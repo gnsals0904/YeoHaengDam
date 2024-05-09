@@ -1,23 +1,14 @@
 <script setup>
-import TopNav from "@/components/TopNav.vue";
+import TopNav from "./components/TopNav.vue";
+import MainPage from "./components/MainPage.vue";
+import LandingPage from "./components/LandingPage.vue";
 </script>
 
 <template>
-  <header>
-    <div class="container-fluid">
-      <TopNav></TopNav>
-    </div>
-  </header>
-  <div></div>
+  <div>
+    <TopNav></TopNav>
+    <router-view></router-view>
+  </div>
 </template>
 
-<style scoped>
-header {
-}
-main {
-  /* Styles for main content area */
-}
-footer {
-  /* Styles for footer */
-}
-</style>
+<style scoped></style>
