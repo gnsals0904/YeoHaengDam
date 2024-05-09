@@ -1,7 +1,23 @@
-<script setup></script>
+<script setup>
+import TopNav from "@/components/TopNav.vue";
+</script>
 
 <template>
-  <div>test</div>
+  <header>
+    <div class="container-fluid">
+      <TopNav></TopNav>
+    </div>
+  </header>
+  <div></div>
 </template>
 
-<style scoped></style>
+<style scoped>
+header {
+}
+main {
+  /* Styles for main content area */
+}
+footer {
+  /* Styles for footer */
+}
+</style>
