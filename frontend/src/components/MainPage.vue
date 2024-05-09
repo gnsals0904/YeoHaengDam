@@ -1,9 +1,12 @@
 <script setup>
 import TripCard from "./TripCard.vue";
+import { useDestinationStore } from "@/stores/store.js"; // 경로는 실제 환경에 맞게 조정하세요.
+
+const { destinations } = useDestinationStore();
 </script>
 
 <template>
-  <div>
+  <div id="section-wrap">
     <section class="my-12">
       <h2 class="text-5xl font-bold text-center mb-6">
         어디로 여행을 떠나시나요?
@@ -54,17 +57,20 @@ import TripCard from "./TripCard.vue";
         </div>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <TripCard></TripCard>
-        <TripCard></TripCard>
-        <TripCard></TripCard>
-        <TripCard></TripCard>
-        <TripCard></TripCard>
-        <TripCard></TripCard>
-        <TripCard></TripCard>
-        <TripCard></TripCard>
+        <TripCard
+          v-for="destination in destinations"
+          :key="destination.id"
+          :name="destination.name"
+          :image="destination.image"
+        />
       </div>
     </section>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+#section-wrap {
+  margin-left: 5vw;
+  margin-right: 5vw;
+}
+</style>
