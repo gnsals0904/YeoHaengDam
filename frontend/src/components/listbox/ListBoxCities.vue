@@ -15,7 +15,7 @@ const props = defineProps({
 const emits = defineEmits(['update:selected']);
 const destinationStore = useDestinationStore();
 const selectedDestination = ref(
-  destinationStore.destinations[props.initialIndex || 0]
+  props.initialIndex ? destinationStore.destinations[props.initialIndex] : null
 );
 
 function updateSelection(destination) {
@@ -29,9 +29,15 @@ function updateSelection(destination) {
     <Listbox v-model="selectedDestination" @update:modelValue="updateSelection">
       <div class="relative mt-1">
         <ListboxButton
-          class="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm border border-gray rounded-md"
+          class="hover:bg-amber-50 hover:text-amber-900 relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm border border-gray rounded-md"
         >
-          <span class="block truncate">{{ selectedDestination.name }}</span>
+          <span class="block truncate">
+            {{
+              selectedDestination
+                ? selectedDestination.name
+                : '가고싶은 지역을 골라주세요'
+            }}
+          </span>
           <span
             class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
           >

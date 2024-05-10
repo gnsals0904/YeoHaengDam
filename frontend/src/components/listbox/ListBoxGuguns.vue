@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, ref } from 'vue';
+import { defineProps, ref, watch } from 'vue';
 import {
   Listbox,
   ListboxButton,
@@ -9,20 +9,38 @@ import {
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid';
 
 const props = defineProps({
-  guguns: Array,
+  guguns: {
+    type: Array,
+    default: () => [],
+  },
 });
 
-const selectedGugun = ref(props.guguns[0]);
+const selectedGugun = ref(null);
+
+// props.guguns 값이 변경될 때 selectedGugun를 첫 번째 항목으로 설정
+watch(
+  () => props.guguns,
+  (newGuguns) => {
+    if (newGuguns.length > 0) {
+      selectedGugun.value = newGuguns[0];
+    } else {
+      selectedGugun.value = null;
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
   <div class="z-10 w-full">
-    <Listbox v-model="selectedDestination" @update:modelValue="updateSelection">
+    <Listbox v-model="selectedGugun">
       <div class="relative mt-1">
         <ListboxButton
-          class="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm border border-gray rounded-md"
+          class="hover:bg-amber-50 hover:text-amber-900 relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm border border-gray rounded-md"
         >
-          <span class="block truncate"> 시도를 먼저 골라주세요 </span>
+          <span class="block truncate">
+            {{ selectedGugun ? selectedGugun.name : '시도를 먼저 골라주세요' }}
+          </span>
           <span
             class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
           >

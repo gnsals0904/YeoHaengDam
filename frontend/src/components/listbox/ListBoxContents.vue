@@ -1,6 +1,5 @@
 <script setup>
-import { ref, defineProps, defineEmits } from 'vue';
-import { useDestinationStore } from '@/stores/store';
+import { ref } from 'vue';
 import {
   Listbox,
   ListboxButton,
@@ -9,29 +8,28 @@ import {
 } from '@headlessui/vue';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid';
 
-const props = defineProps({
-  initialIndex: Number,
-});
-const emits = defineEmits(['update:selected']);
-const destinationStore = useDestinationStore();
-const selectedDestination = ref(
-  destinationStore.destinations[props.initialIndex || 0]
-);
+const contents = ref([
+  { id: 12, name: '관광지' },
+  { id: 14, name: '문화시설' },
+  { id: 15, name: '축제공연행사' },
+  { id: 25, name: '여행코스' },
+  { id: 28, name: '레포츠' },
+  { id: 32, name: '숙박' },
+  { id: 38, name: '쇼핑' },
+  { id: 39, name: '음식점' },
+]);
 
-function updateSelection(destination) {
-  selectedDestination.value = destination;
-  emits('update:selected', destination);
-}
+const selectedContent = ref(contents.value[0]);
 </script>
 
 <template>
   <div class="z-10 w-full">
-    <Listbox v-model="selectedDestination" @update:modelValue="updateSelection">
+    <Listbox v-model="selectedContent">
       <div class="relative mt-1">
         <ListboxButton
-          class="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm border border-gray rounded-md"
+          class="hover:bg-amber-50 hover:text-amber-900 relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm border border-gray rounded-md"
         >
-          <span class="block truncate">{{ selectedDestination.name }}</span>
+          <span class="block truncate">{{ selectedContent.name }}</span>
           <span
             class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
           >
@@ -52,24 +50,27 @@ function updateSelection(destination) {
           >
             <ListboxOption
               v-slot="{ active, selected }"
-              v-for="destination in destinationStore.destinations"
-              :key="destination.id"
-              :value="destination"
+              v-for="content in contents"
+              :key="content.id"
+              :value="content"
               as="template"
             >
               <li
-                :class="[
-                  active ? 'bg-amber-100 text-amber-900' : 'text-gray-900',
-                  'relative cursor-default select-none py-2 pl-10 pr-4',
-                ]"
+                :class="{
+                  'bg-amber-100 text-amber-900': active,
+                  'text-gray-900': !active,
+                  'relative cursor-default select-none py-2 pl-10 pr-4': true,
+                }"
               >
                 <span
-                  :class="[
-                    selected ? 'font-medium' : 'font-normal',
-                    'block truncate',
-                  ]"
-                  >{{ destination.name }}</span
+                  :class="{
+                    'font-medium': selected,
+                    'font-normal': !selected,
+                    'block truncate': true,
+                  }"
                 >
+                  {{ content.name }}
+                </span>
                 <span
                   v-if="selected"
                   class="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600"
