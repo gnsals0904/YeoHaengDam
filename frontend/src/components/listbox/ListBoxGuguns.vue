@@ -36,7 +36,7 @@ watch(
     <Listbox v-model="selectedGugun">
       <div class="relative">
         <ListboxButton
-          class="hover:bg-amber-50 hover:text-amber-900 relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm border border-gray rounded-md"
+          class="hover:bg-blue-200 hover:text-blue-800 relative w-full cursor-default bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm border border-gray rounded-md"
         >
           <span class="block truncate">
             {{ selectedGugun ? selectedGugun.name : '시도를 먼저 골라주세요' }}
@@ -68,7 +68,7 @@ watch(
             >
               <li
                 :class="[
-                  active ? 'bg-amber-100 text-amber-900' : 'text-gray-900',
+                  active ? 'bg-blue-200 text-blue-800' : 'text-gray-900',
                   'relative cursor-default select-none py-2 pl-10 pr-4',
                 ]"
               >
@@ -81,7 +81,7 @@ watch(
                 >
                 <span
                   v-if="selected"
-                  class="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600"
+                  class="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600"
                 >
                   <CheckIcon class="h-5 w-5" aria-hidden="true" />
                 </span>
