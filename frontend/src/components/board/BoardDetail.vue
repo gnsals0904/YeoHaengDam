@@ -74,11 +74,52 @@
             <div>{{ board.registerTime }}</div>
           </div>
           <div class="prose prose-sm dark:prose-invert">
-            <p v-if="board">
-              {{ board.content }}
-            </p>
+            <p v-if="!isEditing">
+            {{ board.content }}
+          </p>
+  <textarea v-else v-model="board.content" class="w-full rounded-md border p-2 text-sm"></textarea>
+
           </div>
         </div>
+        <div id="3iiga1vpoa5" class="mt-6 flex justify-end space-x-2">
+  <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="w-4 h-4 fill-primary"
+    >
+      <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+      <path d="m15 5 4 4"></path>
+    </svg>
+    Edit
+  </button>
+  <button class="inline-flex items-center bg-red-700 justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-destructive text-destructive-foreground hover:bg-destructive/90 h-10 px-4 py-2">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="w-4 h-4 fill-primary"
+    >
+      <path d="M3 6h18"></path>
+      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+    </svg>
+    Delete
+  </button>
+</div>
         <div class="mt-6 border-t pt-6 dark:border-gray-800">
           <h3 class="text-lg font-bold">Comments</h3>
           <div class="space-y-6">
@@ -266,6 +307,31 @@
                   person.
                 </div>
               </div>
+              <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
+            <img class="aspect-square h-full w-full" alt="@shadcn" src="" />
+          </span>
+        </div>
+      </div>
+      <div class="mt-6 border-t pt-6 dark:border-gray-800">
+        <h3 class="text-lg font-bold">Add a comment</h3>
+        <div class="flex items-start space-x-4">
+          <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
+            <img class="aspect-square h-full w-full" alt="@shadcn" src="" />
+          </span>
+          <div class="flex-1">
+            <textarea
+              class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[100px]"
+              placeholder="Write your comment..."
+            ></textarea>
+            <div class="mt-4 flex justify-end space-x-2">
+              <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+                Cancel
+              </button>
+              <button class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+                Post comment
+              </button>
+            </div>
+          </div>
             </div>
           </div>
         </div>
@@ -275,10 +341,17 @@
 </template>
 
 <script setup>
+import { defineProps, defineEmits, ref}  from 'vue';
 const props = defineProps({
   board: Object,
   isOpen: Boolean,
 });
+
+const isEditing = ref(false);
+
+function toggleEdit() {
+  isEditing.value = !isEditing.value
+}
 
 const emit = defineEmits(["close"]);
 
