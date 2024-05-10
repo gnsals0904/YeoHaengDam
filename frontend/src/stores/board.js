@@ -24,6 +24,9 @@ const getArticle = async (articleNo) => {
   try {
     const response = await axios.get(`http://localhost:80/api/board/view`, { params: { articleNo } });
     console.log("Fetched article:", response);
+    selectedBoard.value = response.data;
+    console.log('selectedBoards : ');
+    console.log(selectedBoard);
     return response; // 완성된 응답 객체를 반환
   } catch (error) {
     console.error("Failed to fetch article:", error);
