@@ -3,10 +3,12 @@
 <template>
   <header class="flex justify-between items-center py-4">
     <div class="flex items-center space-x-4">
-      <h1 class="text-3xl font-bold">YeoHaengDam</h1>
+      <router-link :to="{ name: 'Landing' }" class="text-3xl font-bold"
+        >YeoHaengDam</router-link
+      >
     </div>
     <nav class="hidden md:flex space-x-6">
-      <a class="text-lg" href="#"> 여행지 </a>
+      <router-link :to="{ name: 'Main' }" class="text-lg">여행지</router-link>
       <a class="text-lg" href="#"> 고객지원 </a>
       <a class="text-lg" href="#"> 이용방법 </a>
       <a class="text-lg" href="#"> 로그인 </a>
