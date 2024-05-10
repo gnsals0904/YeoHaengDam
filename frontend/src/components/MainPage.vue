@@ -1,16 +1,18 @@
 <script setup>
-import TripCard from './TripCard.vue';
-import { ref } from 'vue';
-import { useDestinationStore } from '@/stores/store.js';
-import ListBoxCities from './listbox/ListBoxCities.vue';
-import ListBoxGuguns from './listbox/ListBoxGuguns.vue';
-import ListBoxContents from './listbox/ListBoxContents.vue';
+import TripCard from "./TripCard.vue";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useDestinationStore } from "@/stores/store.js";
+import ListBoxCities from "./listbox/ListBoxCities.vue";
+import ListBoxGuguns from "./listbox/ListBoxGuguns.vue";
+import ListBoxContents from "./listbox/ListBoxContents.vue";
 
-import axios from 'axios';
+import axios from "axios";
 
 const { destinations } = useDestinationStore();
 
 const guguns = ref([]);
+const router = useRouter();
 
 const handleSidoSelection = async (selectedSido) => {
   const response = await axios.get(
@@ -21,6 +23,10 @@ const handleSidoSelection = async (selectedSido) => {
     name: item.gugunName,
   }));
   console.log(guguns.value);
+};
+
+const handleSearch = () => {
+  router.push({ name: "Map" });
 };
 </script>
 
@@ -38,6 +44,7 @@ const handleSidoSelection = async (selectedSido) => {
         <ListBoxGuguns :guguns="guguns" />
         <ListBoxContents></ListBoxContents>
         <button
+          @click="handleSearch"
           class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-blue-600 hover:text-white hover:border-transparent transition ease-in duration-200 h-10 px-4 py-2 pt-2"
         >
           검색
