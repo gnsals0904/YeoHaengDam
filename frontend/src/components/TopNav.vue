@@ -9,9 +9,9 @@
     </div>
     <nav class="hidden md:flex space-x-6">
       <router-link :to="{ name: 'Main' }" class="text-lg">여행지</router-link>
-      <a class="text-lg" href="#"> 고객지원 </a>
-      <a class="text-lg" href="#"> 이용방법 </a>
-      <a class="text-lg" href="#"> 로그인 </a>
+      <a class="text-lg" href="/"> 고객지원 </a>
+      <a class="text-lg" href="/"> 이용방법 </a>
+      <a class="text-lg" href="/"> 로그인 </a>
     </nav>
     <div class="flex md:hidden">
       <svg

@@ -1,27 +1,28 @@
 <script setup>
-import { ref } from 'vue';
-import { useDestinationStore } from '@/stores/store';
+import { defineProps, ref } from 'vue';
 import {
   Listbox,
-  ListboxLabel,
   ListboxButton,
   ListboxOptions,
   ListboxOption,
 } from '@headlessui/vue';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid';
 
-const destinationStore = useDestinationStore();
-const selectedDestination = ref(destinationStore.destinations[0]);
+const props = defineProps({
+  guguns: Array,
+});
+
+const selectedGugun = ref(props.guguns[0]);
 </script>
 
 <template>
   <div class="z-10 w-full">
-    <Listbox v-model="selectedDestination">
+    <Listbox v-model="selectedDestination" @update:modelValue="updateSelection">
       <div class="relative mt-1">
         <ListboxButton
           class="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm border border-gray rounded-md"
         >
-          <span class="block truncate">{{ selectedDestination.name }}</span>
+          <span class="block truncate"> 시도를 먼저 골라주세요 </span>
           <span
             class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
           >
@@ -42,9 +43,9 @@ const selectedDestination = ref(destinationStore.destinations[0]);
           >
             <ListboxOption
               v-slot="{ active, selected }"
-              v-for="destination in destinationStore.destinations"
-              :key="destination.id"
-              :value="destination"
+              v-for="gugun in props.guguns"
+              :key="gugun.id"
+              :value="gugun"
               as="template"
             >
               <li
@@ -58,7 +59,7 @@ const selectedDestination = ref(destinationStore.destinations[0]);
                     selected ? 'font-medium' : 'font-normal',
                     'block truncate',
                   ]"
-                  >{{ destination.name }}</span
+                  >{{ gugun.name }}</span
                 >
                 <span
                   v-if="selected"

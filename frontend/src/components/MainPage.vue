@@ -1,9 +1,27 @@
 <script setup>
 import TripCard from './TripCard.vue';
+import { ref } from 'vue';
 import { useDestinationStore } from '@/stores/store.js';
-import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue';
-import ListBoxCities from './ListBoxCities.vue';
+import ListBoxCities from './listbox/ListBoxCities.vue';
+import ListBoxGuguns from './listbox/ListBoxGuguns.vue';
+import ListBoxContents from './listbox/ListBoxContents.vue';
+
+import axios from 'axios';
+
 const { destinations } = useDestinationStore();
+
+const guguns = ref([]);
+
+const handleSidoSelection = async (selectedSido) => {
+  const response = await axios.get(
+    `http://localhost/api/trip/listgugun?sidoCode=${selectedSido.id}&sidoName=${selectedSido.name}`
+  );
+  guguns.value = response.data.map((item) => ({
+    id: item.gugunCode,
+    name: item.gugunName,
+  }));
+  console.log(guguns.value);
+};
 </script>
 
 <template>
@@ -16,9 +34,9 @@ const { destinations } = useDestinationStore();
         떠나고 싶은 곳과 어떤 여행을 떠나고 싶은지 골라주세요
       </p>
       <div class="flex justify-center items-center space-x-2 mb-12">
-        <ListBoxCities></ListBoxCities>
-        <ListBoxCities></ListBoxCities>
-        <ListBoxCities></ListBoxCities>
+        <ListBoxCities @update:selected="handleSidoSelection" />
+        <ListBoxGuguns :guguns="guguns" />
+        <ListBoxContents></ListBoxContents>
         <button
           class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
         >

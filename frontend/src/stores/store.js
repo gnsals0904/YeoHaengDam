@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
+import axios from 'axios';
 
 export const useDestinationStore = defineStore('destination', () => {
   const destinations = ref([
@@ -22,5 +23,16 @@ export const useDestinationStore = defineStore('destination', () => {
     { id: 39, name: '제주도', image: 'jejuisland.jpg' },
   ]);
 
-  return { destinations };
+  const guguns = ref([]);
+
+  async function fetchGuguns(sidoCode, sidoName) {
+    const response = await axios.get(
+      `http://localhost/api/trip/listgugun?sidoCode=${sidoCode}&sidoName=${sidoName}`
+    );
+    guguns.value = response.data.map((gugun) => ({
+      code: gugun.gugunCode,
+      name: gugun.gugunName,
+    }));
+  }
+  return { destinations, guguns, fetchGuguns };
 });
