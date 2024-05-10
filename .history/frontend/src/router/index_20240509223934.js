@@ -2,10 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes : [
+  routes =[
     {
       path: '/board',
-      name: 'board',
+      name: 'BoardView',
       component: () => import("../views/BoardView.vue"),
       children: [
         {
@@ -15,7 +15,7 @@ const router = createRouter({
         }
       ]
     }
-  ]
+  ];
 });
 
 export default router;

@@ -1,12 +1,13 @@
 <script setup>
 import TopNav from "@/components/TopNav.vue";
-import { RouterLink, RouterView } from "vue-router";
 </script>
 
 <template>
   <header>
-    <div class="container-fluid"><<router-link :to="{ name: 'board' }">Board</router-link></div>
-    <RouterView />
+    <div class="container-fluid">
+      <TopNav></TopNav>
+      <<router-link :to="{ name: 'board' }"></router-link>
+    </div>
   </header>
   <div></div>
 </template>

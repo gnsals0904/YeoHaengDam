@@ -5,7 +5,10 @@ import { RouterLink, RouterView } from "vue-router";
 
 <template>
   <header>
-    <div class="container-fluid"><<router-link :to="{ name: 'board' }">Board</router-link></div>
+    <div class="container-fluid">
+      <TopNav></TopNav>
+      <<router-link :to="{ name: 'board' }"></router-link>
+    </div>
     <RouterView />
   </header>
   <div></div>

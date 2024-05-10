@@ -5,7 +5,7 @@ const router = createRouter({
   routes : [
     {
       path: '/board',
-      name: 'board',
+      name: 'BoardView',
       component: () => import("../views/BoardView.vue"),
       children: [
         {
