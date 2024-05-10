@@ -66,8 +66,7 @@
 import { useBoardStore } from "@/stores/board";
 
 const boardStore = useBoardStore();
-const board = boardStore.selectedBoard;
-console.log(board);
+const board = computed(() => boardStore.selectedBoard);
 </script>
 
 <style scoped></style>

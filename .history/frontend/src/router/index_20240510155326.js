@@ -20,7 +20,7 @@ const router = createRouter({
         },
 
         {
-          path: '/article/:articleNo',
+          path: 'board/:articleNo',
           name: 'detail',
           component: () => import("../components/board/BoardDetail.vue")
         }

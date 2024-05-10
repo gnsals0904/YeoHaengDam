@@ -17,12 +17,6 @@ const router = createRouter({
           path: '/list',
           name: 'list',
           component: () => import("../components/board/BoardList.vue")
-        },
-
-        {
-          path: '/article/:articleNo',
-          name: 'detail',
-          component: () => import("../components/board/BoardDetail.vue")
         }
       ]
     }

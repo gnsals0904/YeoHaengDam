@@ -26,7 +26,7 @@ const getArticle = async (articleNo) => {
     console.log("Fetched article:", response);
     selectedBoard.value = response.data;
     console.log('selectedBoards : ');
-    console.log(selectedBoard);
+    console.log(selectedBoards);
     return response; // 완성된 응답 객체를 반환
   } catch (error) {
     console.error("Failed to fetch article:", error);

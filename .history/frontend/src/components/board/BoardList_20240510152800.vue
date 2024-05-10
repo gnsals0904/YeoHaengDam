@@ -60,12 +60,7 @@
         </div>
       </div>
       <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        <BoardCard
-          v-for="board in boardStore.boardList"
-          :key="board.articleNo"
-          :board="board"
-          @open="openModal"
-        />
+        <BoardCard v-for="board in boardStore.boardList" :key="board.articleNo" :board="board" />
       </div>
       <Pagination :current-page="currentPage" :total-pages="totalPages" @update:page="updatePage" />
     </div>
@@ -78,10 +73,14 @@
 import { ref } from "vue";
 import { RouterView } from "vue-router";
 import { useBoardStore } from "@/stores/board";
+import BoardDetail from "@/components/board/BoardDetail.vue";
 import BoardCard from "@/components/board/BoardCard.vue";
 import Pagination from "./Pagination.vue";
 
 const boardStore = useBoardStore();
+const selectedBoard = ref(null);
+const modalOpen = ref(false);
+
 boardStore.getList();
 
 const currentPage = ref(1);
@@ -89,5 +88,18 @@ const totalPages = ref(5);
 
 function updatePage(newPage) {
   currentPage.value = newPage;
+}
+
+async function openModal(articleNo) {
+  console.log(articleNo);
+  try {
+    // API 호출 결과를 기다립니다.
+    const response = await boardStore.getArticle(articleNo);
+    selectedBoard.value = response.data; // 게시글 정보를 selectedBoard에 저장
+    console.log("seleceted : ");
+    modalOpen.value = true; // 데이터 로드 완료 후 모달 열기
+  } catch (error) {
+    console.error("Failed to fetch board details:", error);
+  }
 }
 </script>

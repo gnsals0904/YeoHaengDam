@@ -63,11 +63,29 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
 import { useBoardStore } from "@/stores/board";
 
+const route = useRoute();
 const boardStore = useBoardStore();
-const board = boardStore.selectedBoard;
-console.log(board);
+const board = ref(null);
+
+onMounted(async () => {
+  try {
+    const response = await boardStore.getArticle(route.params.articleNo);
+    board.value = response.data; // Extract data from response and store
+  } catch (error) {
+    console.error("Error fetching board details:", error);
+    // Error handling logic, e.g., display an error message
+  }
+});
+
+const emit = defineEmits(["close"]);
+
+function close() {
+  emit("close");
+}
 </script>
 
 <style scoped></style>

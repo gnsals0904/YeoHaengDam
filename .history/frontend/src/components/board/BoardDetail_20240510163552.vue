@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-4">
     <div class="flex items-center justify-between">
-      <h2 class="text-2xl font-bold">{{ board.subject }}</h2>
+      <h2 class="text-2xl font-bold">{{ board..subject }}</h2>
       <div class="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
         <div>
           <svg
