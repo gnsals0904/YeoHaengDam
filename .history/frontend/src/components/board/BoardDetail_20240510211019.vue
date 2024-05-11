@@ -69,7 +69,7 @@
           <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
           <path d="m15 5 4 4"></path>
         </svg>
-        수정
+        Edit
       </button>
       <button
         class="inline-flex items-center justify-center border border-input whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-destructive text-destructive-foreground hover:bg-destructive/90 h-10 px-4 py-2"
@@ -90,10 +90,10 @@
           <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
           <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
         </svg>
-        삭제
+        Delete
       </button>
+      <BoardComment />
     </div>
-    <BoardComment />
   </div>
 </template>
 
