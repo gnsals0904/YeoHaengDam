@@ -3,6 +3,7 @@ import LandingPage from "@/components/LandingPage.vue";
 import MainPage from "@/components/MainPage.vue";
 import MapView from "@/views/MapView.vue";
 import LoginView from "@/views/LoginView.vue";
+import MyPageView from "@/views/MyPageView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,6 +13,7 @@ const router = createRouter({
     { path: "/main", name: "Main", component: MainPage },
     { path: "/map", name: "Map", component: MapView },
     { path: "/login", name: "Login", component: LoginView },
+    { path: "/mypage", name: "MyPage", component: MyPageView },
     {
       path: "/board",
       name: "board",

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import router from "@/router";
 import client from "@/api/client";
 
@@ -22,42 +22,12 @@ const handleLogin = async () => {
     console.log("로그인 성공!"); // 성공 메시지 로그
 
     alert("로그인 성공!"); // 또는 이렇게 알림 창을 띄울 수 있습니다.
-    router.go(0); // 현재 페이지를 새로 고침합니다.
+    router.push({ name: "Landing" });
   } catch (error) {
     console.error("로그인 실패:", error);
     alert("로그인 실패: " + error.message); // 에러 메시지를 alert로 보여줍니다.
   }
 };
-/*
-// 세션에서 로그인 정보 가져오기
-const loadingState = ref({ isLoading: true });
-
-onMounted(async () => {
-  if (sessionStorage.getItem("memberDto") !== null) {
-    if (!sessionStorage.getItem("refreshed")) {
-      sessionStorage.setItem("refreshed", "true");
-      await router.go(0);
-    } else {
-      sessionStorage.removeItem("refreshed");
-    }
-  }
-
-  try {
-    const res = await client.get("/members/ping");
-    if (res.status === 200) {
-      if (res.data !== "") {
-        sessionStorage.setItem("memberDto", JSON.stringify(res.data));
-      }
-    } else {
-      await router.go(0);
-    }
-  } catch (error) {
-    console.error(error);
-  }
-
-  loadingState.value.isLoading = false; // 로딩이 완료되었음을 표시
-});
-*/
 </script>
 
 <template>

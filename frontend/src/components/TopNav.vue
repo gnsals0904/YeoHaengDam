@@ -1,4 +1,88 @@
-<script setup></script>
+<script setup>
+import { ref, onMounted } from "vue";
+import router from "@/router";
+import client from "@/api/client";
+
+// 로그인 상태를 저장하는 반응형 변수
+const isLoggedIn = ref(false);
+
+// 세션에서 로그인 정보 가져오기
+const loadingState = ref({ isLoading: true });
+
+onMounted(async () => {
+  /*
+  if (sessionStorage.getItem("memberDto") !== null) {
+    if (!sessionStorage.getItem("refreshed")) {
+      sessionStorage.setItem("refreshed", "true");
+      router.go(0);
+    } else {
+      sessionStorage.removeItem("refreshed");
+    }
+  }
+  */
+  try {
+    const res = await client.get("/member/ping");
+    if (res.status === 200) {
+      if (res.data !== "") {
+        sessionStorage.setItem("memberDto", JSON.stringify(res.data));
+        isLoggedIn.value = true;
+      }
+    } else {
+      router.go(0);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+
+  loadingState.value.isLoading = false; // 로딩이 완료되었음을 표시
+});
+
+/*
+// 로그인 정보 계속 확인용
+client.get("/member/ping").then((res) => {
+  if (res.status === 200) {
+    if (res.data === "") {
+      return;
+    }
+
+    sessionStorage.setItem("memberDto", JSON.stringify(res.data));
+  } else {
+    router.go(0);
+    
+  }
+});
+
+// 세션에서 로그인 정보 가져오기
+isLoggedIn = computed(() => {
+  return sessionStorage.getItem("memberDto") !== null;
+});
+
+// 세션에서 회원 정보 가져오기
+const userInfo = computed(() => {
+  const memberDto = sessionStorage.getItem("memberDto");
+  return memberDto ? JSON.parse(memberDto) : null;
+});
+*/
+/*
+// 로그아웃
+const logout = async () => {
+  try {
+    await client.post("/member/logout");
+    sessionStorage.removeItem("memberDto");
+    Swal.fire({
+      title: "로그아웃 성공",
+      icon: "success",
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "확인",
+    }).then(() => {
+      router.go(0);
+    });
+  } catch (error) {
+    console.error("로그아웃 에러: ", error);
+  }
+};
+*/
+</script>
 
 <template>
   <header class="flex justify-between items-center py-4">
@@ -11,9 +95,17 @@
       <router-link :to="{ name: 'Main' }" class="text-lg">여행지</router-link>
       <a class="text-lg" href="/"> 고객지원 </a>
       <a class="text-lg" href="/"> 이용방법 </a>
-      <router-link :to="{ name: 'Login' }" class="text-lg">
-        로그인
-      </router-link>
+      <template v-if="isLoggedIn">
+        <router-link :to="{ name: 'MyPage' }" class="text-lg"
+          >마이페이지</router-link
+        >
+        <button @click="logout" class="text-lg">로그아웃</button>
+      </template>
+      <template v-else>
+        <router-link :to="{ name: 'Login' }" class="text-lg"
+          >로그인</router-link
+        >
+      </template>
     </nav>
     <div class="flex md:hidden">
       <svg
