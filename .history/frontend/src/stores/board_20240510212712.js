@@ -42,7 +42,6 @@ export const useBoardStore = defineStore('board', () => {
     } catch (error) {
       throw error;
     }
-  }
     
     const modifyArticle = async (board) => {
       try {
@@ -52,7 +51,8 @@ export const useBoardStore = defineStore('board', () => {
       } catch (error) {
         throw error;
       }
-    };
+    }
+};
 
   
   

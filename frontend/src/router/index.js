@@ -28,9 +28,20 @@ const router = createRouter({
           name: "detail",
           component: () => import("../components/board/BoardDetail.vue"),
         },
+        {
+            path: '/article/:articleNo',
+            name: 'detail',
+            component: () => import("../components/board/BoardDetail.vue")
+        },
+
+        {
+            path: '/article/:articleNo',
+                name: 'update',
+            component:() => import("../components/board/BoardDetail.vue")
+        },
       ],
     },
-  ],
+  ]
 });
 
 export default router;
