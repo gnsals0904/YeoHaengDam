@@ -2,6 +2,7 @@
 import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
 import { onMounted, ref, computed, reactive } from "vue";
 import { useRoute } from "vue-router";
+import LocationBox from "@/components/map/LocationBox.vue";
 import axios from "axios";
 
 const route = useRoute();
@@ -56,11 +57,12 @@ const toggleInfoWindow = (item) => {
 </script>
 
 <template>
-  <div>
+  <div class="map-container flex">
     <KakaoMap
       :lat="defaultCoordinate.lat"
       :lng="defaultCoordinate.lng"
       :draggable="true"
+      class="flex-1 h-screen"
     >
       <KakaoMapMarker
         v-for="(item, index) in tripData"
@@ -81,6 +83,23 @@ const toggleInfoWindow = (item) => {
         }"
       />
     </KakaoMap>
+    <div class="locations-list w-1/3 h-screen overflow-auto">
+      <LocationBox
+        v-for="(item, index) in tripData"
+        :key="index"
+        :item="item"
+      />
+    </div>
   </div>
 </template>
-<style scoped></style>
+<style scoped>
+.map-container {
+  display: flex;
+  height: 100vh; /* Adjust height to fill the screen */
+}
+
+.locations-list {
+  padding: 10px;
+  border-left: 2px solid #ccc; /* Adds a line to separate from the map */
+}
+</style>
