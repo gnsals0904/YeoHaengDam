@@ -1,18 +1,18 @@
 <script setup>
-import { ref, defineProps, defineEmits } from 'vue';
-import { useDestinationStore } from '@/stores/store';
+import { ref, defineProps, defineEmits } from "vue";
+import { useDestinationStore } from "@/stores/mapstore";
 import {
   Listbox,
   ListboxButton,
   ListboxOptions,
   ListboxOption,
-} from '@headlessui/vue';
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid';
+} from "@headlessui/vue";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/20/solid";
 
 const props = defineProps({
   initialIndex: Number,
 });
-const emits = defineEmits(['update:selected']);
+const emits = defineEmits(["update:selected"]);
 const destinationStore = useDestinationStore();
 const selectedDestination = ref(
   props.initialIndex ? destinationStore.destinations[props.initialIndex] : null
@@ -20,7 +20,7 @@ const selectedDestination = ref(
 
 function updateSelection(destination) {
   selectedDestination.value = destination;
-  emits('update:selected', destination);
+  emits("update:selected", destination);
 }
 </script>
 
@@ -35,7 +35,7 @@ function updateSelection(destination) {
             {{
               selectedDestination
                 ? selectedDestination.name
-                : '가고싶은 지역을 골라주세요'
+                : "가고싶은 지역을 골라주세요"
             }}
           </span>
           <span

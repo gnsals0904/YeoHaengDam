@@ -2,7 +2,7 @@
 import TripCard from "./TripCard.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { useDestinationStore } from "@/stores/store.js";
+import { useDestinationStore } from "@/stores/mapstore.js";
 import ListBoxCities from "./listbox/ListBoxCities.vue";
 import ListBoxGuguns from "./listbox/ListBoxGuguns.vue";
 import ListBoxContents from "./listbox/ListBoxContents.vue";

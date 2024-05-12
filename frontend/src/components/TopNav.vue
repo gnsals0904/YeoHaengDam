@@ -2,6 +2,8 @@
 import { ref, onMounted } from "vue";
 import router from "@/router";
 import client from "@/api/client";
+import { useAuthStore } from "@/stores/auth";
+const authStore = useAuthStore();
 
 // 로그인 상태를 저장하는 반응형 변수
 const isLoggedIn = ref(false);
@@ -63,25 +65,18 @@ const userInfo = computed(() => {
   return memberDto ? JSON.parse(memberDto) : null;
 });
 */
-/*
+
 // 로그아웃
 const logout = async () => {
   try {
-    await client.post("/member/logout");
-    sessionStorage.removeItem("memberDto");
-    Swal.fire({
-      title: "로그아웃 성공",
-      icon: "success",
-      confirmButtonColor: "#3085d6",
-      confirmButtonText: "확인",
-    }).then(() => {
-      router.go(0);
+    await client.get("/member/logout").then(() => {
+      sessionStorage.removeItem("memberDto");
     });
   } catch (error) {
     console.error("로그아웃 에러: ", error);
   }
+  router.go(0);
 };
-*/
 </script>
 
 <template>
@@ -95,14 +90,14 @@ const logout = async () => {
       <router-link :to="{ name: 'Main' }" class="text-lg">여행지</router-link>
       <a class="text-lg" href="/"> 고객지원 </a>
       <a class="text-lg" href="/"> 이용방법 </a>
-      <template v-if="isLoggedIn">
-        <router-link :to="{ name: 'MyPage' }" class="text-lg"
+      <template v-if="authStore.isLoggedIn">
+        <router-link class="text-lg" :to="{ name: 'MyPage' }"
           >마이페이지</router-link
         >
-        <button @click="logout" class="text-lg">로그아웃</button>
+        <button class="text-lg" @click="authStore.logout">로그아웃</button>
       </template>
       <template v-else>
-        <router-link :to="{ name: 'Login' }" class="text-lg"
+        <router-link class="text-lg" :to="{ name: 'Login' }"
           >로그인</router-link
         >
       </template>

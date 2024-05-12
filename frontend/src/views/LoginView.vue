@@ -2,7 +2,9 @@
 import { ref } from "vue";
 import router from "@/router";
 import client from "@/api/client";
+import { useAuthStore } from "@/stores/auth";
 
+const authStore = useAuthStore();
 const username = ref("");
 const password = ref("");
 
@@ -19,13 +21,12 @@ const handleLogin = async () => {
     }
 
     sessionStorage.setItem("memberDto", JSON.stringify(response.data));
-    console.log("로그인 성공!"); // 성공 메시지 로그
-
-    alert("로그인 성공!"); // 또는 이렇게 알림 창을 띄울 수 있습니다.
+    authStore.login(response.data);
+    alert("로그인 성공!");
     router.push({ name: "Landing" });
   } catch (error) {
     console.error("로그인 실패:", error);
-    alert("로그인 실패: " + error.message); // 에러 메시지를 alert로 보여줍니다.
+    alert("로그인 실패: " + error.message);
   }
 };
 </script>
