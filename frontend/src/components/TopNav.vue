@@ -1,15 +1,9 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { onMounted } from "vue";
 import router from "@/router";
 import client from "@/api/client";
 import { useAuthStore } from "@/stores/auth";
 const authStore = useAuthStore();
-
-// 로그인 상태를 저장하는 반응형 변수
-const isLoggedIn = ref(false);
-
-// 세션에서 로그인 정보 가져오기
-const loadingState = ref({ isLoading: true });
 
 onMounted(async () => {
   /*
@@ -22,21 +16,6 @@ onMounted(async () => {
     }
   }
   */
-  try {
-    const res = await client.get("/member/ping");
-    if (res.status === 200) {
-      if (res.data !== "") {
-        sessionStorage.setItem("memberDto", JSON.stringify(res.data));
-        isLoggedIn.value = true;
-      }
-    } else {
-      router.go(0);
-    }
-  } catch (error) {
-    console.error(error);
-  }
-
-  loadingState.value.isLoading = false; // 로딩이 완료되었음을 표시
 });
 
 /*
@@ -65,18 +44,6 @@ const userInfo = computed(() => {
   return memberDto ? JSON.parse(memberDto) : null;
 });
 */
-
-// 로그아웃
-const logout = async () => {
-  try {
-    await client.get("/member/logout").then(() => {
-      sessionStorage.removeItem("memberDto");
-    });
-  } catch (error) {
-    console.error("로그아웃 에러: ", error);
-  }
-  router.go(0);
-};
 </script>
 
 <template>
@@ -88,8 +55,9 @@ const logout = async () => {
     </div>
     <nav class="hidden md:flex space-x-6">
       <router-link :to="{ name: 'Main' }" class="text-lg">여행지</router-link>
-      <a class="text-lg" href="/"> 고객지원 </a>
-      <a class="text-lg" href="/"> 이용방법 </a>
+      <router-link :to="{ name: 'Main' }" class="text-lg">고객지원</router-link>
+      <router-link :to="{ name: 'Main' }" class="text-lg">이용방법</router-link>
+      <router-link :to="{ name: 'board' }" class="text-lg">게시판</router-link>
       <template v-if="authStore.isLoggedIn">
         <router-link class="text-lg" :to="{ name: 'MyPage' }"
           >마이페이지</router-link

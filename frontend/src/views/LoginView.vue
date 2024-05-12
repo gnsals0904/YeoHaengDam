@@ -21,6 +21,7 @@ const handleLogin = async () => {
     }
 
     sessionStorage.setItem("memberDto", JSON.stringify(response.data));
+    console.log(response.data);
     authStore.login(response.data);
     alert("로그인 성공!");
     router.push({ name: "Landing" });
