@@ -1,12 +1,12 @@
 <script setup>
-import { defineProps, ref, watch } from 'vue';
+import { defineProps, ref, watch, defineEmits } from "vue";
 import {
   Listbox,
   ListboxButton,
   ListboxOptions,
   ListboxOption,
-} from '@headlessui/vue';
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid';
+} from "@headlessui/vue";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/20/solid";
 
 const props = defineProps({
   guguns: {
@@ -15,7 +15,18 @@ const props = defineProps({
   },
 });
 
+const emits = defineEmits(["update:selected"]);
 const selectedGugun = ref(null);
+
+watch(
+  selectedGugun,
+  (newGugun) => {
+    if (newGugun) {
+      emits("update:selected", newGugun);
+    }
+  },
+  { immediate: true }
+);
 
 // props.guguns 값이 변경될 때 selectedGugun를 첫 번째 항목으로 설정
 watch(
@@ -39,7 +50,7 @@ watch(
           class="hover:bg-blue-200 hover:text-blue-800 relative w-full cursor-default bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm border border-gray rounded-md"
         >
           <span class="block truncate">
-            {{ selectedGugun ? selectedGugun.name : '시도를 먼저 골라주세요' }}
+            {{ selectedGugun ? selectedGugun.name : "시도를 먼저 골라주세요" }}
           </span>
           <span
             class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"

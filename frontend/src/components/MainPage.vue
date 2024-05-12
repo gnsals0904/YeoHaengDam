@@ -14,19 +14,54 @@ const { destinations } = useDestinationStore();
 const guguns = ref([]);
 const router = useRouter();
 
-const handleSidoSelection = async (selectedSido) => {
+const selectedSido = ref(null);
+const selectedGugun = ref(null);
+const selectedContent = ref(null);
+
+const handleGugunSelected = (gugun) => {
+  selectedGugun.value = gugun;
+  console.log("Selected Gugun:", selectedGugun.value);
+};
+
+const handleContentSelected = (content) => {
+  selectedContent.value = content;
+  console.log("Selected Content:", selectedContent.value);
+};
+
+const handleSidoSelection = async (sido) => {
   const response = await axios.get(
-    `http://localhost/api/trip/listgugun?sidoCode=${selectedSido.id}&sidoName=${selectedSido.name}`
+    `http://localhost/api/trip/listgugun?sidoCode=${sido.id}&sidoName=${sido.name}`
   );
   guguns.value = response.data.map((item) => ({
     id: item.gugunCode,
     name: item.gugunName,
   }));
   console.log(guguns.value);
+  selectedSido.value = sido;
+  console.log("Selected Sido:", selectedSido.value);
 };
 
 const handleSearch = () => {
-  router.push({ name: "Map" });
+  console.log(
+    "Sido:",
+    selectedSido.value,
+    "Gugun:",
+    selectedGugun.value,
+    "Content:",
+    selectedContent.value
+  );
+  if (selectedSido.value && selectedGugun.value && selectedContent.value) {
+    router.push({
+      name: "Map",
+      query: {
+        sidoCode: selectedSido.value.id,
+        gugunCode: selectedGugun.value.id,
+        contentCode: selectedContent.value.id,
+      },
+    });
+  } else {
+    alert("모든 옵션을 선택해주세요.");
+  }
 };
 </script>
 
@@ -41,8 +76,11 @@ const handleSearch = () => {
       </p>
       <div class="flex justify-center items-center space-x-2 mb-12">
         <ListBoxCities @update:selected="handleSidoSelection" />
-        <ListBoxGuguns :guguns="guguns" />
-        <ListBoxContents></ListBoxContents>
+        <ListBoxGuguns
+          :guguns="guguns"
+          @update:selected="handleGugunSelected"
+        />
+        <ListBoxContents @update:selected="handleContentSelected" />
         <button
           @click="handleSearch"
           class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-blue-600 hover:text-white hover:border-transparent transition ease-in duration-200 h-10 px-4 py-2 pt-2"

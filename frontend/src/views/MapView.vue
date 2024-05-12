@@ -16,5 +16,4 @@ const coordinate = {
     </KakaoMap>
   </div>
 </template>
-
 <style scoped></style>
