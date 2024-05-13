@@ -1,9 +1,9 @@
 <script setup>
-import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
-import { onMounted, ref, computed, reactive } from "vue";
-import { useRoute } from "vue-router";
-import LocationBox from "@/components/map/LocationBox.vue";
-import axios from "axios";
+import { KakaoMap, KakaoMapMarker } from 'vue3-kakao-maps';
+import { onMounted, ref, computed, reactive } from 'vue';
+import { useRoute } from 'vue-router';
+import LocationBox from '@/components/map/LocationBox.vue';
+import axios from 'axios';
 
 const route = useRoute();
 const tripData = ref([]);
@@ -14,7 +14,7 @@ onMounted(async () => {
   if (sidoCode && gugunCode && contentCode) {
     try {
       const response = await axios.get(
-        "http://localhost/api/trip/listTripWithOutTitle",
+        'http://localhost/api/trip/listTripWithOutTitle',
         {
           params: {
             sidoCode: parseInt(sidoCode),
@@ -27,13 +27,13 @@ onMounted(async () => {
         ...item,
         infoVisible: false,
       }));
-      console.log("Trip Data:", tripData.value);
+      console.log('Trip Data:', tripData.value);
     } catch (error) {
-      console.error("Error fetching trip data:", error);
-      alert("여행 정보를 가져오는 데 실패했습니다.");
+      console.error('Error fetching trip data:', error);
+      alert('여행 정보를 가져오는 데 실패했습니다.');
     }
   } else {
-    alert("필요한 매개변수가 URL에 포함되지 않았습니다.");
+    alert('필요한 매개변수가 URL에 포함되지 않았습니다.');
   }
 });
 
@@ -62,7 +62,8 @@ const toggleInfoWindow = (item) => {
       :lat="defaultCoordinate.lat"
       :lng="defaultCoordinate.lng"
       :draggable="true"
-      class="flex-1 h-screen"
+      class="flex-4 h-screen"
+      style="width: 100%; height: 100%"
     >
       <KakaoMapMarker
         v-for="(item, index) in tripData"
@@ -83,7 +84,7 @@ const toggleInfoWindow = (item) => {
         }"
       />
     </KakaoMap>
-    <div class="locations-list w-1/3 h-screen overflow-auto">
+    <div class="locations-list flex-1 h-screen overflow-auto min-w-[500px]">
       <LocationBox
         v-for="(item, index) in tripData"
         :key="index"
