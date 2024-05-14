@@ -1,11 +1,13 @@
-import "./assets/main.css";
+import './assets/main.css';
+import './assets/fonts.css'; // 폰트 파일
+import './assets/global.css'; // 전역 스타일
 
-import { createApp } from "vue";
-import { createPinia } from "pinia";
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 
-import App from "./App.vue";
-import router from "./router";
-import { useKakao } from "vue3-kakao-maps/@utils";
+import App from './App.vue';
+import router from './router';
+import { useKakao } from 'vue3-kakao-maps/@utils';
 
 const app = createApp(App);
 
@@ -15,4 +17,4 @@ useKakao(kakaoApiKey); // API 키를 useKakao 함수에 전달
 app.use(createPinia());
 app.use(router);
 
-app.mount("#app");
+app.mount('#app');
