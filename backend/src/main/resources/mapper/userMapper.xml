@@ -19,7 +19,13 @@
         <select id ="findByEmail">
                 select *
                 from users
-                where email = #{email};
+                where email = #{email}
         </select>
+
+        <update id = "update">
+                update users
+                set password = #{password}, nickname = #{nickname}, profile_image = #{profileImage}
+                where email = #{email}
+        </update>
 
 </mapper>

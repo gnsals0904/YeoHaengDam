@@ -9,5 +9,5 @@ CREATE TABLE users (
    role_type         enum ('USER', 'ADMIN')                               DEFAULT 'USER' NULL,
    created_at        TIMESTAMP                                            DEFAULT CURRENT_TIMESTAMP NOT NULL,
    updated_at        TIMESTAMP                                            DEFAULT CURRENT_TIMESTAMP NOT NULL,
-   CONSTRAINT users_email_unique UNIQUE (email),
+   CONSTRAINT users_email_unique UNIQUE (email)
 );
