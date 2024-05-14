@@ -7,5 +7,7 @@ import com.ssafy.yeohaengdam.auth.dto.LoginRequest;
 public interface AuthService {
     JwtToken login(LoginRequest loginRequest);
 
+    JwtToken refresh(String refreshToken);
+
 
 }

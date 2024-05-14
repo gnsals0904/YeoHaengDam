@@ -28,4 +28,12 @@ public class AuthServiceImpl implements AuthService{
 
         return jwtTokenService.generateToken(user);
     }
+
+    @Override
+    public JwtToken refresh(String refreshToken) {
+        String email = jwtTokenService.getUsername(refreshToken);
+        if(email == null) throw new IllegalArgumentException("유효하지 않은 토큰 입니다.");
+
+        return jwtTokenService.generateTokenByRefreshToken(refreshToken);
+    }
 }

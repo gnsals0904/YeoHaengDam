@@ -37,6 +37,24 @@ public class JwtTokenService {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
+    public String getUsername(String token){
+        Claims claims = parseClaims(token);
+        return claims.getSubject();
+    }
+
+    private Claims parseClaims(String token){
+        
+        try{
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        }catch(Exception e){
+            throw new RuntimeException("token 발급 도중 오류가 발생했습니다.");
+        }
+    }
+
 
     public JwtToken generateToken(User user){
         Collection<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getRoleType().name()));
@@ -84,7 +102,7 @@ public class JwtTokenService {
                     .getBody();
             return claims != null;
         }catch(Exception e){
-            throw new Exception();
+            throw new RuntimeException("토큰 파싱 중 오류가 발생했습니다.");
         }
 
     }
@@ -108,5 +126,42 @@ public class JwtTokenService {
         return new UsernamePasswordAuthenticationToken(principal,"", authorities);
 
 
+    }
+
+    public JwtToken generateTokenByRefreshToken(String refreshToken) {
+        Claims claims = parseClaims(refreshToken);
+        String email = claims.getSubject();
+
+        Collection<? extends GrantedAuthority> authorities =
+                Arrays.stream(claims.get("authorities").toString().split(","))
+                        .map(SimpleGrantedAuthority::new)
+                        .toList();
+
+        String authority = authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        long now = System.currentTimeMillis();
+        Date accessTokenExpire = new Date(now + authProperties.getTokenExpiry());
+        Date refreshTokenExpire = new Date(now + authProperties.getRefreshTokenExpiry());
+
+        String accessToken = Jwts.builder()
+                .setHeader(Map.of("typ", "JWT", "alg", "HS256"))
+                .setSubject(email)
+                .claim("authorities", authority)
+                .setIssuedAt(new Date(now))
+                .setExpiration(accessTokenExpire)
+                .signWith(key)
+                .compact();
+
+        String newRefreshToken = Jwts.builder()
+                .setSubject(email)
+                .claim("authorities", authority)
+                .setIssuedAt(new Date(now))
+                .setExpiration(refreshTokenExpire)
+                .signWith(key)
+                .compact();
+
+        return new JwtToken(accessToken, newRefreshToken);
     }
 }

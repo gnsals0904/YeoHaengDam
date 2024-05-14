@@ -1,14 +1,20 @@
 package com.ssafy.yeohaengdam.user.controller;
 
+import com.ssafy.yeohaengdam.auth.dto.JwtToken;
 import com.ssafy.yeohaengdam.user.dto.UserData;
 import com.ssafy.yeohaengdam.user.entity.User;
 import com.ssafy.yeohaengdam.user.service.UserService;
 import com.ssafy.yeohaengdam.user.request.JoinRequest;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
 
 import static com.ssafy.yeohaengdam.user.dto.UserData.*;
 
