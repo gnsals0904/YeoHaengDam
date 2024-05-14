@@ -1,6 +1,6 @@
-package com.ssafy.yeohaengdam.user.domain.mapper;
+package com.ssafy.yeohaengdam.user.mapper;
 
-import com.ssafy.yeohaengdam.user.domain.User;
+import com.ssafy.yeohaengdam.user.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

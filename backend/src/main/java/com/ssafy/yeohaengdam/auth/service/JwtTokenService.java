@@ -2,7 +2,7 @@ package com.ssafy.yeohaengdam.auth.service;
 
 import com.ssafy.yeohaengdam.auth.dto.JwtToken;
 import com.ssafy.yeohaengdam.core.properties.AuthProperties;
-import com.ssafy.yeohaengdam.user.domain.User;
+import com.ssafy.yeohaengdam.user.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -17,9 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service

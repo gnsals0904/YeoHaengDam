@@ -1,7 +1,7 @@
-package com.ssafy.yeohaengdam.user.domain.service;
+package com.ssafy.yeohaengdam.user.service;
 
-import com.ssafy.yeohaengdam.user.domain.User;
-import com.ssafy.yeohaengdam.user.domain.mapper.UserMapper;
+import com.ssafy.yeohaengdam.user.entity.User;
+import com.ssafy.yeohaengdam.user.mapper.UserMapper;
 import com.ssafy.yeohaengdam.user.request.JoinRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

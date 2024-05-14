@@ -2,8 +2,8 @@ package com.ssafy.yeohaengdam.auth.service;
 
 import com.ssafy.yeohaengdam.auth.dto.JwtToken;
 import com.ssafy.yeohaengdam.auth.dto.LoginRequest;
-import com.ssafy.yeohaengdam.user.domain.User;
-import com.ssafy.yeohaengdam.user.domain.mapper.UserMapper;
+import com.ssafy.yeohaengdam.user.entity.User;
+import com.ssafy.yeohaengdam.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
