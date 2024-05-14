@@ -1,6 +1,7 @@
 package com.ssafy.yeohaengdam.user.controller;
 
 import com.ssafy.yeohaengdam.user.dto.UserData;
+import com.ssafy.yeohaengdam.user.entity.User;
 import com.ssafy.yeohaengdam.user.service.UserService;
 import com.ssafy.yeohaengdam.user.request.JoinRequest;
 import lombok.RequiredArgsConstructor;
@@ -33,10 +34,19 @@ public class UserController {
      * @param update
      * @return
      */
-    @PostMapping("/update")
+    @PutMapping("/update")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> update(@RequestBody Update update){
         userService.updateUser(update);
         return ResponseEntity.ok().build();
+    }
+    /**
+     * 회원 정보 조회
+     */
+    @GetMapping("/myInfo")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<User> myPage(@RequestBody UserInfo userInfo){
+        User user = userService.findByEmail(userInfo);
+        return ResponseEntity.ok(user);
     }
 }
