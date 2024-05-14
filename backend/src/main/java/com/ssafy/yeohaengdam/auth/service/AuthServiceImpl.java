@@ -2,8 +2,8 @@ package com.ssafy.yeohaengdam.auth.service;
 
 import com.ssafy.yeohaengdam.auth.dto.JwtToken;
 import com.ssafy.yeohaengdam.auth.dto.LoginRequest;
-import com.ssafy.yeohaengdam.user.domain.User;
-import com.ssafy.yeohaengdam.user.domain.mapper.UserMapper;
+import com.ssafy.yeohaengdam.user.entity.User;
+import com.ssafy.yeohaengdam.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,5 +27,13 @@ public class AuthServiceImpl implements AuthService{
         }
 
         return jwtTokenService.generateToken(user);
+    }
+
+    @Override
+    public JwtToken refresh(String refreshToken) {
+        String email = jwtTokenService.getUsername(refreshToken);
+        if(email == null) throw new IllegalArgumentException("유효하지 않은 토큰 입니다.");
+
+        return jwtTokenService.generateTokenByRefreshToken(refreshToken);
     }
 }

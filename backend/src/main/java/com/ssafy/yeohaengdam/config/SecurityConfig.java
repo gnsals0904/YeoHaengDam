@@ -39,6 +39,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> {
                             authorize.requestMatchers("/api/auth/login").permitAll();
                             authorize.requestMatchers(POST, "/api/users/join").permitAll();
+                    /**
+                     * 개발
+                     */
+                    authorize.requestMatchers("/**").permitAll();
                         }
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

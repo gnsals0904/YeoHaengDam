@@ -1,13 +1,22 @@
 package com.ssafy.yeohaengdam.user.controller;
 
-import com.ssafy.yeohaengdam.user.domain.service.UserService;
+import com.ssafy.yeohaengdam.auth.dto.JwtToken;
+import com.ssafy.yeohaengdam.user.dto.UserData;
+import com.ssafy.yeohaengdam.user.entity.User;
+import com.ssafy.yeohaengdam.user.service.UserService;
 import com.ssafy.yeohaengdam.user.request.JoinRequest;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Arrays;
+
+import static com.ssafy.yeohaengdam.user.dto.UserData.*;
 
 @RestController
 @RequestMapping("/api/users")
@@ -23,5 +32,27 @@ public class UserController {
         System.out.println("join");
         System.out.println(request);
         userService.join(request);
+    }
+
+
+    /**
+     * 회원 정보 업데이트
+     * @param update
+     * @return
+     */
+    @PutMapping("/update")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Void> update(@RequestBody Update update){
+        userService.updateUser(update);
+        return ResponseEntity.ok().build();
+    }
+    /**
+     * 회원 정보 조회
+     */
+    @GetMapping("/myInfo")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<User> myPage(@RequestBody UserInfo userInfo){
+        User user = userService.findByEmail(userInfo);
+        return ResponseEntity.ok(user);
     }
 }

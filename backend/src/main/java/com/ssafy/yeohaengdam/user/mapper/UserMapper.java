@@ -1,6 +1,6 @@
-package com.ssafy.yeohaengdam.user.domain.mapper;
+package com.ssafy.yeohaengdam.user.mapper;
 
-import com.ssafy.yeohaengdam.user.domain.User;
+import com.ssafy.yeohaengdam.user.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
@@ -11,4 +11,5 @@ public interface UserMapper {
 
     public User findByEmail(String email);
 
+    public void update(User user);
 }
