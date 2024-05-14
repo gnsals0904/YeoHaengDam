@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.yeohaengdam.user.domain.mapper.UserMapper">
+
+        <resultMap id="userDto" type="User">
+                <result column="email" property="email"></result>
+                <result column="nickname" property="nickname"></result>
+                <result column="password" property="password"></result>
+                <result column="role_type" property="roleType"></result>
+                <result column="profile_image" property="profileImage"></result>
+        </resultMap>
+
+        <insert id ='join'>
+                insert into users (email, password, nickname, profile_image)
+                values (#{email}, #{password}, #{nickname}, #{profileImage})
+        </insert>
+
+        <select id ="findByEmail">
+                select *
+                from users
+                where email = #{email};
+        </select>
+
+</mapper>

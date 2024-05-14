@@ -1,5 +1,24 @@
 <script setup>
 import { ref } from 'vue';
+import { joinUser } from '@/api/user';
+
+/** 회원 가입 */
+const nickname = ref('');
+const email = ref('');
+const password = ref('');
+const passwordConfirmation = ref('');
+
+const handleSignUp = async () => {
+  const user = {
+    nickname: nickname.value,
+    email: email.value,
+    password: password.value,
+    passwordConfirmation: passwordConfirmation.value,
+  };
+
+  const result = await joinUser(user);
+  console.log('회원가입 결과:', result);
+};
 
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
@@ -35,13 +54,13 @@ const toggleConfirmPasswordVisibility = () => {
 
           <form class="my-8 text-sm">
             <div class="flex flex-col my-4">
-              <label for="name" class="text-gray-700">Name</label>
+              <label for="nickname" class="text-gray-700">Nick Name</label>
               <input
                 type="text"
-                name="name"
-                id="name"
+                name="nickname"
+                id="nickname"
                 class="mt-2 p-2 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
-                placeholder="Enter your name"
+                placeholder="Enter your nickname"
               />
             </div>
 
@@ -68,7 +87,6 @@ const toggleConfirmPasswordVisibility = () => {
                   id="password"
                   class="flex-1 p-2 pr-10 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
                   placeholder="Enter your password"
-                  type="password"
                 />
                 <button
                   @click="togglePasswordVisibility"
@@ -130,7 +148,6 @@ const toggleConfirmPasswordVisibility = () => {
                   id="password_confirmation"
                   class="flex-1 p-2 pr-10 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
                   placeholder="Enter your password again"
-                  type="password"
                 />
                 <button
                   @click="toggleConfirmPasswordVisibility"
@@ -203,7 +220,8 @@ const toggleConfirmPasswordVisibility = () => {
 
             <div class="my-4 flex items-center justify-end space-x-4">
               <button
-                class="bg-blue-600 hover:bg-blue-700 rounded-lg px-8 py-2 text-gray-100 hover:shadow-xl transition duration-150 uppercase"
+                class="bg-blue-600 hover:bg-blue-700 rounded-lg px-8 py-2 text-gray-100 hover:shadow-xl transition duration-150 uppercase w-full"
+                @click="handleSignUp"
               >
                 Sign Up
               </button>
@@ -265,12 +283,11 @@ const toggleConfirmPasswordVisibility = () => {
             <h1
               class="text-3xl xl:text-4xl 2xl:text-5xl font-bold text-gray-100 tracking-wider"
             >
-              Template
+              YeoHaengDam
             </h1>
           </div>
           <p class="text-gray-300 mt-4 px-16 text-center">
-            Free admin dashboard template created with Tailwind CSS and
-            Alpine.js
+            지금 가입하고 여행 계획을 세워보세요
           </p>
           <a
             href="#"
