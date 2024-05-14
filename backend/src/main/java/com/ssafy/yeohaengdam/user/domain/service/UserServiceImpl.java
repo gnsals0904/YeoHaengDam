@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService{
         User newUser = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .nickname(request.getNickName())
+                .nickname(request.getNickname())
                 .build();
         userMapper.join(newUser);
     }

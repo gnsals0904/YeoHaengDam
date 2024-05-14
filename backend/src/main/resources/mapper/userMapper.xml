@@ -7,6 +7,7 @@
                 <result column="email" property="email"></result>
                 <result column="nickname" property="nickname"></result>
                 <result column="password" property="password"></result>
+                <result column="role_type" property="roleType"></result>
                 <result column="profile_image" property="profileImage"></result>
         </resultMap>
 
@@ -14,5 +15,11 @@
                 insert into users (email, password, nickname, profile_image)
                 values (#{email}, #{password}, #{nickname}, #{profileImage})
         </insert>
+
+        <select id ="findByEmail">
+                select *
+                from users
+                where email = #{email};
+        </select>
 
 </mapper>
