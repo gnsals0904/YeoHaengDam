@@ -1,33 +1,33 @@
 <script setup>
-import { ref } from "vue";
-import router from "@/router";
-import client from "@/api/client";
-import { useAuthStore } from "@/stores/auth";
+import { ref } from 'vue';
+import router from '@/router';
+import client from '@/api/client';
+import { useAuthStore } from '@/stores/auth';
 
 const authStore = useAuthStore();
-const username = ref("");
-const password = ref("");
+const username = ref('');
+const password = ref('');
 
 const handleLogin = async () => {
-  console.log("Logging in with:", username.value, password.value);
+  console.log('Logging in with:', username.value, password.value);
   try {
-    const response = await client.post("/member/login", {
+    const response = await client.post('/member/login', {
       userId: username.value,
       userPassword: password.value,
     });
 
     if (response.status !== 200) {
-      throw new Error("로그인 실패");
+      throw new Error('로그인 실패');
     }
 
-    sessionStorage.setItem("memberDto", JSON.stringify(response.data));
+    sessionStorage.setItem('memberDto', JSON.stringify(response.data));
     console.log(response.data);
     authStore.login(response.data);
-    alert("로그인 성공!");
-    router.push({ name: "Landing" });
+    alert('로그인 성공!');
+    router.push({ name: 'Landing' });
   } catch (error) {
-    console.error("로그인 실패:", error);
-    alert("로그인 실패: " + error.message);
+    console.error('로그인 실패:', error);
+    alert('로그인 실패: ' + error.message);
   }
 };
 </script>
@@ -86,7 +86,9 @@ const handleLogin = async () => {
         </button>
         <div class="flex justify-between mt-4 text-sm">
           <a href="#" class="hover:text-blue-500">Forgot Password?</a>
-          <a href="#" class="hover:text-blue-500">Don't have an account yet?</a>
+          <router-link :to="{ name: 'Signup' }" class="hover:text-blue-500"
+            >Don't have an account yet?</router-link
+          >
         </div>
       </form>
     </div>
