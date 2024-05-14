@@ -9,4 +9,6 @@ public interface UserMapper {
     // 회원 가입
     public void join(User user);
 
+    public User findByEmail(String email);
+
 }

@@ -1,14 +1,12 @@
 package com.ssafy.yeohaengdam.user.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
+@ToString
 public class User {
 
     private Long userId;
@@ -20,4 +18,6 @@ public class User {
     private String password;
 
     private String profileImage;
+
+    private RoleType roleType;
 }

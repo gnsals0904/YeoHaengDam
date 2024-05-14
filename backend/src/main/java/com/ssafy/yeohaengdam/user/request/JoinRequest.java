@@ -10,7 +10,7 @@ public class JoinRequest {
 
     private String email;
 
-    private String nickName;
+    private String nickname;
 
     private String password;
 
@@ -20,7 +20,7 @@ public class JoinRequest {
     public String toString() {
         return "JoinRequest{" +
                 "email='" + email + '\'' +
-                ", nickName='" + nickName + '\'' +
+                ", nickname='" + nickname + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
