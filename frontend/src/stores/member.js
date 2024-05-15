@@ -3,7 +3,12 @@ import { useRouter } from "vue-router";
 import { defineStore } from "pinia";
 import { jwtDecode } from "jwt-decode";
 
-import { userConfirm, findById, tokenRegeneration, logout } from "@/api/user";
+import {
+  userConfirm,
+  findByEmail,
+  tokenRegeneration,
+  logout,
+} from "@/api/user";
 import { httpStatusCode } from "@/util/http-status";
 
 export const useMemberStore = defineStore("memberStore", () => {
@@ -15,14 +20,15 @@ export const useMemberStore = defineStore("memberStore", () => {
   const isValidToken = ref(false);
 
   const userLogin = async (loginUser) => {
+    console.log("로그인 시도 : ", loginUser);
     await userConfirm(
       loginUser,
       (response) => {
-        if (response.status === httpStatusCode.CREATE) {
+        if (response.status === httpStatusCode.OK) {
           console.log("로그인 성공!!!!");
           let { data } = response;
-          let accessToken = data["access-token"];
-          let refreshToken = data["refresh-token"];
+          let accessToken = data["accessToken"];
+          let refreshToken = data["refreshToken"];
           isLogin.value = true;
           isLoginError.value = false;
           isValidToken.value = true;
@@ -43,8 +49,9 @@ export const useMemberStore = defineStore("memberStore", () => {
   const getUserInfo = async (token) => {
     let decodeToken = jwtDecode(token);
     console.log(decodeToken);
-    await findById(
-      decodeToken.userId,
+    await findByEmail(
+      // email
+      decodeToken.sub,
       (response) => {
         if (response.status === httpStatusCode.OK) {
           userInfo.value = response.data.userInfo;
