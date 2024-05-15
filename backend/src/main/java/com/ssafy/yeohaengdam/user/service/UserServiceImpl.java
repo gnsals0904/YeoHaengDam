@@ -1,9 +1,7 @@
 package com.ssafy.yeohaengdam.user.service;
 
-import com.ssafy.yeohaengdam.user.dto.UserData;
 import com.ssafy.yeohaengdam.user.entity.User;
 import com.ssafy.yeohaengdam.user.mapper.UserMapper;
-import com.ssafy.yeohaengdam.user.request.JoinRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,11 +16,11 @@ public class UserServiceImpl implements UserService{
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void join(JoinRequest request) {
+    public void join(Join join) {
         User newUser = User.builder()
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .nickname(request.getNickname())
+                .email(join.getEmail())
+                .password(passwordEncoder.encode(join.getPassword()))
+                .nickname(join.getNickname())
                 .build();
         userMapper.join(newUser);
     }
