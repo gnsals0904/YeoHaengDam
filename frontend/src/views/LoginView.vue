@@ -31,6 +31,7 @@ const login = async () => {
   }
 };
 
+/** TODO : 삭제 예정 */
 const handleLogin = async () => {
   console.log("Logging in with:", username.value, password.value);
   try {
@@ -63,13 +64,13 @@ const handleLogin = async () => {
       class="hidden lg:flex w-full lg:w-1/2 justify-around items-center login_img_section"
     >
       <div class="text-center space-y-6">
-        <h1 class="text-white text-4xl font-bold">Simple App</h1>
-        <p class="text-white text-lg">The simplest app to use</p>
+        <h1 class="text-white text-4xl font-bold">여행담</h1>
+        <p class="text-white text-lg">여행 계획을 세워보세요</p>
         <button
           @click="router.push('/signup')"
           class="bg-white text-blue-600 font-bold py-2 px-4 rounded-xl transition-all duration-500 hover:bg-indigo-700 hover:text-white"
         >
-          Get Started
+          회원 가입 하기
         </button>
       </div>
     </div>
@@ -108,8 +109,12 @@ const handleLogin = async () => {
           Login
         </button>
         <div class="flex justify-between mt-4 text-sm">
-          <a href="#" class="hover:text-blue-500">Forgot Password?</a>
-          <a href="#" class="hover:text-blue-500">Don't have an account yet?</a>
+          <router-link :to="{ name: 'FindPwd' }" class="hover:text-blue-500"
+            >비밀번호를 잊으셨나요?</router-link
+          >
+          <router-link :to="{ name: 'Signup' }" class="hover:text-blue-500"
+            >아직 회원이 아니신가요?</router-link
+          >
         </div>
       </form>
     </div>

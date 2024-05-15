@@ -42,12 +42,12 @@ const toggleConfirmPasswordVisibility = () => {
             Sign Up
           </h2>
           <p class="text-center text-sm text-gray-600 mt-2">
-            Already have an account?
-            <a
-              href="#"
+            이미 계정이 있으신가요?
+            <router-link
+              :to="{ name: 'Login' }"
               class="text-blue-600 hover:text-blue-700 hover:underline"
               title="Sign In"
-              >Sign in here</a
+              >여기에서 로그인 하세요</router-link
             >
           </p>
 
@@ -286,7 +286,7 @@ const toggleConfirmPasswordVisibility = () => {
             <h1
               class="text-3xl xl:text-4xl 2xl:text-5xl font-bold text-gray-100 tracking-wider"
             >
-              YeoHaengDam
+              여행담
             </h1>
           </div>
           <p class="text-gray-300 mt-4 px-16 text-center">
