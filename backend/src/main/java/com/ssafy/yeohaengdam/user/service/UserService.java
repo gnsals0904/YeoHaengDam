@@ -12,4 +12,6 @@ public interface UserService {
     public User findByEmail(UserInfo userInfo);
 
     public void delete(UserInfo userInfo);
+
+    boolean checkNickname(String nickname);
 }

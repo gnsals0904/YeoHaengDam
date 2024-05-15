@@ -3,10 +3,13 @@ package com.ssafy.yeohaengdam.user.controller;
 import com.ssafy.yeohaengdam.user.entity.User;
 import com.ssafy.yeohaengdam.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 import static com.ssafy.yeohaengdam.user.dto.UserData.*;
 
@@ -27,6 +30,20 @@ public class UserController {
     public void join(@RequestBody Join join){
         userService.join(join);
     }
+
+    /**
+     * 닉네임 중복 검증
+     */
+    @GetMapping("/check_nickname/{nickname}")
+
+    public ResponseEntity<?> checkNickname(@PathVariable(value = "nickname") String nickname){
+        boolean isAvailable = userService.checkNickname(nickname);
+        if(!isAvailable){
+            return ResponseEntity.ok().body(Map.of("available", false, "message", "Nickname is already taken"));
+        }
+        return ResponseEntity.ok().body(Map.of("available", true, "message", "Nickname is available"));
+    }
+
 
 
     /**

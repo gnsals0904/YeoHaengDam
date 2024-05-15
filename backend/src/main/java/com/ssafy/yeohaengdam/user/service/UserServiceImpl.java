@@ -54,4 +54,9 @@ public class UserServiceImpl implements UserService{
         User user = userMapper.findByEmail(userInfo.getEmail());
         userMapper.delete(user);
     }
+
+    @Override
+    public boolean checkNickname(String nickname) {
+        return userMapper.checkNickname(nickname);
+    }
 }
