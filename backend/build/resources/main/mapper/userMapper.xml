@@ -28,4 +28,10 @@
                 where email = #{email}
         </update>
 
+        <delete id = "delete">
+                delete
+                from users
+                where email = #{email}
+        </delete>
+
 </mapper>

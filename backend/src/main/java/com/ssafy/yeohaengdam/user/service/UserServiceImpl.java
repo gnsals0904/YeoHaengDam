@@ -50,4 +50,10 @@ public class UserServiceImpl implements UserService{
     public User findByEmail(UserInfo userInfo) {
         return userMapper.findByEmail(userInfo.getEmail());
     }
+
+    @Override
+    public void delete(UserInfo userInfo){
+        User user = userMapper.findByEmail(userInfo.getEmail());
+        userMapper.delete(user);
+    }
 }

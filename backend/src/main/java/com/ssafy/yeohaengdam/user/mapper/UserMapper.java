@@ -1,5 +1,6 @@
 package com.ssafy.yeohaengdam.user.mapper;
 
+import com.ssafy.yeohaengdam.user.dto.UserData;
 import com.ssafy.yeohaengdam.user.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,4 +13,6 @@ public interface UserMapper {
     public User findByEmail(String email);
 
     public void update(User user);
+
+    public void delete(User user);
 }

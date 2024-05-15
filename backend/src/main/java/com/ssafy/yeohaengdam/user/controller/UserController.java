@@ -55,4 +55,14 @@ public class UserController {
         User user = userService.findByEmail(userInfo);
         return ResponseEntity.ok(user);
     }
+
+    /**
+     * 회원 삭제
+     */
+    @DeleteMapping("/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Void> delete(@RequestBody UserInfo userInfo){
+        userService.delete(userInfo);
+        return ResponseEntity.ok().build();
+    }
 }

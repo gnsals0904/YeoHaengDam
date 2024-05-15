@@ -13,4 +13,6 @@ public interface UserService {
     public void updateUser(Update update);
 
     public User findByEmail(UserInfo userInfo);
+
+    public void delete(UserInfo userInfo);
 }
