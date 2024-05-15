@@ -10,4 +10,5 @@ public interface SpotService {
 
     public List<GugunCode> findGugunBySido(int sidoCode, String sidoName);
 
+    public List<SpotInfo> findSpotByCondition(int sidoCode, int gugunCode, int contentCode);
 }

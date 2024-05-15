@@ -18,4 +18,9 @@ public class SpotServiceImpl implements SpotService{
     public List<GugunCode> findGugunBySido(int sidoCode, String sidoName) {
         return spotMapper.findGugunBySido(sidoCode, sidoName);
     }
+
+    @Override
+    public List<SpotInfo> findSpotByCondition(int sidoCode, int gugunCode, int contentCode) {
+        return spotMapper.findSpotByCondition(sidoCode, gugunCode, contentCode);
+    }
 }
