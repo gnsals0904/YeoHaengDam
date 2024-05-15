@@ -26,6 +26,10 @@ public class UserController {
 
     private final UserService userService;
 
+    /**
+     * 회원가입
+     * @param request
+     */
     @PostMapping("/join")
     @ResponseStatus(HttpStatus.OK)
     public void join(@RequestBody JoinRequest request){
