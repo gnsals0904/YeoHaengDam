@@ -3,8 +3,12 @@ package com.ssafy.yeohaengdam.user.service;
 import com.ssafy.yeohaengdam.user.entity.User;
 import com.ssafy.yeohaengdam.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.function.Function;
 
 import static com.ssafy.yeohaengdam.user.dto.UserData.*;
 
@@ -53,6 +57,11 @@ public class UserServiceImpl implements UserService{
     public void delete(UserInfo userInfo){
         User user = userMapper.findByEmail(userInfo.getEmail());
         userMapper.delete(user);
+    }
+
+    @Bean
+    public Function<UserDetails, User> fetchUser() {
+        return userDetails -> userMapper.findByEmail(userDetails.getUsername());
     }
 
     @Override

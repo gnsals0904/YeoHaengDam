@@ -19,7 +19,7 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    public final String AUTHORIZATION_HEAD = "authorization";
+    public final String AUTHORIZATION_HEAD = "Authorization";
 
     // JwtTokenService는 토큰에 대해 유효성 검사를 하거나 토큰을 생성하기 위한 객체다.
     private final JwtTokenService jwtTokenService;
@@ -31,12 +31,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 요청 객체에 헤더를 확인 하여 토큰 정보가 있는지 확인한다.
         String accessToken = resolveToken(request);
+        System.out.println("accessToken = " + accessToken);
 
         try{
+
             // 토큰 정보가 존재하고, 유효한 토큰인지 확인한다.
             if(StringUtils.hasText(accessToken) && jwtTokenService.validateToken(accessToken)){
                 // 유효한 토큰이라면 ? 토큰에 대한 정보를 가지고 인증 객체를 생성하여 SecurityContextHolder에 Authentication 객체를 저장해야한다.
                 Authentication authentication = jwtTokenService.parseAuthentication(accessToken);
+                System.out.println(authentication);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }catch(Exception e){

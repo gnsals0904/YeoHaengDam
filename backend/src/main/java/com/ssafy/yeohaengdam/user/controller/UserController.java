@@ -1,5 +1,6 @@
 package com.ssafy.yeohaengdam.user.controller;
 
+import com.ssafy.yeohaengdam.core.annotation.CurrentUser;
 import com.ssafy.yeohaengdam.user.entity.User;
 import com.ssafy.yeohaengdam.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -7,8 +8,11 @@ import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Map;
 
 import static com.ssafy.yeohaengdam.user.dto.UserData.*;
@@ -38,6 +42,7 @@ public class UserController {
 
     public ResponseEntity<?> checkNickname(@PathVariable(value = "nickname") String nickname){
         boolean isAvailable = userService.checkNickname(nickname);
+        System.out.println("중복 조회" + nickname);
         if(!isAvailable){
             return ResponseEntity.ok().body(Map.of("available", false, "message", "Nickname is already taken"));
         }
@@ -62,8 +67,9 @@ public class UserController {
      */
     @GetMapping("/myInfo")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<User> myPage(@RequestBody UserInfo userInfo){
-        User user = userService.findByEmail(userInfo);
+    public ResponseEntity<User> myPage(@CurrentUser User user){
+        System.out.println("회원 정보 조회 : " + user);
+//        User user = userService.findByEmail(user.getEmail());
         return ResponseEntity.ok(user);
     }
 

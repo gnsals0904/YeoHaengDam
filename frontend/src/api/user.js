@@ -31,9 +31,9 @@ async function userConfirm(param, success, fail) {
 
 /** user email 로 user info 를 모두 가져온다 */
 async function findByEmail(email, success, fail) {
-  local.defaults.headers["Authorization"] =
-    sessionStorage.getItem("accessToken");
-  await local.get(`/api/users/myInfo/`, email).then(success).catch(fail);
+  const token = sessionStorage.getItem("accessToken");
+  local.defaults.headers["Authorization"] = `Bearer ${token}`;
+  await local.get(`/api/users/myInfo`).then(success).catch(fail);
 }
 
 async function tokenRegeneration(user, success, fail) {

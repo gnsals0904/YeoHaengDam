@@ -1,47 +1,6 @@
 <script setup>
-import { onMounted } from "vue";
 import { useAuthStore } from "@/stores/auth";
 const authStore = useAuthStore();
-
-onMounted(async () => {
-  /*
-  if (sessionStorage.getItem("memberDto") !== null) {
-    if (!sessionStorage.getItem("refreshed")) {
-      sessionStorage.setItem("refreshed", "true");
-      router.go(0);
-    } else {
-      sessionStorage.removeItem("refreshed");
-    }
-  }
-  */
-});
-
-/*
-// 로그인 정보 계속 확인용
-client.get("/member/ping").then((res) => {
-  if (res.status === 200) {
-    if (res.data === "") {
-      return;
-    }
-
-    sessionStorage.setItem("memberDto", JSON.stringify(res.data));
-  } else {
-    router.go(0);
-    
-  }
-});
-
-// 세션에서 로그인 정보 가져오기
-isLoggedIn = computed(() => {
-  return sessionStorage.getItem("memberDto") !== null;
-});
-
-// 세션에서 회원 정보 가져오기
-const userInfo = computed(() => {
-  const memberDto = sessionStorage.getItem("memberDto");
-  return memberDto ? JSON.parse(memberDto) : null;
-});
-*/
 </script>
 
 <template>
