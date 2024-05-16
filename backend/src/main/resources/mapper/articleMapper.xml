@@ -33,9 +33,16 @@
         ORDER BY article.article_id DESC;
     </select>
 
-    <insert id="create" parameterType="Article">
+    <insert id="create" parameterType="Article" useGeneratedKeys="true" keyProperty="articleId">
         insert into article(user_id, title, content, create_at)
-        values (#{userId}, #{title}, #{content}, #{createAt})
+        values (#{userId}, #{title}, #{content}, #{createdAt})
     </insert>
+
+    <insert id="createImage">
+        INSERT INTO images (url, article_id)
+        VALUES (#{url}, #{articleId})
+    </insert>
+
+
 
 </mapper>
