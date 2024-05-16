@@ -27,6 +27,10 @@ public class ArticleController {
     /**
      * 게시글 전체 조회
      */
+    @GetMapping
+    public ResponseEntity<List<ArticleInfo>> findAll(){
+        return ResponseEntity.ok(articleService.findAll());
+    }
 //    @GetMapping("/{articleId}")
 //    public ResponseEntity<>
 
@@ -35,9 +39,9 @@ public class ArticleController {
      * 게시글 등록
      */
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody Create create,
+    public ResponseEntity<Void> create(@RequestBody Create create, @CurrentUser User user,
                                        @RequestPart(required = false) List<MultipartFile> images){
-        articleService.create(create, 1, images);
+        articleService.create(create, user.getUserId(), images);
         return ResponseEntity.ok().build();
     }
 
@@ -48,6 +52,14 @@ public class ArticleController {
     /**
      * 게시글 수정
      */
+    @PatchMapping("/{articleId}")
+    public ResponseEntity<Void> update(@PathVariable int articleId,
+                                       @RequestBody Create update, @CurrentUser User user,
+                                       @RequestPart(required = false) List<MultipartFile> images){
+
+        articleService.update(articleId, update, user.getUserId(), images);
+        return ResponseEntity.ok().build();
+    }
 
     /**
      * 게시글 삭제

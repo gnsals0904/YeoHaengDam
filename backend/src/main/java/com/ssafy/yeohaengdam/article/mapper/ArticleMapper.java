@@ -16,5 +16,11 @@ public interface ArticleMapper {
 
     public int create(Article article);
 
+    public int update(Article article);
+
+    public int delete(int articleId);
+
     public void createImage(Image image);
+
+    public void deleteImage(int articleId);
 }

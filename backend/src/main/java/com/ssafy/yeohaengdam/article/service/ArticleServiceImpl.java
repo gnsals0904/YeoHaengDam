@@ -16,7 +16,7 @@ import static java.time.LocalDateTime.now;
 
 @Service
 @RequiredArgsConstructor
-public class ArticleServiceImpl implements ArticleService{
+public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleMapper articleMapper;
     private final FileService fileService;
@@ -27,11 +27,11 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public void create(Create create, int userId ,List<MultipartFile> images) {
+    public void create(Create create, int userId, List<MultipartFile> images) {
         List<Image> imageList = new ArrayList<>();
 
         try {
-            if(images != null) {
+            if (images != null) {
                 for (MultipartFile image : images) {
                     String imagePath = fileService.saveFile(image);
                     imageList.add(new Image(null, imagePath, null)); // articleId는 나중에 설정
@@ -45,11 +45,11 @@ public class ArticleServiceImpl implements ArticleService{
                     .hit(0)
                     .createdAt(now())
                     .build();
-            int articleNo = articleMapper.create(newArticle); // 생성된 Article의 ID를 설정
+            int articleId = articleMapper.create(newArticle); // 생성된 Article의 ID를 설정
 
-            if(images != null) {
+            if (images != null) {
                 for (Image image : imageList) {
-                    image.setArticleId(articleNo);
+                    image.setArticleId(articleId);
                     articleMapper.createImage(image);
                 }
             }
@@ -57,6 +57,38 @@ public class ArticleServiceImpl implements ArticleService{
             throw new RuntimeException("이미지 저장 도중 오류가 발생했습니다.", e);
         } catch (Exception e) {
             throw new RuntimeException("게시글 생성 도중 오류가 발생했습니다.", e);
+        }
+    }
+
+    @Override
+    public void update(int articleId, Create update, int userId, List<MultipartFile> images) {
+        List<Image> imageList = new ArrayList<>();
+
+        try {
+            if (images != null) {
+                for (MultipartFile image : images) {
+                    String imagePath = fileService.saveFile(image);
+                    imageList.add(new Image(null, imagePath, null)); // articleId는 나중에 설정
+                }
+            }
+
+            articleMapper.deleteImage(articleId);
+            Article updatedArticle = Article.builder()
+                    .articleId(articleId)
+                    .title(update.getTitle())
+                    .content(update.getContent())
+                    .build();
+            articleMapper.update(updatedArticle);
+
+
+            if (images != null) {
+                for (Image image : imageList) {
+                    image.setArticleId(articleId);
+                    articleMapper.createImage(image);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("게시글 수정 도중 오류가 발생했습니다.", e);
         }
     }
 }

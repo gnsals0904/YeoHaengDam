@@ -31,4 +31,13 @@ public class ArticleData {
         @NotNull(message = "내용을 입력해주세요")
         private String content;
     }
+
+    @Data
+    public static class Update{
+
+        private int articleId;
+        private String title;
+        private String content;
+        private LocalDateTime updatedAt;
+    }
 }

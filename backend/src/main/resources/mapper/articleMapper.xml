@@ -10,8 +10,8 @@
         <result column="title" property="title"/>
         <result column="content" property="content"/>
         <result column="hit" property="hit"/>
-        <result column="create_at" property="createdAt"/>
-        <result column="update_at" property="updatedAt"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
         <collection property="imageUrls" ofType="java.lang.String">
             <result column="image_url" property="url"/>
         </collection>
@@ -34,14 +34,25 @@
     </select>
 
     <insert id="create" parameterType="Article" useGeneratedKeys="true" keyProperty="articleId">
-        insert into article(user_id, title, content, create_at)
+        insert into article(user_id, title, content, created_at)
         values (#{userId}, #{title}, #{content}, #{createdAt})
     </insert>
 
     <insert id="createImage">
-        INSERT INTO images (url, article_id)
+        INSERT INTO article_image (url, article_id)
         VALUES (#{url}, #{articleId})
     </insert>
+
+    <update id="update">
+        update article
+        set title = #{title}, content = #{content}, updated_at = now()
+        where article_id = #{articleId}
+    </update>
+
+    <delete id="deleteImage">
+        delete from article_image
+        where article_id = #{articleId}
+    </delete>
 
 
 
