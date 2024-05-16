@@ -11,7 +11,9 @@ async function joinUser(user) {
       "http://localhost:8080/api/users/join",
       user
     );
-    return response.data;
+    if (response.status === 200) {
+      return { success: true };
+    }
   } catch (error) {
     console.error("회원가입 에러:", error);
     if (error.response) {

@@ -1,14 +1,25 @@
 <script setup>
 import { ref } from "vue";
 import { joinUser } from "@/api/user";
+import { useRouter } from "vue-router";
+import axios from "axios";
 
 /** 회원 가입 */
 const nickname = ref("");
 const email = ref("");
 const password = ref("");
 const passwordConfirmation = ref("");
+const isNicknameAvailable = ref(false);
+const hasCheckedNickname = ref(false);
+const isNicknameConfirmed = ref(false);
+const router = useRouter();
 
+/** 회원 가입 */
 const handleSignUp = async () => {
+  if (!hasCheckedNickname.value) {
+    alert("닉네임 중복체크를 해주세요.");
+    return;
+  }
   const user = {
     nickname: nickname.value,
     email: email.value,
@@ -17,8 +28,16 @@ const handleSignUp = async () => {
   console.log(user);
   const result = await joinUser(user);
   console.log("회원가입 결과:", result);
+
+  if (result.success) {
+    alert("회원가입이 완료되었습니다.");
+    router.replace("/login");
+  } else {
+    alert("회원가입에 실패했습니다.");
+  }
 };
 
+/** 비밀번호 보이게 / 보이지 않게 */
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 const togglePasswordVisibility = () => {
@@ -26,6 +45,35 @@ const togglePasswordVisibility = () => {
 };
 const toggleConfirmPasswordVisibility = () => {
   showConfirmPassword.value = !showConfirmPassword.value;
+};
+
+/** 닉네임 중복 체크 */
+const nicknameCheck = async () => {
+  if (!nickname.value) {
+    alert("닉네임을 입력해주세요.");
+    return;
+  }
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/users/check_nickname/${nickname.value}`
+    );
+    if (response.data.available) {
+      const confirmUse = confirm(
+        "사용 가능한 닉네임입니다. 이 닉네임을 사용하시겠습니까?"
+      );
+      if (confirmUse) {
+        isNicknameAvailable.value = true;
+        isNicknameConfirmed.value = true;
+        hasCheckedNickname.value = true;
+      }
+    } else {
+      alert("이미 사용 중인 닉네임입니다.");
+      isNicknameAvailable.value = false;
+    }
+  } catch (error) {
+    console.error("닉네임 중복체크 오류:", error);
+    alert("중복 체크 중 오류가 발생했습니다.");
+  }
 };
 </script>
 
@@ -54,14 +102,23 @@ const toggleConfirmPasswordVisibility = () => {
           <form class="my-8 text-sm" @submit.prevent>
             <div class="flex flex-col my-4">
               <label for="nickname" class="text-gray-700">Nick Name</label>
-              <input
-                type="text"
-                name="nickname"
-                id="nickname"
-                class="mt-2 p-2 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
-                placeholder="Enter your nickname"
-                v-model="nickname"
-              />
+              <div class="flex items-center mt-2">
+                <input
+                  type="text"
+                  name="nickname"
+                  id="nickname"
+                  class="flex-grow p-2 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
+                  placeholder="Enter your nickname"
+                  v-model="nickname"
+                  :disabled="isNicknameConfirmed"
+                />
+                <button
+                  class="ml-2 bg-blue-600 hover:bg-blue-700 rounded-lg px-4 py-2 text-gray-100 hover:shadow-xl transition duration-150 uppercase"
+                  @click="nicknameCheck"
+                >
+                  중복 검사
+                </button>
+              </div>
             </div>
 
             <div class="flex flex-col my-4">
