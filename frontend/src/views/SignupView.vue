@@ -1,23 +1,22 @@
 <script setup>
-import { ref } from 'vue';
-import { joinUser } from '@/api/user';
+import { ref } from "vue";
+import { joinUser } from "@/api/user";
 
 /** 회원 가입 */
-const nickname = ref('');
-const email = ref('');
-const password = ref('');
-const passwordConfirmation = ref('');
+const nickname = ref("");
+const email = ref("");
+const password = ref("");
+const passwordConfirmation = ref("");
 
 const handleSignUp = async () => {
   const user = {
     nickname: nickname.value,
     email: email.value,
     password: password.value,
-    passwordConfirmation: passwordConfirmation.value,
   };
-
+  console.log(user);
   const result = await joinUser(user);
-  console.log('회원가입 결과:', result);
+  console.log("회원가입 결과:", result);
 };
 
 const showPassword = ref(false);
@@ -43,16 +42,16 @@ const toggleConfirmPasswordVisibility = () => {
             Sign Up
           </h2>
           <p class="text-center text-sm text-gray-600 mt-2">
-            Already have an account?
-            <a
-              href="#"
+            이미 계정이 있으신가요?
+            <router-link
+              :to="{ name: 'Login' }"
               class="text-blue-600 hover:text-blue-700 hover:underline"
               title="Sign In"
-              >Sign in here</a
+              >여기에서 로그인 하세요</router-link
             >
           </p>
 
-          <form class="my-8 text-sm">
+          <form class="my-8 text-sm" @submit.prevent>
             <div class="flex flex-col my-4">
               <label for="nickname" class="text-gray-700">Nick Name</label>
               <input
@@ -61,6 +60,7 @@ const toggleConfirmPasswordVisibility = () => {
                 id="nickname"
                 class="mt-2 p-2 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
                 placeholder="Enter your nickname"
+                v-model="nickname"
               />
             </div>
 
@@ -72,6 +72,7 @@ const toggleConfirmPasswordVisibility = () => {
                 id="email"
                 class="mt-2 p-2 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
                 placeholder="Enter your email"
+                v-model="email"
               />
             </div>
 
@@ -87,6 +88,7 @@ const toggleConfirmPasswordVisibility = () => {
                   id="password"
                   class="flex-1 p-2 pr-10 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
                   placeholder="Enter your password"
+                  v-model="password"
                 />
                 <button
                   @click="togglePasswordVisibility"
@@ -94,7 +96,7 @@ const toggleConfirmPasswordVisibility = () => {
                   class="absolute right-2 bg-transparent flex items-center justify-center text-gray-700"
                 >
                   <svg
-                    :class="{ hidden: !showPassword }"
+                    :class="{ hidden: showPassword }"
                     class="w-5 h-5"
                     fill="none"
                     stroke="currentColor"
@@ -110,7 +112,7 @@ const toggleConfirmPasswordVisibility = () => {
                   </svg>
 
                   <svg
-                    :class="{ hidden: showPassword }"
+                    :class="{ hidden: !showPassword }"
                     class="w-5 h-5"
                     fill="none"
                     stroke="currentColor"
@@ -148,6 +150,7 @@ const toggleConfirmPasswordVisibility = () => {
                   id="password_confirmation"
                   class="flex-1 p-2 pr-10 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
                   placeholder="Enter your password again"
+                  v-model="passwordConfirmation"
                 />
                 <button
                   @click="toggleConfirmPasswordVisibility"
@@ -155,7 +158,7 @@ const toggleConfirmPasswordVisibility = () => {
                   class="absolute right-2 bg-transparent flex items-center justify-center text-gray-700"
                 >
                   <svg
-                    :class="{ hidden: !showConfirmPassword }"
+                    :class="{ hidden: showConfirmPassword }"
                     class="w-5 h-5"
                     fill="none"
                     stroke="currentColor"
@@ -171,7 +174,7 @@ const toggleConfirmPasswordVisibility = () => {
                   </svg>
 
                   <svg
-                    :class="{ hidden: showConfirmPassword }"
+                    :class="{ hidden: !showConfirmPassword }"
                     class="w-5 h-5"
                     fill="none"
                     stroke="currentColor"
@@ -283,7 +286,7 @@ const toggleConfirmPasswordVisibility = () => {
             <h1
               class="text-3xl xl:text-4xl 2xl:text-5xl font-bold text-gray-100 tracking-wider"
             >
-              YeoHaengDam
+              여행담
             </h1>
           </div>
           <p class="text-gray-300 mt-4 px-16 text-center">

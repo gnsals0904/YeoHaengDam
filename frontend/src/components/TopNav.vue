@@ -48,7 +48,7 @@ const userInfo = computed(() => {
   <header class="flex justify-between items-center py-4">
     <div class="flex items-center space-x-4">
       <router-link :to="{ name: 'Landing' }" class="text-3xl font-bold"
-        >YeoHaengDam</router-link
+        >여행담</router-link
       >
     </div>
     <nav class="hidden md:flex space-x-6">
