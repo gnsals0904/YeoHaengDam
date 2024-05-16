@@ -30,9 +30,9 @@ public class Article {
 
     private List<String> imageUrls;
 
-    private LocalDateTime createDate;
+    private LocalDateTime createdAt;
 
-    private LocalDateTime lastModifiedDate;
+    private LocalDateTime updatedAt;
 
 
 }
