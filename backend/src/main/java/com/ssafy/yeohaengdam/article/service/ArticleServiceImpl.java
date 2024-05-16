@@ -91,4 +91,9 @@ public class ArticleServiceImpl implements ArticleService {
             throw new RuntimeException("게시글 수정 도중 오류가 발생했습니다.", e);
         }
     }
+
+    @Override
+    public void delete(int articleId) {
+        articleMapper.delete(articleId);
+    }
 }

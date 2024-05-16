@@ -64,4 +64,10 @@ public class ArticleController {
     /**
      * 게시글 삭제
      */
+    @DeleteMapping("/{articleId}")
+    public ResponseEntity<Void> delete(@PathVariable int articleId) {
+        articleService.delete(articleId);
+        return ResponseEntity.ok().build();
+    }
+
 }

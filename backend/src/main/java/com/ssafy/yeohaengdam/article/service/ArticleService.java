@@ -15,4 +15,6 @@ public interface ArticleService {
     public void create(Create create, int userId, List<MultipartFile> images);
 
     public void update(int articleId, Create update, int userId, List<MultipartFile> images);
+
+    public void delete(int articleId);
 }
