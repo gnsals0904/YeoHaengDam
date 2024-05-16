@@ -1,9 +1,9 @@
 <script setup>
-import { KakaoMap, KakaoMapMarker } from 'vue3-kakao-maps';
-import { onMounted, ref, computed, reactive } from 'vue';
-import { useRoute } from 'vue-router';
-import LocationBox from '@/components/map/LocationBox.vue';
-import axios from 'axios';
+import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
+import { onMounted, ref, computed } from "vue";
+import { useRoute } from "vue-router";
+import LocationBox from "@/components/map/LocationBox.vue";
+import axios from "axios";
 
 const route = useRoute();
 const tripData = ref([]);
@@ -14,7 +14,7 @@ onMounted(async () => {
   if (sidoCode && gugunCode && contentCode) {
     try {
       const response = await axios.get(
-        'http://localhost/api/trip/listTripWithOutTitle',
+        "http://localhost:8080/api/spot/listSpot",
         {
           params: {
             sidoCode: parseInt(sidoCode),
@@ -27,13 +27,13 @@ onMounted(async () => {
         ...item,
         infoVisible: false,
       }));
-      console.log('Trip Data:', tripData.value);
+      console.log("Trip Data:", tripData.value);
     } catch (error) {
-      console.error('Error fetching trip data:', error);
-      alert('여행 정보를 가져오는 데 실패했습니다.');
+      console.error("Error fetching trip data:", error);
+      alert("여행 정보를 가져오는 데 실패했습니다.");
     }
   } else {
-    alert('필요한 매개변수가 URL에 포함되지 않았습니다.');
+    alert("필요한 매개변수가 URL에 포함되지 않았습니다.");
   }
 });
 
