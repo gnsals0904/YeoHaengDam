@@ -1,6 +1,5 @@
 package com.ssafy.yeohaengdam.spot.controller;
 
-import com.ssafy.yeohaengdam.spot.dto.SpotData;
 import com.ssafy.yeohaengdam.spot.service.SpotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
