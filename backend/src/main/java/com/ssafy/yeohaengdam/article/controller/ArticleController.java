@@ -31,8 +31,6 @@ public class ArticleController {
     public ResponseEntity<List<ArticleInfo>> findAll(){
         return ResponseEntity.ok(articleService.findAll());
     }
-//    @GetMapping("/{articleId}")
-//    public ResponseEntity<>
 
 
     /**
@@ -48,6 +46,10 @@ public class ArticleController {
     /**
      * 게시글 상세 조회
      */
+    @GetMapping("/{articleId}")
+    public ResponseEntity<ArticleInfo> findById(@PathVariable int articleId){
+        return ResponseEntity.ok(articleService.findById(articleId));
+    }
 
     /**
      * 게시글 수정

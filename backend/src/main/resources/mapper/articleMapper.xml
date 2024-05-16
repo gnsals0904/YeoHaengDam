@@ -24,14 +24,32 @@
                article.title,
                article.content,
                article.hit,
-               article.create_at,
-               article.update_at,
+               article.created_at,
+               article.updated_at,
                article_image.image_url
         FROM article
                  LEFT JOIN users ON article.user_id = users.user_id
                  LEFT JOIN article_image ON article.article_id = article_image.article_id
         ORDER BY article.article_id DESC;
     </select>
+
+    <select id = "findById" resultMap="ArticleWithImages">
+
+        SELECT article.article_id,
+               article.user_id,
+               users.nickname AS user_nickname,
+               article.title,
+               article.content,
+               article.hit,
+               article.created_at,
+               article.updated_at,
+               article_image.image_url
+        FROM article
+                 LEFT JOIN users ON article.user_id = users.user_id
+                 LEFT JOIN article_image ON article.article_id = article_image.article_id
+        where article.article_id = #{articleId}
+    </select>
+
 
     <insert id="create" parameterType="Article" useGeneratedKeys="true" keyProperty="articleId">
         insert into article(user_id, title, content, created_at)
@@ -58,7 +76,6 @@
         delete from article
         where article_id = #{articleId}
     </delete>
-
 
 
 </mapper>

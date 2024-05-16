@@ -27,6 +27,11 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public ArticleInfo findById(int articleId){
+        return articleMapper.findById(articleId);
+    }
+
+    @Override
     public void create(Create create, int userId, List<MultipartFile> images) {
         List<Image> imageList = new ArrayList<>();
 
