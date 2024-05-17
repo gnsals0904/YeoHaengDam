@@ -1,6 +1,7 @@
 <script setup>
-import { useAuthStore } from "@/stores/auth";
-const authStore = useAuthStore();
+import { useMemberStore } from "@/stores/member";
+
+const memberStore = useMemberStore();
 </script>
 
 <template>
@@ -15,11 +16,13 @@ const authStore = useAuthStore();
       <router-link :to="{ name: 'Main' }" class="text-lg">고객지원</router-link>
       <router-link :to="{ name: 'Main' }" class="text-lg">이용방법</router-link>
       <router-link :to="{ name: 'board' }" class="text-lg">게시판</router-link>
-      <template v-if="authStore.isLoggedIn">
+      <template v-if="memberStore.isLogin">
         <router-link class="text-lg" :to="{ name: 'MyPage' }"
           >마이페이지</router-link
         >
-        <button class="text-lg" @click="authStore.logout">로그아웃</button>
+        <button class="text-lg" @click="memberStore.userLogout">
+          로그아웃
+        </button>
       </template>
       <template v-else>
         <router-link class="text-lg" :to="{ name: 'Login' }"
