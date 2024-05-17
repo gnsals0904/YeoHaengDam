@@ -12,7 +12,7 @@ public interface NoticeService {
     public void create(int userId, Create create);
 
 
-    public void delete(int noticeId);
+    public void delete(int noticeId, int userId);
 
     public Detail findById(int noticeId);
 

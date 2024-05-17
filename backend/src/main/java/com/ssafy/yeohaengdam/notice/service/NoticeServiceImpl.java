@@ -32,8 +32,8 @@ public class NoticeServiceImpl implements NoticeService{
 
 
     @Override
-    public void delete(int noticeId) {
-
+    public void delete(int noticeId, int userId) {
+        noticeMapper.delete(noticeId);
     }
 
     @Override

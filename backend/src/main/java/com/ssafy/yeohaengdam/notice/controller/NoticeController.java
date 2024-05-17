@@ -44,4 +44,11 @@ public class NoticeController {
         noticeService.update(noticeId, update, user.getUserId());
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/{noticeId}")
+    public ResponseEntity<Void> update(@CurrentUser User user,
+                                       @PathVariable(value = "noticeId") int noticeId){
+        noticeService.delete(noticeId, user.getUserId());
+        return ResponseEntity.ok().build();
+    }
 }
