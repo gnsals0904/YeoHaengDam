@@ -1,6 +1,6 @@
 package com.ssafy.yeohaengdam.notice.service;
 
-import com.ssafy.yeohaengdam.notice.dto.NoticeData;
+import com.ssafy.yeohaengdam.notice.entity.Notice;
 import com.ssafy.yeohaengdam.notice.mapper.NoticeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,8 +21,13 @@ public class NoticeServiceImpl implements NoticeService{
     }
 
     @Override
-    public void create(Create create) {
-
+    public void create(int userId, Create create) {
+        Notice newNotice = Notice.builder()
+                .userId(userId)
+                .title(create.getTitle())
+                .content(create.getContent())
+                .build();
+        noticeMapper.create(newNotice);
     }
 
     @Override

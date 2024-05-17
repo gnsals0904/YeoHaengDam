@@ -26,4 +26,9 @@
         ORDER BY notice.notice_id DESC;
     </select>
 
+    <insert id="create" parameterType="Notice" useGeneratedKeys="true" keyProperty="noticeId">
+        insert into notice(user_id, title, content, created_at)
+        values (#{userId}, #{title}, #{content}, now())
+    </insert>
+
 </mapper>

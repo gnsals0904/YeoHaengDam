@@ -1,17 +1,18 @@
 package com.ssafy.yeohaengdam.notice.controller;
 
 
+import com.ssafy.yeohaengdam.core.annotation.CurrentUser;
 import com.ssafy.yeohaengdam.notice.dto.NoticeData;
 import com.ssafy.yeohaengdam.notice.service.NoticeService;
+import com.ssafy.yeohaengdam.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 import static com.ssafy.yeohaengdam.notice.dto.NoticeData.*;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -23,5 +24,12 @@ public class NoticeController {
     @GetMapping("/list")
     public ResponseEntity<List<Detail>> findAll(){
         return ResponseEntity.ok(noticeService.findAll());
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> create(@CurrentUser User user, @RequestBody Create create){
+        System.out.println(user.getUserId() + " " + create);
+        noticeService.create(user.getUserId(), create);
+        return ResponseEntity.ok().build();
     }
 }
