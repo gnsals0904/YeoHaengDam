@@ -118,6 +118,10 @@ export const useMemberStore = defineStore(
 
           sessionStorage.removeItem('accessToken');
           sessionStorage.removeItem('refreshToken');
+          // 히스토리를 날리고 Landing 페이지로 이동
+          router.replace({ name: 'Landing' }).then(() => {
+            window.location.href = router.resolve({ name: 'Landing' }).href;
+          });
         }
       );
     };
@@ -148,6 +152,10 @@ export const useMemberStore = defineStore(
 
       sessionStorage.removeItem('accessToken');
       sessionStorage.removeItem('refreshToken');
+      // 히스토리를 날리고 Landing 페이지로 이동
+      router.replace({ name: 'Landing' }).then(() => {
+        window.location.href = router.resolve({ name: 'Landing' }).href;
+      });
     };
     return {
       isLogin,
