@@ -37,4 +37,11 @@ public class CommentController {
         commentService.delete(user.getUserId(), commentId);
         return ResponseEntity.ok().build();
     }
+
+    @PatchMapping
+    public ResponseEntity<Void> update(@CurrentUser User user,
+                                       @RequestBody Update update){
+        commentService.update(user.getUserId(), update);
+        return ResponseEntity.ok().build();
+    }
 }
