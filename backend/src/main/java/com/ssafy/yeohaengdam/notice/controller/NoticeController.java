@@ -32,9 +32,16 @@ public class NoticeController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("{noticeId}")
+    @GetMapping("/{noticeId}")
     public ResponseEntity<Detail> findById(@PathVariable(value = "noticeId") int noticeId){
         return ResponseEntity.ok(noticeService.findById(noticeId));
+    }
 
+    @PatchMapping("/{noticeId}")
+    public ResponseEntity<Void> update(@CurrentUser User user,
+                                       @PathVariable(value = "noticeId") int noticeId,
+                                       @RequestBody Create update){
+        noticeService.update(noticeId, update, user.getUserId());
+        return ResponseEntity.ok().build();
     }
 }

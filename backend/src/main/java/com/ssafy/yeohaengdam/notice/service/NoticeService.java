@@ -11,9 +11,10 @@ public interface NoticeService {
 
     public void create(int userId, Create create);
 
-    public void update(Create update);
 
     public void delete(int noticeId);
 
     public Detail findById(int noticeId);
+
+    public void update(int noticeId, Create update, int userId);
 }

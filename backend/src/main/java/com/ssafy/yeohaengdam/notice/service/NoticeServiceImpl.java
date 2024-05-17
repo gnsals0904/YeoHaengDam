@@ -30,10 +30,6 @@ public class NoticeServiceImpl implements NoticeService{
         noticeMapper.create(newNotice);
     }
 
-    @Override
-    public void update(Create update) {
-
-    }
 
     @Override
     public void delete(int noticeId) {
@@ -43,5 +39,15 @@ public class NoticeServiceImpl implements NoticeService{
     @Override
     public Detail findById(int noticeId) {
         return noticeMapper.findById(noticeId);
+    }
+
+    @Override
+    public void update(int noticeId, Create update, int userId) {
+        Notice updatedNotice = Notice.builder()
+                .noticeId(noticeId)
+                .title(update.getTitle())
+                .content(update.getContent())
+                .build();
+        noticeMapper.update(updatedNotice);
     }
 }
