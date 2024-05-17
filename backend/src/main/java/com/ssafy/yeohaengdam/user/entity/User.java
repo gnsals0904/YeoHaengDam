@@ -20,4 +20,9 @@ public class User {
     private String profileImage;
 
     private RoleType roleType;
+
+
+    public void changePassword(String password) {
+        this.password = password;
+    }
 }

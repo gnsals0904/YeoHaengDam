@@ -24,7 +24,7 @@
 
         <update id = "update">
                 update users
-                set password = #{password}, nickname = #{nickname}, profile_image = #{profileImage}
+                set nickname = #{nickname}, profile_image = #{profileImage}
                 where email = #{email}
         </update>
 
@@ -40,5 +40,11 @@
                 FROM users
                 WHERE nickname = #{nickname}
         </select>
+
+        <update id="updatePassword">
+            update users
+            set password = #{password}
+            where user_id = #{userId}
+        </update>
 
 </mapper>

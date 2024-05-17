@@ -62,6 +62,12 @@ public class UserController {
         userService.updateUser(update);
         return ResponseEntity.ok().build();
     }
+
+    @PatchMapping("/update/password")
+    public ResponseEntity<Void> updatePassword(@RequestBody Password password){
+        userService.updatePassword(password);
+        return ResponseEntity.ok().build();
+    }
     /**
      * 회원 정보 조회
      */

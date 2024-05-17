@@ -23,7 +23,7 @@ public class AuthServiceImpl implements AuthService{
         System.out.println(user);
 
         if(!passwordEncoder.matches(loginRequest.getPassword(),user.getPassword())){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("비밀번호를 확인하세요.");
         }
 
         return jwtTokenService.generateToken(user);
