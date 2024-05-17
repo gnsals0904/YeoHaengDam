@@ -1,8 +1,362 @@
-<script setup></script>
+<script setup>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
+import { useMemberStore } from '@/stores/member';
+
+const memberStore = useMemberStore();
+const { getUserInfo } = memberStore;
+const router = useRouter();
+const token = sessionStorage.getItem('accessToken');
+const nickname = ref('닉네임');
+const email = ref('email@example.com');
+const password = ref('');
+const passwordConfirmation = ref('');
+const isNicknameAvailable = ref(false);
+const hasCheckedNickname = ref(false);
+const isNicknameEditable = ref(false);
+const isNicknameConfirmed = ref(false);
+const isDisabled = ref(true);
+const isEditing = ref(false);
+const nicknameDisabled = ref(true);
+
+const toggleEdit = () => {
+  isDisabled.value = !isDisabled.value;
+  isEditing.value = !isEditing.value;
+  nicknameDisabled.value = !nicknameDisabled.value;
+};
+
+/** 비밀번호 보이게 / 보이지 않게 */
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
+const togglePasswordVisibility = () => {
+  showPassword.value = !showPassword.value;
+};
+const toggleConfirmPasswordVisibility = () => {
+  showConfirmPassword.value = !showConfirmPassword.value;
+};
+
+/** 닉네임 중복 체크 */
+const nicknameCheck = async () => {
+  if (!nickname.value) {
+    alert('닉네임을 입력해주세요.');
+    return;
+  }
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/users/check_nickname/${nickname.value}`
+    );
+    if (response.data.available) {
+      const confirmUse = confirm(
+        '사용 가능한 닉네임입니다. 이 닉네임을 사용하시겠습니까?'
+      );
+      if (confirmUse) {
+        isNicknameAvailable.value = true;
+        isNicknameConfirmed.value = true;
+        hasCheckedNickname.value = true;
+        // 닉네임 필드 비활성화
+        isNicknameEditable.value = true;
+      }
+    } else {
+      alert('이미 사용 중인 닉네임입니다.');
+      isNicknameAvailable.value = false;
+    }
+  } catch (error) {
+    console.error('닉네임 중복체크 오류:', error);
+    alert('중복 체크 중 오류가 발생했습니다.');
+  }
+};
+
+const handleUpdate = async () => {
+  const user = {
+    nickname: nickname.value,
+    email: email.value,
+    password: password.value,
+  };
+
+  try {
+    const response = await axios.put(
+      'http://localhost:8080/api/users/update',
+      user
+    );
+    if (response.status === 200) {
+      alert('정보가 성공적으로 업데이트되었습니다.');
+      router.replace('/');
+    }
+  } catch (error) {
+    console.error('업데이트 에러:', error);
+    alert('정보 업데이트 중 문제가 발생했습니다.');
+  }
+  toggleEdit();
+};
+
+onMounted(async () => {
+  if (token) {
+    await getUserInfo(token);
+    nickname.value = memberStore.userInfo.nickname;
+    email.value = memberStore.userInfo.email;
+    password.value = memberStore.userInfo.password;
+    passwordConfirmation.value = memberStore.userInfo.password;
+  }
+});
+</script>
 
 <template>
-  <div>
-    <h1>My Page</h1>
+  <div class="w-full min-h-screen flex items-center justify-center">
+    <div class="w-full h-screen flex items-center justify-center">
+      <div
+        class="hidden lg:flex lg:w-1/2 xl:w-2/3 2xl:w-3/4 h-full bg-cover"
+        style="
+          background-image: url('https://source.unsplash.com/1600x900/?ocean');
+        "
+      >
+        <div
+          class="w-full h-full flex flex-col items-center justify-center bg-black bg-opacity-30"
+        >
+          <div class="flex items-center justify-center space-x-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-16 w-16 xl:h-20 xl:w-20 2xl:h-24 2xl:w-24 text-gray-100"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"
+              ></path>
+            </svg>
+            <h1
+              class="text-3xl xl:text-4xl 2xl:text-5xl font-bold text-gray-100 tracking-wider"
+            >
+              여행담
+            </h1>
+          </div>
+          <p class="text-gray-300 mt-4 px-16 text-center">
+            지금 가입하고 여행 계획을 세워보세요
+          </p>
+          <a
+            href="#"
+            class="mt-6 bg-gray-100 hover:bg-gray-200 px-6 py-2 rounded text-sm uppercase text-gray-900 transition duration-150"
+            title="Learn More"
+            >Learn More</a
+          >
+        </div>
+      </div>
+      <div
+        class="w-full sm:w-5/6 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/4 h-full bg-white flex items-center justify-center"
+      >
+        <div class="w-full px-12">
+          <h1
+            class="text-center text-3xl font-bold tracking-wide text-gray-800"
+          >
+            My Page
+          </h1>
+
+          <form class="my-8 text-sm" @submit.prevent>
+            <div class="flex flex-col my-4">
+              <label for="nickname" class="text-gray-700">Nick Name</label>
+              <div class="flex items-center mt-2">
+                <input
+                  type="text"
+                  name="nickname"
+                  id="nickname"
+                  class="flex-grow p-2 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
+                  placeholder="Enter your nickname"
+                  v-model="nickname"
+                  :disabled="nicknameDisabled || isNicknameEditable"
+                />
+                <button
+                  class="ml-2 bg-blue-600 hover:bg-blue-700 rounded-lg px-4 py-2 text-gray-100 hover:shadow-xl transition duration-150 uppercase"
+                  @click="nicknameCheck"
+                >
+                  중복 검사
+                </button>
+              </div>
+            </div>
+
+            <div class="flex flex-col my-4">
+              <label for="email" class="text-gray-700">Email Address</label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                class="mt-2 p-2 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
+                placeholder="Enter your email"
+                v-model="email"
+                :disabled="isDisabled"
+              />
+            </div>
+
+            <div class="flex flex-col my-4">
+              <label for="password" class="text-gray-700">Password</label>
+              <div
+                x-data="{ show: false }"
+                class="relative flex items-center mt-2"
+              >
+                <input
+                  :type="showPassword ? 'text' : 'password'"
+                  name="password"
+                  id="password"
+                  class="flex-1 p-2 pr-10 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
+                  placeholder="Enter your password"
+                  v-model="password"
+                  :disabled="isDisabled"
+                />
+                <button
+                  @click="togglePasswordVisibility"
+                  type="button"
+                  class="absolute right-2 bg-transparent flex items-center justify-center text-gray-700"
+                >
+                  <svg
+                    :class="{ hidden: showPassword }"
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
+                    ></path>
+                  </svg>
+
+                  <svg
+                    :class="{ hidden: !showPassword }"
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    ></path>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="flex flex-col my-4">
+              <label for="password_confirmation" class="text-gray-700"
+                >Password Confirmation</label
+              >
+              <div
+                x-data="{ show: false }"
+                class="relative flex items-center mt-2"
+              >
+                <input
+                  :type="showConfirmPassword ? 'text' : 'password'"
+                  name="password_confirmation"
+                  id="password_confirmation"
+                  class="flex-1 p-2 pr-10 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
+                  placeholder="Enter your password again"
+                  v-model="passwordConfirmation"
+                  :disabled="isDisabled"
+                />
+                <button
+                  @click="toggleConfirmPasswordVisibility"
+                  type="button"
+                  class="absolute right-2 bg-transparent flex items-center justify-center text-gray-700"
+                >
+                  <svg
+                    :class="{ hidden: showConfirmPassword }"
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
+                    ></path>
+                  </svg>
+
+                  <svg
+                    :class="{ hidden: !showConfirmPassword }"
+                    class="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    ></path>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="flex items-center">
+              <input
+                type="checkbox"
+                name="remember_me"
+                id="remember_me"
+                class="mr-2 focus:ring-0 rounded"
+              />
+              <label for="remember_me" class="text-gray-700"
+                >I accept the
+                <a
+                  href="#"
+                  class="text-blue-600 hover:text-blue-700 hover:underline"
+                  >terms</a
+                >
+                and
+                <a
+                  href="#"
+                  class="text-blue-600 hover:text-blue-700 hover:underline"
+                  >privacy policy</a
+                ></label
+              >
+            </div>
+
+            <div class="my-4 flex items-center justify-end space-x-4">
+              <button
+                v-if="!isEditing"
+                class="bg-blue-600 hover:bg-blue-700 rounded-lg px-8 py-2 text-gray-100 hover:shadow-xl transition duration-150 uppercase w-full"
+                @click="toggleEdit"
+              >
+                수정
+              </button>
+              <button
+                v-else
+                class="bg-blue-600 hover:bg-blue-700 rounded-lg px-8 py-2 text-gray-100 hover:shadow-xl transition duration-150 uppercase w-full"
+                @click="handleUpdate"
+              >
+                수정 완료
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

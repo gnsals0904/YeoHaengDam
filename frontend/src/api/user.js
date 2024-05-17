@@ -1,5 +1,5 @@
-import axios from "axios";
-import { localAxios } from "@/util/http-commons";
+import axios from 'axios';
+import { localAxios } from '@/util/http-commons';
 
 const local = localAxios();
 
@@ -8,18 +8,18 @@ async function joinUser(user) {
   try {
     console.log(user);
     const response = await axios.post(
-      "http://localhost:8080/api/users/join",
+      'http://localhost:8080/api/users/join',
       user
     );
     if (response.status === 200) {
       return { success: true };
     }
   } catch (error) {
-    console.error("회원가입 에러:", error);
+    console.error('회원가입 에러:', error);
     if (error.response) {
       return error.response.data;
     }
-    return { error: "회원가입 요청 중 문제가 발생했습니다." };
+    return { error: '회원가입 요청 중 문제가 발생했습니다.' };
   }
 }
 /** jwt section */
@@ -31,14 +31,14 @@ async function userConfirm(param, success, fail) {
 
 /** user email 로 user info 를 모두 가져온다 */
 async function findByEmail(email, success, fail) {
-  const token = sessionStorage.getItem("accessToken");
-  local.defaults.headers["Authorization"] = `Bearer ${token}`;
+  const token = sessionStorage.getItem('accessToken');
+  local.defaults.headers['Authorization'] = `Bearer ${token}`;
   await local.get(`/api/users/myInfo`).then(success).catch(fail);
 }
 
 async function tokenRegeneration(user, success, fail) {
-  local.defaults.headers["refreshToken"] =
-    sessionStorage.getItem("refreshToken"); //axios header에 refresh-token 셋팅
+  const token = sessionStorage.getItem('accessToken');
+  local.defaults.headers['refreshToken'] = `Bearer ${token}`; //axios header에 refresh-token 셋팅
   await local.post(`/api/auth/refresh`, user).then(success).catch(fail);
 }
 
