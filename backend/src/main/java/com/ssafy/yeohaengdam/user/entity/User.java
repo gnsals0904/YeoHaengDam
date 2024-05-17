@@ -9,7 +9,7 @@ import lombok.*;
 @ToString
 public class User {
 
-    private Long userId;
+    private int userId;
 
     private String email;
 
