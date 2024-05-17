@@ -12,23 +12,14 @@ const nickname = ref('닉네임');
 const email = ref('email@example.com');
 const password = ref('');
 const passwordConfirmation = ref('');
-const isNicknameAvailable = ref(false);
-const hasCheckedNickname = ref(false);
-const isNicknameEditable = ref(false);
-const isNicknameConfirmed = ref(false);
-const isDisabled = ref(true);
-const isEditing = ref(false);
-const nicknameDisabled = ref(true);
-
-const toggleEdit = () => {
-  isDisabled.value = !isDisabled.value;
-  isEditing.value = !isEditing.value;
-  nicknameDisabled.value = !nicknameDisabled.value;
-};
 
 /** 비밀번호 보이게 / 보이지 않게 */
+const showPrevPassword = ref(false);
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
+const togglePrevPasswordVisibility = () => {
+  showPrevPassword.value = !showPrevPassword.value;
+};
 const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value;
 };
@@ -36,37 +27,7 @@ const toggleConfirmPasswordVisibility = () => {
   showConfirmPassword.value = !showConfirmPassword.value;
 };
 
-/** 닉네임 중복 체크 */
-const nicknameCheck = async () => {
-  if (!nickname.value) {
-    alert('닉네임을 입력해주세요.');
-    return;
-  }
-  try {
-    const response = await axios.get(
-      `http://localhost:8080/api/users/check_nickname/${nickname.value}`
-    );
-    if (response.data.available) {
-      const confirmUse = confirm(
-        '사용 가능한 닉네임입니다. 이 닉네임을 사용하시겠습니까?'
-      );
-      if (confirmUse) {
-        isNicknameAvailable.value = true;
-        isNicknameConfirmed.value = true;
-        hasCheckedNickname.value = true;
-        // 닉네임 필드 비활성화
-        isNicknameEditable.value = true;
-      }
-    } else {
-      alert('이미 사용 중인 닉네임입니다.');
-      isNicknameAvailable.value = false;
-    }
-  } catch (error) {
-    console.error('닉네임 중복체크 오류:', error);
-    alert('중복 체크 중 오류가 발생했습니다.');
-  }
-};
-
+// Todo 비밀번호 변경 api 로 바꿀 필요 있음
 const handleUpdate = async () => {
   const user = {
     nickname: nickname.value,
@@ -87,18 +48,7 @@ const handleUpdate = async () => {
     console.error('업데이트 에러:', error);
     alert('정보 업데이트 중 문제가 발생했습니다.');
   }
-  toggleEdit();
 };
-
-onMounted(async () => {
-  if (token) {
-    await getUserInfo(token);
-    nickname.value = memberStore.userInfo.nickname;
-    email.value = memberStore.userInfo.email;
-    password.value = memberStore.userInfo.password;
-    passwordConfirmation.value = memberStore.userInfo.password;
-  }
-});
 </script>
 
 <template>
@@ -122,21 +72,20 @@ onMounted(async () => {
                 class="relative flex items-center mt-2"
               >
                 <input
-                  :type="showPassword ? 'text' : 'password'"
+                  :type="showPrevPassword ? 'text' : 'password'"
                   name="password"
                   id="password"
                   class="flex-1 p-2 pr-10 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
                   placeholder="Enter your password"
                   v-model="password"
-                  :disabled="isDisabled"
                 />
                 <button
-                  @click="togglePasswordVisibility"
+                  @click="togglePrevPasswordVisibility"
                   type="button"
                   class="absolute right-2 bg-transparent flex items-center justify-center text-gray-700"
                 >
                   <svg
-                    :class="{ hidden: showPassword }"
+                    :class="{ hidden: showPrevPassword }"
                     class="w-5 h-5"
                     fill="none"
                     stroke="currentColor"
@@ -152,7 +101,7 @@ onMounted(async () => {
                   </svg>
 
                   <svg
-                    :class="{ hidden: !showPassword }"
+                    :class="{ hidden: !showPrevPassword }"
                     class="w-5 h-5"
                     fill="none"
                     stroke="currentColor"
@@ -191,7 +140,6 @@ onMounted(async () => {
                   class="flex-1 p-2 pr-10 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
                   placeholder="Enter your password"
                   v-model="password"
-                  :disabled="isDisabled"
                 />
                 <button
                   @click="togglePasswordVisibility"
@@ -254,7 +202,6 @@ onMounted(async () => {
                   class="flex-1 p-2 pr-10 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
                   placeholder="Enter your password again"
                   v-model="passwordConfirmation"
-                  :disabled="isDisabled"
                 />
                 <button
                   @click="toggleConfirmPasswordVisibility"
@@ -302,43 +249,12 @@ onMounted(async () => {
               </div>
             </div>
 
-            <div class="flex items-center">
-              <input
-                type="checkbox"
-                name="remember_me"
-                id="remember_me"
-                class="mr-2 focus:ring-0 rounded"
-              />
-              <label for="remember_me" class="text-gray-700"
-                >I accept the
-                <a
-                  href="#"
-                  class="text-blue-600 hover:text-blue-700 hover:underline"
-                  >terms</a
-                >
-                and
-                <a
-                  href="#"
-                  class="text-blue-600 hover:text-blue-700 hover:underline"
-                  >privacy policy</a
-                ></label
-              >
-            </div>
-
             <div class="my-4 flex items-center justify-end space-x-4">
               <button
-                v-if="!isEditing"
                 class="bg-blue-600 hover:bg-blue-700 rounded-lg px-8 py-2 text-gray-100 hover:shadow-xl transition duration-150 uppercase w-full"
                 @click="toggleEdit"
               >
                 수정
-              </button>
-              <button
-                v-else
-                class="bg-blue-600 hover:bg-blue-700 rounded-lg px-8 py-2 text-gray-100 hover:shadow-xl transition duration-150 uppercase w-full"
-                @click="handleUpdate"
-              >
-                수정 완료
               </button>
             </div>
           </form>
