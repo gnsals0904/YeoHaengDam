@@ -67,11 +67,6 @@ const emit = defineEmits(['click']);
       <h5 class="font-black text-gray-800 md:text-lg text-lg truncate">
         {{ item.title }}
       </h5>
-      <!-- <p class="md:text-lg text-gray-500 text-base">
-        The best kept secret of The Bahamas is the country’s sheer size and
-        diversity. With 16 major islands, The Bahamas is an unmatched
-        destination
-      </p> -->
       <p class="text-sm font-black text-gray-800 truncate">
         {{ item.addr1 }}
       </p>
