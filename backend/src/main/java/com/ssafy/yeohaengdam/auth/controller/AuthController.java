@@ -1,16 +1,23 @@
 package com.ssafy.yeohaengdam.auth.controller;
 
+import com.ssafy.yeohaengdam.auth.dto.AuthData;
 import com.ssafy.yeohaengdam.auth.dto.JwtToken;
 import com.ssafy.yeohaengdam.auth.dto.LoginRequest;
 import com.ssafy.yeohaengdam.auth.service.AuthService;
+import com.ssafy.yeohaengdam.auth.service.EmailService;
 import com.ssafy.yeohaengdam.core.properties.AuthProperties;
+import com.ssafy.yeohaengdam.user.dto.UserData;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import static com.ssafy.yeohaengdam.auth.dto.AuthData.*;
+import static com.ssafy.yeohaengdam.user.dto.UserData.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final EmailService emailService;
     private final AuthProperties authProperties;
 
     @PostMapping("/login")
@@ -35,6 +43,7 @@ public class AuthController {
         JwtToken token = authService.login(request);
         response.setHeader("Authorization", "Bearer " + token.getAccessToken());
         response.setHeader("RefreshToken", "Bearer " + token.getRefreshToken());
+        System.out.println();
         return token;
     }
 
@@ -61,5 +70,18 @@ public class AuthController {
             throw new IllegalArgumentException("Invalid RefreshToken header");
         }
         return header.substring(7); // "Bearer " 이후의 토큰 부분만 추출
+    }
+
+
+    @PostMapping("/checkEmail")
+    public ResponseEntity<Void> checkEmail(@RequestBody Email email) {
+        emailService.sendEmail(email.getEmail());
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/checkCode")
+    public ResponseEntity<Boolean> checkCode(@RequestBody Email email){
+        return ResponseEntity.ok(emailService.verifyCode(email));
+
     }
 }
