@@ -13,7 +13,7 @@ public interface CommentService {
 
     public void update(Update update);
 
-    public List<Detail> findAll();
+    public List<Detail> findAll(int articleId);
 
     public void delete(int commentId);
 }

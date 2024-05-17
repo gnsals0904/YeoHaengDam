@@ -32,8 +32,8 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public List<Detail> findAll() {
-        return null;
+    public List<Detail> findAll(int articleId) {
+        return commentMapper.findAll(articleId);
     }
 
     @Override

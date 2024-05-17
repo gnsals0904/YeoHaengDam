@@ -3,14 +3,22 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.yeohaengdam.comment.mapper.CommentMapper">
 
-    <resultMap id="create" type="Comment">
+    <resultMap id="detail" type="Comment">
         <result column="user_id" property="userId"></result>
         <result column="article_id" property="articleId"></result>
         <result column="content" property="content"></result>
+        <result column="created_at" property="createdAt"></result>
+        <result column="updated_at" property="updatedAt"></result>
     </resultMap>
 
     <insert id="create">
         insert into comment(user_id, article_id, content, created_at)
         values(#{userId}, #{articleId}, #{content}, now())
     </insert>
+
+    <select id="findAll" resultMap="detail">
+        select *
+        from comment
+        where article_id = #{articleId}
+    </select>
 </mapper>

@@ -20,7 +20,7 @@ public class Comment {
 
     private String content;
 
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 }

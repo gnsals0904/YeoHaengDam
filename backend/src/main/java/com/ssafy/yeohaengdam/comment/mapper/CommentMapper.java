@@ -16,7 +16,7 @@ public interface CommentMapper {
 
     public void update(Comment comment);
 
-    public List<Detail> findAll();
+    public List<Detail> findAll(int articleId);
 
     public void delete(int commentId);
 }

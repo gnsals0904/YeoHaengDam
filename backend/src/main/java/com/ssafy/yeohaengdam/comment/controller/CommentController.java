@@ -6,10 +6,9 @@ import com.ssafy.yeohaengdam.core.annotation.CurrentUser;
 import com.ssafy.yeohaengdam.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.ssafy.yeohaengdam.comment.dto.CommentData.*;
 
@@ -25,6 +24,12 @@ public class CommentController {
                                        @RequestBody Create create){
         commentService.create(user.getUserId(), create);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{articleId}")
+    public ResponseEntity<List<Detail>> findAll(@PathVariable(value = "articleId") int articleId){
+        return ResponseEntity.ok(commentService.findAll(articleId));
+
     }
 
 
