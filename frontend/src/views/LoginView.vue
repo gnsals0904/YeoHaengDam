@@ -1,57 +1,33 @@
 <script setup>
-import { ref } from "vue";
-import { storeToRefs } from "pinia";
-import router from "@/router";
-import client from "@/api/client";
-import { useAuthStore } from "@/stores/auth";
-import { useMemberStore } from "@/stores/member";
+import { ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import router from '@/router';
+import client from '@/api/client';
+import { useAuthStore } from '@/stores/auth';
+import { useMemberStore } from '@/stores/member';
 
 const memberStore = useMemberStore();
 const authStore = useAuthStore();
-const email = ref("");
-const password = ref("");
+const email = ref('');
+const password = ref('');
 
 const { isLogin, isLoginError } = storeToRefs(memberStore);
 const { userLogin, getUserInfo } = memberStore;
 
 const loginUser = ref({
-  email: "",
-  password: "",
+  email: '',
+  password: '',
 });
 
 /** 로그인 함수 */
 const login = async () => {
   await userLogin(loginUser.value);
-  let token = sessionStorage.getItem("accessToken");
+  let token = sessionStorage.getItem('accessToken');
   console.log(token);
-  console.log("isLogin: " + isLogin.value);
+  console.log('isLogin: ' + isLogin.value);
   if (isLogin.value) {
     getUserInfo(token);
-    router.replace("/");
-  }
-};
-
-/** TODO : 삭제 예정 */
-const handleLogin = async () => {
-  console.log("Logging in with:", username.value, password.value);
-  try {
-    const response = await client.post("/member/login", {
-      userId: username.value,
-      userPassword: password.value,
-    });
-
-    if (response.status !== 200) {
-      throw new Error("로그인 실패");
-    }
-
-    sessionStorage.setItem("memberDto", JSON.stringify(response.data));
-    console.log(response.data);
-    authStore.login(response.data);
-    alert("로그인 성공!");
-    router.push({ name: "Landing" });
-  } catch (error) {
-    console.error("로그인 실패:", error);
-    alert("로그인 실패: " + error.message);
+    router.replace('/');
   }
 };
 </script>
