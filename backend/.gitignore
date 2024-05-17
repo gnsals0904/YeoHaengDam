@@ -40,3 +40,5 @@ out/
 **/application-oauth.properties
 **/application-secret.properties
 .env
+
+sql/Dump20230324.sql
