@@ -68,8 +68,8 @@ public class UserController {
     @GetMapping("/myInfo")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<User> myPage(@CurrentUser User user){
-        System.out.println("회원 정보 조회 : " + user);
-//        User user = userService.findByEmail(user.getEmail());
+        System.out.println("member info : " + user);
+//        User tuser = userService.findByEmail(user.getEmail());
         return ResponseEntity.ok(user);
     }
 

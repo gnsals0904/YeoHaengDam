@@ -35,6 +35,7 @@ public class AuthController {
         JwtToken token = authService.login(request);
         response.setHeader("Authorization", "Bearer " + token.getAccessToken());
         response.setHeader("RefreshToken", "Bearer " + token.getRefreshToken());
+        System.out.println();
         return token;
     }
 
