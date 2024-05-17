@@ -1,3 +1,5 @@
+<script setup></script>
+
 <template>
   <div class="mt-6 border-t pt-6 dark:border-gray-800">
     <h3 class="text-lg font-bold">Comments</h3>
@@ -8,7 +10,9 @@
             <div class="flex items-center justify-between">
               <div>
                 <div class="font-medium">John Doe</div>
-                <div class="text-sm text-gray-500 dark:text-gray-400">2 days ago</div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">
+                  2 days ago
+                </div>
               </div>
               <div class="flex items-center space-x-2">
                 <button
@@ -58,8 +62,11 @@
               This t-shirt looks amazing! I love the unique prism design.
             </div>
           </div>
-          <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
-            <span class="flex h-full w-full items-center justify-center rounded-full bg-muted"
+          <span
+            class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border"
+          >
+            <span
+              class="flex h-full w-full items-center justify-center rounded-full bg-muted"
               >AC</span
             >
           </span>
@@ -69,7 +76,9 @@
             <div class="flex items-center justify-between">
               <div>
                 <div class="font-medium">Jane Smith</div>
-                <div class="text-sm text-gray-500 dark:text-gray-400">1 week ago</div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">
+                  1 week ago
+                </div>
               </div>
               <div class="flex items-center space-x-2">
                 <button
@@ -116,11 +125,15 @@
               </div>
             </div>
             <div class="mt-2 text-sm">
-              I can't wait to get my hands on this t-shirt! The quality and design look top-notch.
+              I can't wait to get my hands on this t-shirt! The quality and
+              design look top-notch.
             </div>
           </div>
-          <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
-            <span class="flex h-full w-full items-center justify-center rounded-full bg-muted"
+          <span
+            class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border"
+          >
+            <span
+              class="flex h-full w-full items-center justify-center rounded-full bg-muted"
               >AC</span
             >
           </span>
@@ -130,7 +143,9 @@
             <div class="flex items-center justify-between">
               <div>
                 <div class="font-medium">Michael Johnson</div>
-                <div class="text-sm text-gray-500 dark:text-gray-400">3 days ago</div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">
+                  3 days ago
+                </div>
               </div>
               <div class="flex items-center space-x-2">
                 <button
@@ -177,11 +192,15 @@
               </div>
             </div>
             <div class="mt-2 text-sm">
-              The prism design is so unique and eye-catching. I can't wait to see this in person.
+              The prism design is so unique and eye-catching. I can't wait to
+              see this in person.
             </div>
           </div>
-          <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
-            <span class="flex h-full w-full items-center justify-center rounded-full bg-muted"
+          <span
+            class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border"
+          >
+            <span
+              class="flex h-full w-full items-center justify-center rounded-full bg-muted"
               >AC</span
             >
           </span>
@@ -190,8 +209,11 @@
       <div class="mt-6 border-t pt-6 dark:border-gray-800">
         <h3 class="text-lg font-bold">Add a comment</h3>
         <div class="flex items-start space-x-4">
-          <span class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border">
-            <span class="flex h-full w-full items-center justify-center rounded-full bg-muted"
+          <span
+            class="relative flex shrink-0 overflow-hidden rounded-full w-10 h-10 border"
+          >
+            <span
+              class="flex h-full w-full items-center justify-center rounded-full bg-muted"
               >AC</span
             >
           </span>
@@ -218,7 +240,5 @@
     </div>
   </div>
 </template>
-
-<script setup></script>
 
 <style></style>

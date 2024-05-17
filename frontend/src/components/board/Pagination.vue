@@ -1,3 +1,18 @@
+<script setup>
+defineProps({
+  currentPage: Number,
+  totalPages: Number,
+});
+
+const emit = defineEmits(['update:page']);
+
+function changePage(page) {
+  if (page > 0 && page <= totalPages) {
+    emit('update:page', page);
+  }
+}
+</script>
+
 <template>
   <nav
     aria-label="pagination"
@@ -67,21 +82,6 @@
     </ul>
   </nav>
 </template>
-
-<script setup>
-defineProps({
-  currentPage: Number,
-  totalPages: Number,
-});
-
-const emit = defineEmits(['update:page']);
-
-function changePage(page) {
-  if (page > 0 && page <= totalPages) {
-    emit('update:page', page);
-  }
-}
-</script>
 
 <style scoped>
 /* Add specific styles if needed */

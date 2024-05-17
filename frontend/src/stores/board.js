@@ -9,7 +9,7 @@ export const useBoardStore = defineStore('board', () => {
 
   const getList = () => {
     axios
-      .get('http://localhost:80/api/board/list')
+      .get('http://localhost:8080/api/articles')
       .then((response) => {
         console.log(response);
         boardList.value = response.data;
@@ -22,9 +22,12 @@ export const useBoardStore = defineStore('board', () => {
   // getArticle 함수를 async 함수로 수정
   const getArticle = async (articleNo) => {
     try {
-      const response = await axios.get(`http://localhost:80/api/board/view`, {
-        params: { articleNo },
-      });
+      const response = await axios.get(
+        `http://localhost:8080/api/articles/view`,
+        {
+          params: { articleNo },
+        }
+      );
       console.log('Fetched article:', response);
       selectedBoard.value = response.data;
       console.log('selectedBoards : ');
@@ -37,28 +40,20 @@ export const useBoardStore = defineStore('board', () => {
   };
 
   const deleteArticle = async (articleNo) => {
-    try {
-      await axios.get(`http://localhost:80/api/board/delete`, {
-        params: { articleNo },
-      });
-      console.log('finish delete');
-      return;
-    } catch (error) {
-      throw error;
-    }
+    await axios.get(`http://localhost:8080/api/articles/delete`, {
+      params: { articleNo },
+    });
+    console.log('finish delete');
+    return;
   };
 
   const modifyArticle = async (board) => {
-    try {
-      const updatedArticle = await axios.get(
-        `http://localhost:80/api/board/update`,
-        { params: { board } }
-      );
-      console.log('finish update');
-      return updatedArticle;
-    } catch (error) {
-      throw error;
-    }
+    const updatedArticle = await axios.get(
+      `http://localhost:8080/api/articles/update`,
+      { params: { board } }
+    );
+    console.log('finish update');
+    return updatedArticle;
   };
 
   return {

@@ -1,8 +1,18 @@
+<script setup>
+import { useBoardStore } from '@/stores/board';
+import BoardComment from '@/components/board/BoardComment.vue';
+const boardStore = useBoardStore();
+const board = boardStore.selectedBoard;
+console.log(board);
+</script>
+
 <template>
   <div class="space-y-4">
     <div class="flex items-center justify-between">
       <h2 class="text-2xl font-bold">{{ board.subject }}</h2>
-      <div class="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
+      <div
+        class="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400"
+      >
         <div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -42,7 +52,9 @@
         </div>
       </div>
     </div>
-    <div class="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
+    <div
+      class="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400"
+    >
       <div>{{ board.userId }}</div>
       <div>•</div>
       <div>{{ board.registerTime }}</div>
@@ -96,14 +108,6 @@
     <BoardComment />
   </div>
 </template>
-
-<script setup>
-import { useBoardStore } from "@/stores/board";
-import BoardComment from "@/components/board/BoardComment.vue";
-const boardStore = useBoardStore();
-const board = boardStore.selectedBoard;
-console.log(board);
-</script>
 
 <style scoped>
 /* CSS here */
