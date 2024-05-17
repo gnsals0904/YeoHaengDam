@@ -1,17 +1,17 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
-import { useRouter } from 'vue-router';
-import { useMemberStore } from '@/stores/member';
+import { ref, onMounted } from "vue";
+import axios from "axios";
+import { useRouter } from "vue-router";
+import { useMemberStore } from "@/stores/member";
 
 const memberStore = useMemberStore();
 const { getUserInfo } = memberStore;
 const router = useRouter();
-const token = sessionStorage.getItem('accessToken');
-const nickname = ref('닉네임');
-const email = ref('email@example.com');
-const password = ref('');
-const passwordConfirmation = ref('');
+const token = sessionStorage.getItem("accessToken");
+const nickname = ref("닉네임");
+const email = ref("email@example.com");
+const password = ref("");
+const passwordConfirmation = ref("");
 
 /** 비밀번호 보이게 / 보이지 않게 */
 const showPrevPassword = ref(false);
@@ -37,16 +37,16 @@ const handleUpdate = async () => {
 
   try {
     const response = await axios.put(
-      'http://localhost:8080/api/users/update',
+      "http://localhost:8080/api/users/update",
       user
     );
     if (response.status === 200) {
-      alert('정보가 성공적으로 업데이트되었습니다.');
-      router.replace('/');
+      alert("정보가 성공적으로 업데이트되었습니다.");
+      router.replace("/");
     }
   } catch (error) {
-    console.error('업데이트 에러:', error);
-    alert('정보 업데이트 중 문제가 발생했습니다.');
+    console.error("업데이트 에러:", error);
+    alert("정보 업데이트 중 문제가 발생했습니다.");
   }
 };
 </script>
@@ -66,15 +66,17 @@ const handleUpdate = async () => {
 
           <form class="my-8 text-sm" @submit.prevent>
             <div class="flex flex-col my-4">
-              <label for="password" class="text-gray-700">기존 비밀번호</label>
+              <label for="basicPassword" class="text-gray-700"
+                >기존 비밀번호</label
+              >
               <div
                 x-data="{ show: false }"
                 class="relative flex items-center mt-2"
               >
                 <input
                   :type="showPrevPassword ? 'text' : 'password'"
-                  name="password"
-                  id="password"
+                  name="basicPassword"
+                  id="basicPassword"
                   class="flex-1 p-2 pr-10 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
                   placeholder="Enter your password"
                   v-model="password"
