@@ -13,7 +13,7 @@ public class CommentData {
         private int articleId;
         private int userId;
         private String content;
-        private LocalDateTime createAt;
+        private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
     }
 

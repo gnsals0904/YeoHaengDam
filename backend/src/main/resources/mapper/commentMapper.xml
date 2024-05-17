@@ -16,12 +16,6 @@
         values(#{userId}, #{articleId}, #{content}, now())
     </insert>
 
-    <select id="findAll" resultMap="detail">
-        select *
-        from comment
-        where article_id = #{articleId}
-    </select>
-
     <select id="findById">
         select *
         from comment

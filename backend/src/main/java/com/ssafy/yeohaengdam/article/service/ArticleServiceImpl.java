@@ -27,7 +27,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleInfo findById(int articleId){
+    public Detail findById(int articleId){
         return articleMapper.findById(articleId);
     }
 

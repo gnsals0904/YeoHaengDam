@@ -14,7 +14,7 @@ import static com.ssafy.yeohaengdam.article.dto.ArticleData.*;
 public interface ArticleMapper {
     public List<ArticleInfo> findAll();
 
-    public ArticleInfo findById(int articleId);
+    public Detail findById(int articleId);
     public int create(Article article);
 
     public int update(Article article);

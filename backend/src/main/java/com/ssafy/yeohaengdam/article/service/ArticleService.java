@@ -18,5 +18,5 @@ public interface ArticleService {
 
     public void delete(int articleId);
 
-    public ArticleInfo findById(int articleId);
+    public Detail findById(int articleId);
 }

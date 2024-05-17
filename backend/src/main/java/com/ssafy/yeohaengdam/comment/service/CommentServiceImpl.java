@@ -24,10 +24,6 @@ public class CommentServiceImpl implements CommentService{
                 .build();
         commentMapper.create(newComment);
     }
-    @Override
-    public List<Detail> findAll(int articleId) {
-        return commentMapper.findAll(articleId);
-    }
 
     @Override
     public void delete(int userId, int commentId) {

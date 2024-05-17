@@ -26,10 +26,6 @@ public class CommentController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{articleId}")
-    public ResponseEntity<List<Detail>> findAll(@PathVariable(value = "articleId") int articleId){
-        return ResponseEntity.ok(commentService.findAll(articleId));
-    }
 
     @DeleteMapping("/{commentId}")
     public ResponseEntity<Void> create(@CurrentUser User user,

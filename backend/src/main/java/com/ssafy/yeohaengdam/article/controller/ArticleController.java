@@ -48,7 +48,7 @@ public class ArticleController {
      * 게시글 상세 조회
      */
     @GetMapping("/{articleId}")
-    public ResponseEntity<ArticleInfo> findById(@PathVariable int articleId){
+    public ResponseEntity<Detail> findById(@PathVariable int articleId){
         return ResponseEntity.ok(articleService.findById(articleId));
     }
 
