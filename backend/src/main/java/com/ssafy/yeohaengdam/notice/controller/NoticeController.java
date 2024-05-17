@@ -28,8 +28,13 @@ public class NoticeController {
 
     @PostMapping
     public ResponseEntity<Void> create(@CurrentUser User user, @RequestBody Create create){
-        System.out.println(user.getUserId() + " " + create);
         noticeService.create(user.getUserId(), create);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("{noticeId}")
+    public ResponseEntity<Detail> findById(@PathVariable(value = "noticeId") int noticeId){
+        return ResponseEntity.ok(noticeService.findById(noticeId));
+
     }
 }

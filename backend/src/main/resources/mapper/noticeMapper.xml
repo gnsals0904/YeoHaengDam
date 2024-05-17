@@ -13,6 +13,7 @@
         <result column="updated_at" property="updatedAt"/>
     </resultMap>
 
+
     <select id="findAll" resultMap="NoticeDetail">
         SELECT notice.notice_id,
             notice.user_id,
@@ -26,9 +27,33 @@
         ORDER BY notice.notice_id DESC;
     </select>
 
+    <select id = "findById" resultMap="NoticeDetail">
+        SELECT notice.notice_id,
+        notice.user_id,
+        users.nickname AS user_nickname,
+        notice.title,
+        notice.content,
+        notice.created_at,
+        notice.updated_at,
+        FROM notice
+        LEFT JOIN users ON notice.user_id = users.user_id
+        where notice_id = #{noticeId}
+    </select>
+
     <insert id="create" parameterType="Notice" useGeneratedKeys="true" keyProperty="noticeId">
-        insert into notice(user_id, title, content, created_at)
+        insert into notice(user_id, title, content, now())
         values (#{userId}, #{title}, #{content}, now())
     </insert>
+
+    <update id="update">
+        update notice
+        set title = #{title}, content = #{content}, updated_at = now()
+        where notice_id = #{noticeId}
+    </update>
+
+    <delete id="delete">
+        delete from notice
+        where notice_id = #{noticeId}
+    </delete>
 
 </mapper>

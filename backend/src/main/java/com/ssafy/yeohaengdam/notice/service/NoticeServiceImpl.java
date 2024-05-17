@@ -42,6 +42,6 @@ public class NoticeServiceImpl implements NoticeService{
 
     @Override
     public Detail findById(int noticeId) {
-        return null;
+        return noticeMapper.findById(noticeId);
     }
 }
