@@ -21,4 +21,15 @@
         from comment
         where article_id = #{articleId}
     </select>
+
+    <select id="findById">
+        select *
+        from comment
+        where comment_id = #{commentId}
+    </select>
+
+    <delete id="delete">
+        delete from comment
+        where comment_id = #{commentId};
+    </delete>
 </mapper>

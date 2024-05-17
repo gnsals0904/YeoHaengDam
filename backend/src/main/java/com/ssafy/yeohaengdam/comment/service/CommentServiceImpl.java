@@ -37,7 +37,11 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public void delete(int commentId) {
-
+    public void delete(int userId, int commentId) {
+        Detail comment = commentMapper.findById(commentId);
+        if(comment.getUserId() != userId){
+            throw new IllegalArgumentException("댓글을 삭제할 권한이 없습니다");
+        }
+        commentMapper.delete(commentId);
     }
 }

@@ -15,5 +15,5 @@ public interface CommentService {
 
     public List<Detail> findAll(int articleId);
 
-    public void delete(int commentId);
+    public void delete(int userId, int commentId);
 }
