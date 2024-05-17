@@ -1,3 +1,23 @@
+<script setup>
+import { useRouter } from 'vue-router';
+import { useBoardStore } from '@/stores/board';
+
+const router = useRouter();
+const boardStore = useBoardStore();
+
+async function loadAndNavigate(articleNo) {
+  await boardStore.getArticle(articleNo); // 데이터 로드를 기다림
+  router.push({ name: 'detail', params: { articleNo } }); // 데이터 로드 후 페이지 이동
+}
+
+const props = defineProps({
+  board: {
+    type: Object,
+    required: true,
+  },
+});
+</script>
+
 <template>
   <div
     class="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-transform duration-300 ease-in-out hover:-translate-y-2"
@@ -29,26 +49,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { useRouter } from "vue-router";
-import { useBoardStore } from "@/stores/board";
-
-const router = useRouter();
-const boardStore = useBoardStore();
-
-async function loadAndNavigate(articleNo) {
-  await boardStore.getArticle(articleNo); // 데이터 로드를 기다림
-  router.push({ name: "detail", params: { articleNo } }); // 데이터 로드 후 페이지 이동
-}
-
-const props = defineProps({
-  board: {
-    type: Object,
-    required: true,
-  },
-});
-</script>
 
 <style scoped>
 /* Card style */

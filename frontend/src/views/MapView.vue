@@ -1,12 +1,15 @@
 <script setup>
-import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
-import { onMounted, ref, computed } from "vue";
-import { useRoute } from "vue-router";
-import LocationBox from "@/components/map/LocationBox.vue";
-import axios from "axios";
+import { KakaoMap, KakaoMapMarker } from 'vue3-kakao-maps';
+import { onMounted, ref, computed } from 'vue';
+import { useRoute } from 'vue-router';
+import LocationBox from '@/components/map/LocationBox.vue';
+import LocationDetail from '@/components/map/LocationDetail.vue';
+import axios from 'axios';
 
 const route = useRoute();
 const tripData = ref([]);
+const selectedItem = ref(null);
+const modalVisible = ref(false);
 
 onMounted(async () => {
   const { sidoCode, gugunCode, contentCode } = route.query;
@@ -14,7 +17,7 @@ onMounted(async () => {
   if (sidoCode && gugunCode && contentCode) {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/spot/listSpot",
+        'http://localhost:8080/api/spot/listSpot',
         {
           params: {
             sidoCode: parseInt(sidoCode),
@@ -27,13 +30,13 @@ onMounted(async () => {
         ...item,
         infoVisible: false,
       }));
-      console.log("Trip Data:", tripData.value);
+      console.log('Trip Data:', tripData.value);
     } catch (error) {
-      console.error("Error fetching trip data:", error);
-      alert("여행 정보를 가져오는 데 실패했습니다.");
+      console.error('Error fetching trip data:', error);
+      alert('여행 정보를 가져오는 데 실패했습니다.');
     }
   } else {
-    alert("필요한 매개변수가 URL에 포함되지 않았습니다.");
+    alert('필요한 매개변수가 URL에 포함되지 않았습니다.');
   }
 });
 
@@ -53,6 +56,16 @@ const defaultCoordinate = computed(() => {
 
 const toggleInfoWindow = (item) => {
   item.infoVisible = !item.infoVisible;
+};
+
+const showModal = (item) => {
+  selectedItem.value = item;
+  modalVisible.value = true;
+};
+
+const closeModal = () => {
+  modalVisible.value = false;
+  selectedItem.value = null;
 };
 </script>
 
@@ -89,10 +102,19 @@ const toggleInfoWindow = (item) => {
         v-for="(item, index) in tripData"
         :key="index"
         :item="item"
+        @click="showModal"
       />
     </div>
   </div>
+
+  <LocationDetail
+    v-if="selectedItem"
+    :item="selectedItem"
+    :visible="modalVisible"
+    @close="closeModal"
+  />
 </template>
+
 <style scoped>
 .map-container {
   display: flex;

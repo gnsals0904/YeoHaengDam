@@ -29,6 +29,7 @@ public class ArticleController {
      */
     @GetMapping
     public ResponseEntity<List<ArticleInfo>> findAll(){
+        System.out.println("articles list all");
         return ResponseEntity.ok(articleService.findAll());
     }
 
