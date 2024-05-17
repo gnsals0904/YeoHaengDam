@@ -63,11 +63,27 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * 비밀번호 찾기
+     * @param password
+     * @return
+     */
     @PatchMapping("/update/password")
     public ResponseEntity<Void> updatePassword(@RequestBody Password password){
         userService.updatePassword(password);
         return ResponseEntity.ok().build();
     }
+
+    /**
+     * 비밀번호 초기화
+     */
+    @PostMapping("/reset/password")
+    public ResponseEntity<String> resetPassword(@RequestBody Password password){
+        return ResponseEntity.ok(userService.resetPassword(password));
+
+    }
+
+
     /**
      * 회원 정보 조회
      */

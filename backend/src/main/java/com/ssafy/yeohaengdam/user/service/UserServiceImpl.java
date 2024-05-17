@@ -18,6 +18,7 @@ public class UserServiceImpl implements UserService{
 
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final PasswordService passwordService;
 
     @Override
     public void join(Join join) {
@@ -73,5 +74,18 @@ public class UserServiceImpl implements UserService{
         User user = userMapper.findByEmail(password.getEmail());
         user.changePassword(passwordEncoder.encode(password.getPassword()));
         userMapper.updatePassword(user);
+    }
+
+    @Override
+    public String resetPassword(Password password) {
+        User user = userMapper.findByEmail(password.getEmail());
+        if (user == null) {
+            throw new IllegalArgumentException("해당 이메일을 사용하는 사용자가 없습니다.");
+        }
+
+        String newPassword = passwordService.generateRandomPassword();
+        user.changePassword(passwordEncoder.encode(newPassword));
+        userMapper.updatePassword(user);
+        return newPassword;
     }
 }

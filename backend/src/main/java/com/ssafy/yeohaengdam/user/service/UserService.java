@@ -17,4 +17,6 @@ public interface UserService {
     public boolean checkNickname(String nickname);
 
     public void updatePassword(Password password);
+
+    public String resetPassword(Password password);
 }
