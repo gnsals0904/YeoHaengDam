@@ -1,5 +1,7 @@
 package com.ssafy.yeohaengdam.article.dto;
 
+import com.ssafy.yeohaengdam.comment.dto.CommentData;
+import com.ssafy.yeohaengdam.comment.entity.Comment;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -17,6 +19,22 @@ public class ArticleData {
         private String content;
         private int hit;
 //        private int likeCount;
+//        private boolean isLiked;
+        private List<String> imageUrls;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
+    }
+
+    @Data
+    public static class Detail{
+        private int articleId;
+        private int userId;
+        private String nickname;
+        private String title;
+        private String content;
+        private int hit;
+        private List<CommentData.Detail> comments;
+        //        private int likeCount;
 //        private boolean isLiked;
         private List<String> imageUrls;
         private LocalDateTime createdAt;
