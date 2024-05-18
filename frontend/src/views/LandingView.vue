@@ -1,54 +1,37 @@
-<script setup></script>
+<script setup>
+import WordAnimation from "@/components/Landing/WordAnimation.vue";
+</script>
 
 <template>
   <!-- Page Main -->
-  <main class="flex flex-col items-center justify-center mt-32">
+  <main class="flex flex-col items-center justify-center">
     <!-- Hero -->
     <section
-      class="flex flex-wrap items-center -mx-3 font-sans px-4 mx-auto w-full lg:max-w-screen-lg sm:max-w-screen-sm md:max-w-screen-md pb-20"
+      class="flex flex-wrap items-center px-4 w-full 2xl:max-w-screen-2xl xl:max-w-screen-xl lg:max-w-screen-lg sm:max-w-screen-sm md:max-w-screen-md min-h-screen"
     >
       <!-- Column-1 -->
-      <div class="px-3 w-full lg:w-2/5">
-        <div
-          class="mx-auto mb-8 max-w-lg text-center lg:mx-0 lg:max-w-md lg:text-left"
-        >
-          <h2 class="mb-4 text-3xl font-bold text-left lg:text-5xl">
-            Exclusive Agency For
+      <div class="px-3 w-full lg:w-3/5"></div>
 
-            <span class="text-5xl text-blue-500 leading-relaxeds"
-              >Technology
-            </span>
-
-            Provide Solution
-          </h2>
-
-          <p
-            class="visible mx-0 mt-3 mb-0 text-sm leading-relaxed text-left text-slate-400"
-          >
-            Helping you maximize operations management with digitization
-          </p>
-        </div>
-
-        <div class="text-center lg:text-left">
+      <!-- Column-2 -->
+      <div class="px-3 mb-12 w-full lg:mb-0 lg:w-2/5">
+        <WordAnimation></WordAnimation>
+        <div class="mt-12 text-center flex justify-center">
           <a
-            class="block visible py-4 px-8 mb-4 text-xs font-semibold tracking-wide leading-none text-white bg-blue-500 rounded cursor-pointer sm:mr-3 sm:mb-0 sm:inline-block"
-            >Key Features</a
+            class="py-4 px-4 mr-10 text-xl font-semibold tracking-wide text-white bg-blue-500 rounded cursor-pointer"
+            >여행담 사용해보기</a
           >
 
           <a
-            class="block visible py-4 px-8 text-xs font-semibold leading-none bg-white rounded border border-solid cursor-pointer sm:inline-block border-slate-200 text-slate-500"
-            >How We Work?</a
+            class="py-4 px-4 text-xl font-semibold bg-black text-white rounded border border-solid cursor-pointer"
+            >사용 방법</a
           >
         </div>
       </div>
-
-      <!-- Column-2 -->
-      <div class="px-3 mb-12 w-full lg:mb-0 lg:w-3/5"></div>
     </section>
 
     <!-- Parallax Background -->
     <section
-      class="flex flex-col w-full h-[500px] bg-cover bg-fixed bg-center flex justify-center items-center bg-[url('https://images.unsplash.com/photo-1642427749670-f20e2e76ed8c?auto=format&fit=crop&w=880&q=80')]"
+      class="bg-gray-400 bg-blend-multiply flex-col w-full h-[500px] bg-cover bg-fixed bg-center flex justify-center items-center bg-[url('/landingimg.jpg')]"
     >
       <h1 class="text-white text-5xl font-semibold mt-20 mb-10">
         This is Parallax Effect
