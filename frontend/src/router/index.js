@@ -10,6 +10,7 @@ import LandingPage2 from "@/components/LandingPage2.vue";
 import EditPwdView from "@/views/EditPwdView.vue";
 import BoardList from "@/components/board/BoardList.vue";
 import NoticeView from "@/views/NoticeView.vue";
+import LandingView from "@/views/LandingView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +27,7 @@ const router = createRouter({
     { path: "/editPwd", name: "EditPwd", component: EditPwdView },
     { path: "/board/list", name: "List", component: BoardList },
     { path: "/notice", name: "Notice", component: NoticeView },
+    { path: "/landing3", name: "Landing3", component: LandingView },
   ],
 });
 
