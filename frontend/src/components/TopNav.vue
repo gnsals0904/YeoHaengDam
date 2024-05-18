@@ -13,7 +13,9 @@ const memberStore = useMemberStore();
     </div>
     <nav class="hidden md:flex space-x-6">
       <router-link :to="{ name: 'Main' }" class="text-lg">여행지</router-link>
-      <router-link :to="{ name: 'Main' }" class="text-lg">공지사항</router-link>
+      <router-link :to="{ name: 'Notice' }" class="text-lg"
+        >공지사항</router-link
+      >
       <router-link :to="{ name: 'Main' }" class="text-lg">이용방법</router-link>
       <router-link :to="{ name: 'List' }" class="text-lg">게시판</router-link>
       <template v-if="memberStore.isLogin">
