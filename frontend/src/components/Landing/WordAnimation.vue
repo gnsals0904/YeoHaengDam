@@ -6,7 +6,7 @@
       <div class="text-center text-6xl font-bold">
         여행을
         <div
-          class="relative inline-grid grid-cols-1 grid-rows-1 gap-12 overflow-hidden"
+          class="relative mb-4 inline-grid grid-cols-1 grid-rows-1 gap-12 overflow-hidden"
         >
           <span class="animate-word col-span-full row-span-full text-blue-500"
             >빠르게</span
@@ -28,6 +28,7 @@
             >정확하게</span
           >
         </div>
+        <br />
         세우는 방법
       </div>
     </div>
