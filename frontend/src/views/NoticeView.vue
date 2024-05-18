@@ -1,5 +1,7 @@
 <script setup>
 import TableRow from "@/components/notice/TableRow.vue";
+import { ref } from "vue";
+import NoticeDetail from "@/components/notice/NoticeDetail.vue";
 
 // 가상의 데이터
 const rows = [
@@ -12,6 +14,18 @@ const rows = [
   },
   { title: "Intro to JavaScript", author: "Chris", views: 1280 },
 ];
+
+const selectedItem = ref(null);
+const isModalVisible = ref(false);
+
+const handleRowClick = (item) => {
+  selectedItem.value = item;
+  isModalVisible.value = true;
+};
+
+const closeModal = () => {
+  isModalVisible.value = false;
+};
 </script>
 
 <template>
@@ -73,7 +87,12 @@ const rows = [
           </tr>
         </thead>
         <tbody class="text-sm font-normal text-gray-700">
-          <TableRow v-for="(row, index) in rows" :key="index" :item="row" />
+          <TableRow
+            v-for="(row, index) in rows"
+            :key="index"
+            :item="row"
+            @row-click="handleRowClick"
+          />
         </tbody>
       </table>
     </div>
@@ -137,6 +156,12 @@ const rows = [
       </svg>
     </div>
   </div>
+
+  <NoticeDetail
+    :item="selectedItem"
+    :visible="isModalVisible"
+    @close="closeModal"
+  />
 </template>
 
 <style scoped></style>
