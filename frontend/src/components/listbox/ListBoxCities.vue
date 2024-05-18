@@ -1,5 +1,5 @@
 <script setup>
-import { ref, defineProps, defineEmits } from "vue";
+import { ref, defineProps, defineEmits, onMounted } from "vue";
 import { useDestinationStore } from "@/stores/mapstore";
 import {
   Listbox,
@@ -22,6 +22,13 @@ function updateSelection(destination) {
   selectedDestination.value = destination;
   emits("update:selected", destination);
 }
+
+const setSelected = (destination) => {
+  selectedDestination.value = destination;
+  emits("update:selected", destination);
+};
+
+defineExpose({ setSelected });
 </script>
 
 <template>
