@@ -4,6 +4,7 @@ import { RouterView } from "vue-router";
 import { useBoardStore } from "@/stores/board";
 import BoardCard from "@/components/board/BoardCard.vue";
 import Pagination from "./Pagination.vue";
+import BoardDetail from "@/components/board/BoardDetail.vue"; // 모달 컴포넌트 가져오기
 
 const boardStore = useBoardStore();
 boardStore.getList();
@@ -11,8 +12,20 @@ boardStore.getList();
 const currentPage = ref(1);
 const totalPages = ref(5);
 
+const isModalVisible = ref(false);
+const selectedItem = ref(null);
+
 function updatePage(newPage) {
   currentPage.value = newPage;
+}
+
+function showModal(item) {
+  selectedItem.value = item;
+  isModalVisible.value = true;
+}
+
+function closeModal() {
+  isModalVisible.value = false;
 }
 </script>
 
@@ -32,6 +45,7 @@ function updatePage(newPage) {
               v-for="board in boardStore.boardList"
               :key="board.articleId"
               :board="board"
+              @click="showModal(board)"
             />
           </div>
           <Pagination
@@ -42,6 +56,11 @@ function updatePage(newPage) {
         </div>
       </div>
     </div>
+    <BoardDetail
+      :item="selectedItem"
+      :visible="isModalVisible"
+      @close="closeModal"
+    />
   </div>
 </template>
 

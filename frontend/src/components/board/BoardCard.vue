@@ -1,10 +1,18 @@
 <script setup>
+import { defineProps, defineEmits } from "vue";
+
 const props = defineProps({
   board: {
     type: Object,
     required: true,
   },
 });
+
+const emit = defineEmits(["click"]); // click 이벤트 정의
+
+const handleClick = () => {
+  emit("click", props.board); // 클릭 시 부모 컴포넌트로 이벤트 전달
+};
 
 function formatDateTime(dateTime) {
   // 날짜 형식 변환 함수
@@ -16,6 +24,7 @@ function formatDateTime(dateTime) {
 <template>
   <article
     class="bg-white p-3 mb-6 shadow transition duration-300 group transform hover:-translate-y-2 hover:shadow-2xl rounded-2xl cursor-pointer border"
+    @click="handleClick"
   >
     <div class="relative mb-4 rounded-2xl">
       <img
@@ -71,7 +80,7 @@ function formatDateTime(dateTime) {
           class="h-12 w-12 rounded-full object-cover max-w-none"
           :src="
             board.imageUrl ||
-            'https://source.unsplash.com/800x450/?Beautiful girl'
+            'https://source.unsplash.com/800x450/?Beautifulgirl'
           "
           :alt="board.title"
         />
