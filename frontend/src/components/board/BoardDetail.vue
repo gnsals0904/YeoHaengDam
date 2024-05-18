@@ -27,11 +27,11 @@ const closeModal = () => {
   >
     <div
       class="flex rounded-lg bg-white min-h-[20%] max-h-[95%] min-w-[20%] max-w-[90%]"
+      @click.stop
     >
       <div
-        class="relative text-base font-light leading-relaxed text-blue-gray-500 antialiased shadow-2xl"
+        class="relative text-base font-light leading-relaxed text-blue-gray-500 antialiased shadow-2xl flex-3"
         role="dialog"
-        @click.stop
       >
         <div
           class="flex shrink-0 items-center justify-between p-4 text-2xl font-semibold leading-snug text-blue-gray-900 antialiased"
@@ -146,7 +146,7 @@ const closeModal = () => {
         </div>
       </div>
       <!-- 댓글 부분 -->
-      <div class="col-span-1 relative pl-4 bg-white w-full">
+      <div class="col-span-1 rounded-lg relative pl-4 bg-white w-full flex-1">
         <header class="border-b border-grey-400">
           <a
             href="#"
