@@ -1,5 +1,6 @@
 <script setup>
 import WordAnimation from "@/components/Landing/WordAnimation.vue";
+import VideoSection from "@/components/Landing/VideoSection.vue";
 </script>
 
 <template>
@@ -10,7 +11,9 @@ import WordAnimation from "@/components/Landing/WordAnimation.vue";
       class="flex flex-wrap items-center px-4 w-full 2xl:max-w-screen-2xl xl:max-w-screen-xl lg:max-w-screen-lg sm:max-w-screen-sm md:max-w-screen-md min-h-screen"
     >
       <!-- Column-1 -->
-      <div class="px-3 w-full lg:w-3/5"></div>
+      <div class="px-3 w-full lg:w-3/5">
+        <VideoSection></VideoSection>
+      </div>
 
       <!-- Column-2 -->
       <div class="px-3 mb-12 w-full lg:mb-0 lg:w-2/5">
