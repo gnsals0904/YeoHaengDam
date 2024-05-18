@@ -17,4 +17,6 @@ public interface UserMapper {
     public void delete(User user);
 
     public boolean checkNickname(String nickname);
+
+    public void updatePassword(User user);
 }

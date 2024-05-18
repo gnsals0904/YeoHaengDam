@@ -24,4 +24,6 @@ public interface ArticleMapper {
     public void createImage(Image image);
 
     public void deleteImage(int articleId);
+
+    public void updateHit(int articleId);
 }

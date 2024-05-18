@@ -82,6 +82,5 @@ public class AuthController {
     @GetMapping("/checkCode")
     public ResponseEntity<Boolean> checkCode(@RequestBody Email email){
         return ResponseEntity.ok(emailService.verifyCode(email));
-
     }
 }

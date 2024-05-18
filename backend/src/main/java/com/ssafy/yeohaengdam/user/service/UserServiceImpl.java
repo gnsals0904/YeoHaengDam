@@ -18,6 +18,7 @@ public class UserServiceImpl implements UserService{
 
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final PasswordService passwordService;
 
     @Override
     public void join(Join join) {
@@ -39,7 +40,6 @@ public class UserServiceImpl implements UserService{
         User updatedUser = User.builder()
                 .userId(user.getUserId())
                 .email(user.getEmail())
-                .password(passwordEncoder.encode(update.getPassword()))
                 .nickname(update.getNickname())
                 .profileImage(update.getProfileImage())
                 .roleType(user.getRoleType())
@@ -67,5 +67,25 @@ public class UserServiceImpl implements UserService{
     @Override
     public boolean checkNickname(String nickname) {
         return userMapper.checkNickname(nickname);
+    }
+
+    @Override
+    public void updatePassword(Password password) {
+        User user = userMapper.findByEmail(password.getEmail());
+        user.changePassword(passwordEncoder.encode(password.getPassword()));
+        userMapper.updatePassword(user);
+    }
+
+    @Override
+    public String resetPassword(Password password) {
+        User user = userMapper.findByEmail(password.getEmail());
+        if (user == null) {
+            throw new IllegalArgumentException("해당 이메일을 사용하는 사용자가 없습니다.");
+        }
+
+        String newPassword = passwordService.generateRandomPassword();
+        user.changePassword(passwordEncoder.encode(newPassword));
+        userMapper.updatePassword(user);
+        return newPassword;
     }
 }
