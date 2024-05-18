@@ -1,6 +1,7 @@
 package com.ssafy.yeohaengdam.article.controller;
 
 import com.ssafy.yeohaengdam.article.dto.ArticleData;
+import com.ssafy.yeohaengdam.article.entity.SearchCriteria;
 import com.ssafy.yeohaengdam.article.service.ArticleService;
 import com.ssafy.yeohaengdam.auth.dto.JwtToken;
 import com.ssafy.yeohaengdam.core.annotation.CurrentUser;
@@ -27,10 +28,9 @@ public class ArticleController {
     /**
      * 게시글 전체 조회
      */
-    @GetMapping
-    public ResponseEntity<List<ArticleInfo>> findAll(){
-        System.out.println("articles list all");
-        return ResponseEntity.ok(articleService.findAll());
+    @GetMapping("/list")
+    public ResponseEntity<List<ArticleInfo>> list(@ModelAttribute SearchCriteria searchCriteria){
+        return ResponseEntity.ok(articleService.list(searchCriteria));
     }
 
 
