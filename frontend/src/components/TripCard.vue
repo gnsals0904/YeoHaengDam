@@ -4,6 +4,7 @@ const props = defineProps({
   id: Number,
   name: String,
   image: String,
+  isSelected: Boolean,
 });
 const emit = defineEmits(["select"]);
 
