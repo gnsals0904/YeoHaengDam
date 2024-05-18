@@ -40,7 +40,7 @@
         </collection>
     </resultMap>
 
-    <select id="findAll" resultMap="articleList">
+    <select id="list" resultMap="articleList">
         SELECT article.article_id,
                article.user_id,
                users.nickname AS user_nickname,
@@ -53,7 +53,19 @@
         FROM article
                  LEFT JOIN users ON article.user_id = users.user_id
                  LEFT JOIN article_image ON article.article_id = article_image.article_id
-        ORDER BY article.article_id DESC;
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND article.title LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
+        ORDER BY
+        <if test="sortBy != null and sortBy != ''">
+            ${sortBy}
+        </if>
+        <if test="sortBy == null or sortBy == ''">
+            article.created_at DESC
+        </if>
+        LIMIT #{start}, #{size}
     </select>
 
     <select id = "findById" resultMap="detail">

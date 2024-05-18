@@ -1,6 +1,7 @@
 package com.ssafy.yeohaengdam.article.service;
 import com.ssafy.yeohaengdam.article.entity.Article;
 import com.ssafy.yeohaengdam.article.entity.Image;
+import com.ssafy.yeohaengdam.article.entity.SearchCriteria;
 import com.ssafy.yeohaengdam.article.mapper.ArticleMapper;
 import com.ssafy.yeohaengdam.utils.FileService;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,12 @@ public class ArticleServiceImpl implements ArticleService {
     private final FileService fileService;
 
     @Override
-    public List<ArticleInfo> findAll() {
-        return articleMapper.findAll();
+    public List<ArticleInfo> list(SearchCriteria criteria) {
+        int start = (criteria.getPage() - 1) * criteria.getSize();
+        System.out.println(criteria.getPage());
+        System.out.println(criteria.getKeyword());
+
+        return articleMapper.list(criteria.getKeyword(), criteria.getSortBy(), start, criteria.getSize());
     }
 
     @Override
