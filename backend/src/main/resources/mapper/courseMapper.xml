@@ -3,10 +3,34 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.yeohaengdam.course.mapper.CourseMapper">
 
+    <resultMap id="list" type="com.ssafy.yeohaengdam.course.dto.CourseData$ListUp">
+        <result column="course_id" property="courseId"></result>
+        <result column="title" property="title"></result>
+        <result column="description" property="description"></result>
+    </resultMap>
 
     <resultMap id="detail" type="com.ssafy.yeohaengdam.course.dto.CourseData$Detail">
         <result column="user_id" property="userId"></result>
         <result column="course_id" property="courseId"></result>
+        <result column="title" property="title"></result>
+        <result column="description" property="description"></result>
+        <collection property="schedules" javaType="java.util.List" ofType="Schedule">
+            <id column="schedule_id" property="scheduleId"></id>
+            <result column="course_id" property="courseId"></result>
+            <result column="order_index" property="orderIndex"></result>
+            <association property="spot" javaType="Spot">
+                <id column="content_id" property="contentId"/>
+                <result column="sido_code" property="sidoCode"/>
+                <result column="gugun_code" property="gugunCode"/>
+                <result column="attractio_title" property="title"/>
+                <result column="addr" property="addr"/>
+                <result column="tel" property="tel"/>
+                <result column="image_url" property="imageUrl"/>
+                <result column="latitude" property="latitude"/>
+                <result column="longitude" property="longitude"/>
+            </association>
+        </collection>
+
     </resultMap>
 
     <insert id="save" useGeneratedKeys="true" keyProperty="courseId">
@@ -34,9 +58,13 @@
     </update>
 
     <select id="findById" resultMap="detail">
-        select *
-        from course
-        where course_id = #{courseId};
+        select c.course_id, c.user_id, c.title, c.description,
+               s.schedule_id, s.spot_id, s.order_index,
+               a.content_id, a.title as attractio_title, a.latitude, a.longitude
+        from course c
+        LEFT JOIN schedule s ON s.course_id = c.course_id
+        LEFT JOIN attraction_info a ON s.spot_id = a.content_id
+        where c.course_id = #{courseId}
     </select>
 
     <delete id="delete">
@@ -44,5 +72,10 @@
         where course_id = #{courseId}
     </delete>
 
+    <select id="findByUserId" parameterType="int" resultMap="list">
+        select course_id, title, description
+        from course
+        where user_id = #{userId}
+    </select>
 
 </mapper>

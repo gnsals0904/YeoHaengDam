@@ -22,7 +22,7 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<Void> create(@CurrentUser User user,
                                        @RequestBody Create create){
-        commentService.create(user.getUserId(), create);
+        commentService.create(user, create);
         return ResponseEntity.ok().build();
     }
 

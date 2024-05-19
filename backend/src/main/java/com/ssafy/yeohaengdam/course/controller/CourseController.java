@@ -9,6 +9,8 @@ import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static com.ssafy.yeohaengdam.course.dto.CourseData.*;
 
 @RestController
@@ -38,5 +40,16 @@ public class CourseController {
                                        @RequestBody Delete delete){
         courseService.delete(user.getUserId(), delete);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{courseId}")
+    public ResponseEntity<Detail> findOne(@CurrentUser User user,
+                                          @PathVariable(value = "courseId") int courseId){
+        return ResponseEntity.ok(courseService.findById(courseId));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ListUp>> findCourseByUser(@CurrentUser User user){
+        return ResponseEntity.ok(courseService.findByUserId(user.getUserId()));
     }
 }

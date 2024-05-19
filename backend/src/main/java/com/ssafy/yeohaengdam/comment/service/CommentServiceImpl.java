@@ -3,6 +3,7 @@ package com.ssafy.yeohaengdam.comment.service;
 import com.ssafy.yeohaengdam.comment.dto.CommentData;
 import com.ssafy.yeohaengdam.comment.entity.Comment;
 import com.ssafy.yeohaengdam.comment.mapper.CommentMapper;
+import com.ssafy.yeohaengdam.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +17,10 @@ public class CommentServiceImpl implements CommentService{
 
     private final CommentMapper commentMapper;
     @Override
-    public void create(int userId, Create create) {
+    public void create(User user, Create create) {
         Comment newComment = Comment.builder()
-                .userId(userId)
+                .userId(user.getUserId())
+                .nickname(user.getNickname())
                 .articleId(create.getArticleId())
                 .content(create.getContent())
                 .build();

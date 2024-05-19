@@ -58,4 +58,24 @@ public class CourseServiceImpl implements CourseService{
         }
         courseMapper.delete(delete.getCourseId());
     }
+
+    /**
+     * 유저 여행 경로 상세 조회
+     * @param courseId
+     * @return
+     */
+    @Override
+    public Detail findById(int courseId){
+        return courseMapper.findById(courseId);
+    }
+
+    /**
+     * 유저 여행 경로 전체 조회
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<ListUp> findByUserId(int userId){
+        return courseMapper.findByUserId(userId);
+    }
 }

@@ -15,4 +15,8 @@ public interface CourseService {
     public void update(int userId, Update update);
 
     public void delete(int userId, Delete delete);
+
+    public Detail findById(int courseId);
+
+    public List<ListUp> findByUserId(int userId);
 }

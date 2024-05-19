@@ -1,10 +1,8 @@
 package com.ssafy.yeohaengdam.course.dto;
 
 import com.ssafy.yeohaengdam.course.entity.Schedule;
-import com.ssafy.yeohaengdam.spot.entity.Spot;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class CourseData {
@@ -14,6 +12,21 @@ public class CourseData {
         private int courseId;
 
         private int userId;
+
+        private String title;
+
+        private String description;
+
+        private List<Schedule> schedules;
+    }
+
+    @Data
+    public static class ListUp{
+        private int courseId;
+
+        private String title;
+
+        private String description;
     }
 
     @Data

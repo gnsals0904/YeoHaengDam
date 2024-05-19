@@ -14,8 +14,8 @@
     </resultMap>
 
     <insert id="create">
-        insert into comment(user_id, article_id, content, created_at)
-        values(#{userId}, #{articleId}, #{content}, now())
+        insert into comment(user_id, article_id, nickname, content, created_at)
+        values(#{userId}, #{articleId}, #{nickname}, #{content}, now())
     </insert>
 
     <select id="findById">

@@ -20,7 +20,11 @@ public interface CourseMapper {
 
     public void deleteSchedules(int courseId);
 
+
+
     public Detail findById(int courseId);
+
+    public List<ListUp> findByUserId(int userId);
 
     public void delete(int courseId);
 
