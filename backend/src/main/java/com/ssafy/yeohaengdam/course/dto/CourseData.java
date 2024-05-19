@@ -15,6 +15,17 @@ public class CourseData {
 
         private String description;
 
-        private List<Schedule> Schedules;
+        private List<Schedule> schedules;
+    }
+
+    @Data
+    public static class Update{
+        private int courseId;
+
+        private String title;
+
+        private String description;
+
+        private List<Schedule> schedules;
     }
 }

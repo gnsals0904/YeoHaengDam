@@ -11,4 +11,6 @@ public interface CourseService {
 
 
     void save(int userId, Save save);
+
+    public void update(int userId, Update update);
 }

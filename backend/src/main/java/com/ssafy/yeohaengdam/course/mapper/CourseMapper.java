@@ -11,5 +11,10 @@ public interface CourseMapper {
 
     public int save(Course course);
 
+    public int update(Course course);
+
     public void saveSchedules(int courseId, List<Schedule> schedules);
+
+    public void deleteSchedules(int courseId);
+
 }

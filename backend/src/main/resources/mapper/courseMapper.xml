@@ -17,4 +17,16 @@
         </foreach>
     </insert>
 
+    <delete id="deleteSchedules">
+        delete from schedule
+        where course_id = #{courseId}
+    </delete>
+
+    <update id="update">
+        update course
+        set title = #{title}, description = #{description}
+        where course_id = #{courseId}
+    </update>
+
+
 </mapper>
