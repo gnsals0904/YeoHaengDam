@@ -59,6 +59,7 @@
       </button>
     </div>
   </div>
+
   <div class="py-12 relative overflow-hidden bg-white">
     <div class="grid grid-cols-2 max-w-screen-lg mx-auto">
       <div class="w-full flex flex-col items-end pr-16">

@@ -9,7 +9,7 @@ export const useBoardStore = defineStore("board", () => {
 
   const getList = () => {
     axios
-      .get("http://localhost:8080/api/articles")
+      .get("http://localhost:8080/api/articles/list")
       .then((response) => {
         console.log(response);
         boardList.value = response.data;
@@ -22,9 +22,12 @@ export const useBoardStore = defineStore("board", () => {
   // getArticle 함수를 async 함수로 수정
   const getArticle = async (articleNo) => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/articles`, {
-        params: { articleNo },
-      });
+      const response = await axios.get(
+        `http://localhost:8080/api/articles/list`,
+        {
+          params: { articleNo },
+        }
+      );
       console.log("Fetched article:", response);
       selectedBoard.value = response.data;
       console.log("selectedBoards : ");

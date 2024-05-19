@@ -1,13 +1,21 @@
 <!-- TripCard.vue -->
 <script setup>
-defineProps({
+const props = defineProps({
+  id: Number,
   name: String,
   image: String,
+  isSelected: Boolean,
 });
+const emit = defineEmits(["select"]);
+
+const handleClick = () => {
+  emit("select", { id: props.id, name: props.name, image: props.image });
+};
 </script>
 
 <template>
   <div
+    @click="handleClick"
     class="relative rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden group"
   >
     <div

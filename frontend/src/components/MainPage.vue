@@ -17,6 +17,7 @@ const router = useRouter();
 const selectedSido = ref(null);
 const selectedGugun = ref(null);
 const selectedContent = ref(null);
+const listBoxCitiesRef = ref(null);
 
 const handleGugunSelected = (gugun) => {
   selectedGugun.value = gugun;
@@ -63,6 +64,13 @@ const handleSearch = () => {
     alert("모든 옵션을 선택해주세요.");
   }
 };
+
+const handleTripCardSelect = async (destination) => {
+  if (listBoxCitiesRef.value) {
+    listBoxCitiesRef.value.setSelected(destination);
+    await handleSidoSelection(destination);
+  }
+};
 </script>
 
 <template>
@@ -75,7 +83,10 @@ const handleSearch = () => {
         떠나고 싶은 곳과 어떤 여행을 떠나고 싶은지 골라주세요
       </p>
       <div class="flex justify-center items-center space-x-2 mb-12">
-        <ListBoxCities @update:selected="handleSidoSelection" />
+        <ListBoxCities
+          ref="listBoxCitiesRef"
+          @update:selected="handleSidoSelection"
+        />
         <ListBoxGuguns
           :guguns="guguns"
           @update:selected="handleGugunSelected"
@@ -92,8 +103,10 @@ const handleSearch = () => {
         <TripCard
           v-for="destination in destinations"
           :key="destination.id"
+          :id="destination.id"
           :name="destination.name"
           :image="destination.image"
+          @select="handleTripCardSelect"
         />
       </div>
     </section>
