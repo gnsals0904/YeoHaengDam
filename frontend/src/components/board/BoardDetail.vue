@@ -1,10 +1,20 @@
 <script setup>
-import { defineProps, defineEmits } from "vue";
+import { defineProps, defineEmits, ref, computed, watch } from "vue";
 import BoardComment from "@/components/board/BoardComment.vue";
+import { useMemberStore } from "@/stores/member";
+import axios from "axios";
+
+const memberStore = useMemberStore();
+const isLogin = computed(() => memberStore.isLogin);
+const userInfo = computed(() => memberStore.userInfo);
 
 const props = defineProps({
   item: {
     type: Object,
+    required: true,
+  },
+  comments: {
+    type: Array,
     required: true,
   },
   visible: {
@@ -14,10 +24,112 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["close"]);
+const newComment = ref("");
+const comments = ref([]);
 
 const closeModal = () => {
   emit("close");
 };
+
+const placeholderText = computed(() => {
+  return memberStore.isLogin ? "댓글을 작성해주세요" : "로그인을 해주세요";
+});
+
+const fetchComments = async () => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/comment/${props.item.articleId}`
+    );
+    props.comments = response.data;
+  } catch (error) {
+    console.error("댓글 목록 불러오기 실패:", error);
+  }
+};
+
+const postComment = async () => {
+  if (!memberStore.isLogin) {
+    alert("로그인이 필요합니다.");
+    return;
+  }
+
+  const token = sessionStorage.getItem("accessToken");
+
+  if (!token) {
+    alert("토큰이 없습니다. 다시 로그인해주세요.");
+    return;
+  }
+
+  try {
+    await axios.post(
+      "http://localhost:8080/api/comment",
+      {
+        articleId: props.item.articleId,
+        content: newComment.value,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    // 성공적으로 댓글이 등록되었을 때
+    newComment.value = ""; // 댓글 입력란 초기화
+    alert("댓글이 등록되었습니다.");
+    fetchComments(); // 댓글 목록 다시 불러오기
+  } catch (error) {
+    console.error("댓글 등록 실패:", error);
+    alert("댓글 등록에 실패했습니다. 다시 시도해주세요.");
+  }
+};
+
+// 모달이 열릴 때 댓글 목록을 불러오기
+watch(
+  () => props.visible,
+  (newVal) => {
+    if (newVal) {
+      fetchComments();
+    }
+  }
+);
+
+/*
+const postComment = async () => {
+  if (!memberStore.isLogin) {
+    alert("로그인이 필요합니다.");
+    return;
+  }
+
+  const token = sessionStorage.getItem("accessToken");
+
+  if (!token) {
+    alert("토큰이 없습니다. 다시 로그인해주세요.");
+    return;
+  }
+
+  try {
+    await axios.post(
+      "http://localhost:8080/api/comment",
+      {
+        articleId: props.item.articleId,
+        content: newComment.value,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    // 성공적으로 댓글이 등록되었을 때 할 동작
+    newComment.value = ""; // 댓글 입력란 초기화
+    alert("댓글이 등록되었습니다.");
+  } catch (error) {
+    console.error("댓글 등록 실패:", error);
+    alert("댓글 등록에 실패했습니다. 다시 시도해주세요.");
+  }
+};
+*/
 </script>
 
 <template>
@@ -147,23 +259,28 @@ const closeModal = () => {
         </div>
       </div>
       <!-- 현재 접속한 사용자 부분 -->
-      <div class="col-span-1 rounded-lg relative pl-4 bg-white w-full flex-1">
+      <div class="col-span-1 rounded-lg relative px-4 bg-white w-full flex-1">
         <header class="border-b border-grey-400">
           <a
             href="#"
-            class="block cursor-pointer py-4 flex items-center text-sm outline-none focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out"
+            class="py-4 flex items-center text-sm outline-none focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out"
           >
+            <!--TODO 프로필 이미지로 변경 필요-->
             <img
+              v-if="memberStore.isLogin"
               src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260"
               class="h-9 w-9 rounded-full object-cover"
               alt="user"
             />
-            <p class="block ml-2 font-bold">Paul</p>
+            <p v-if="memberStore.isLogin" class="block mx-2 font-bold">
+              {{ userInfo.nickname }}
+            </p>
+            <p v-else class="block mx-2 font-bold">로그인 해주세요</p>
           </a>
         </header>
         <!-- 댓글 -->
         <div class="mt-5">
-          <div v-for="comment in item.comments" :key="comment.id">
+          <div v-for="comment in comments" :key="comment.commentId">
             <BoardComment :comment="comment" />
           </div>
         </div>
@@ -174,13 +291,16 @@ const closeModal = () => {
               <textarea
                 class="w-full resize-none outline-none appearance-non"
                 aria-label="댓글을 작성해주세요"
-                placeholder="댓글을 작성해주세요"
+                :placeholder="placeholderText"
+                v-model="newComment"
                 autocomplete="off"
                 autocorrect="off"
                 style="height: 36px"
+                :disabled="!memberStore.isLogin"
               ></textarea>
               <button
                 class="mb-4 focus:outline-none border-none text-xl bg-transparent text-blue-600"
+                @click="postComment"
               >
                 >
               </button>
