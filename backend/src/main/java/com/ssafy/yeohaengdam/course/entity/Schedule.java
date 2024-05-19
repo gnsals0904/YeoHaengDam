@@ -1,0 +1,22 @@
+package com.ssafy.yeohaengdam.course.entity;
+
+import com.ssafy.yeohaengdam.spot.entity.Spot;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+public class Schedule {
+
+    private int scheduleId;
+
+    private int courseId;
+
+    private Spot spot;
+
+    private int orderIndex;
+}
