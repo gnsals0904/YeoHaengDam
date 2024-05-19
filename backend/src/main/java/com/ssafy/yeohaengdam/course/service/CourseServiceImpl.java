@@ -33,6 +33,10 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public void update(int userId, Update update){
+        Detail findCourse = courseMapper.findById(update.getCourseId());
+        if(findCourse.getUserId() != userId){
+            throw new IllegalArgumentException("수정할 권한이 없습니다.");
+        }
         Course updatedCourse = Course.builder()
                 .userId(userId)
                 .courseId(update.getCourseId())
@@ -44,5 +48,14 @@ public class CourseServiceImpl implements CourseService{
         courseMapper.deleteSchedules(update.getCourseId());
         List<Schedule> scheduleList = update.getSchedules();
         courseMapper.saveSchedules(update.getCourseId(), scheduleList);
+    }
+
+    @Override
+    public void delete(int userId, Delete delete) {
+        Detail findCourse = courseMapper.findById(delete.getCourseId());
+        if(findCourse.getUserId() != userId){
+            throw new IllegalArgumentException("삭제할 권한이 없습니다.");
+        }
+        courseMapper.delete(delete.getCourseId());
     }
 }

@@ -4,6 +4,11 @@
 <mapper namespace="com.ssafy.yeohaengdam.course.mapper.CourseMapper">
 
 
+    <resultMap id="detail" type="com.ssafy.yeohaengdam.course.dto.CourseData$Detail">
+        <result column="user_id" property="userId"></result>
+        <result column="course_id" property="courseId"></result>
+    </resultMap>
+
     <insert id="save" useGeneratedKeys="true" keyProperty="courseId">
         INSERT INTO course (user_id, title, description, created_at, updated_at)
         VALUES (#{userId}, #{title}, #{description}, #{createdAt}, #{updatedAt})
@@ -27,6 +32,17 @@
         set title = #{title}, description = #{description}
         where course_id = #{courseId}
     </update>
+
+    <select id="findById" resultMap="detail">
+        select *
+        from course
+        where course_id = #{courseId};
+    </select>
+
+    <delete id="delete">
+        delete from course
+        where course_id = #{courseId}
+    </delete>
 
 
 </mapper>

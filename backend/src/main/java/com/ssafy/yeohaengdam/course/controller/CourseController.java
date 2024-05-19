@@ -5,6 +5,7 @@ import com.ssafy.yeohaengdam.course.dto.CourseData;
 import com.ssafy.yeohaengdam.course.service.CourseService;
 import com.ssafy.yeohaengdam.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,13 @@ public class CourseController {
     public ResponseEntity<Void> update(@CurrentUser User user,
                                        @RequestBody Update update){
         courseService.update(user.getUserId(), update);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> delete(@CurrentUser User user,
+                                       @RequestBody Delete delete){
+        courseService.delete(user.getUserId(), delete);
         return ResponseEntity.ok().build();
     }
 }

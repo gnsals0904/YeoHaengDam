@@ -10,6 +10,13 @@ import java.util.List;
 public class CourseData {
 
     @Data
+    public static class Detail{
+        private int courseId;
+
+        private int userId;
+    }
+
+    @Data
     public static class Save{
         private String title;
 
@@ -27,5 +34,10 @@ public class CourseData {
         private String description;
 
         private List<Schedule> schedules;
+    }
+
+    @Data
+    public static class Delete{
+        private int courseId;
     }
 }
