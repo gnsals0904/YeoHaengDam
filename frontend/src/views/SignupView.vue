@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { joinUser } from "@/api/user";
 import { useRouter } from "vue-router";
 import axios from "axios";
+import { showConfetti } from "@/util/confetti";
 
 /** 회원 가입 */
 const nickname = ref("");
@@ -31,6 +32,7 @@ const handleSignUp = async () => {
 
   if (result.success) {
     alert("회원가입이 완료되었습니다.");
+    showConfetti();
     router.replace("/login");
   } else {
     alert("회원가입에 실패했습니다.");
