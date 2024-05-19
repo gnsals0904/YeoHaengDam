@@ -19,23 +19,26 @@ const isModalVisible = ref(false);
 const selectedItem = ref(null);
 const memberStore = useMemberStore();
 const isLogin = computed(() => memberStore.isLogin);
+const comments = ref([]);
 function updatePage(newPage) {
   currentPage.value = newPage;
 }
 
 async function showModal(board) {
   try {
-    const response = await axios.get(
+    const articleResponse = await axios.get(
+      `http://localhost:8080/api/articles/${board.articleId}`
+    );
+    const commentsResponse = await axios.get(
       `http://localhost:8080/api/comment/${board.articleId}`
     );
-    selectedItem.value = {
-      ...board,
-      comments: response.data,
-    };
-    console.log("댓글 : ", selectedItem.value);
+    selectedItem.value = articleResponse.data;
+    comments.value = commentsResponse.data;
+    console.log("게시글 상세 : ", selectedItem.value);
+    console.log("댓글 : ", comments.value);
     isModalVisible.value = true;
   } catch (error) {
-    console.error("Failed to fetch article details:", error);
+    console.error("Failed to fetch article details or comments:", error);
   }
 }
 
@@ -87,6 +90,7 @@ function closeModal() {
     </div>
     <BoardDetail
       :item="selectedItem"
+      :comments="comments"
       :visible="isModalVisible"
       @close="closeModal"
     />

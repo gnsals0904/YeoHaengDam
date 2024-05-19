@@ -1,6 +1,11 @@
 <script setup>
 import { ref } from "vue";
+import axios from "axios";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
+const title = ref("");
+const description = ref("");
 const images = ref([]);
 
 const handleFileChange = (event) => {
@@ -22,6 +27,35 @@ const handleFileChange = (event) => {
 const removeImage = (index) => {
   images.value.splice(index, 1);
 };
+
+const postArticle = async () => {
+  const token = sessionStorage.getItem("accessToken");
+  if (!token) {
+    alert("로그인이 필요합니다.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("title", title.value);
+  formData.append("content", description.value);
+  images.value.forEach((image) => {
+    formData.append("images", image.file);
+  });
+
+  try {
+    await axios.post("http://localhost:8080/api/articles", formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    alert("게시글이 등록되었습니다.");
+    router.push("/"); // 게시글 등록 후 이동할 경로
+  } catch (error) {
+    console.error("게시글 등록 실패:", error);
+    alert("게시글 등록에 실패했습니다. 다시 시도해주세요.");
+  }
+};
 </script>
 
 <template>
@@ -35,12 +69,14 @@ const removeImage = (index) => {
       class="mt-5 editor mx-auto w-10/12 flex flex-col text-gray-800 border border-gray-300 p-4 shadow-lg max-w-2xl"
     >
       <input
+        v-model="title"
         class="title bg-gray-100 border border-gray-300 p-2 mb-4 outline-none"
         spellcheck="false"
         placeholder="Title"
         type="text"
       />
       <textarea
+        v-model="description"
         class="description bg-gray-100 sec p-3 h-60 border border-gray-300 outline-none"
         spellcheck="false"
         placeholder="Describe everything about this post here"
@@ -123,6 +159,7 @@ const removeImage = (index) => {
       <!-- Buttons -->
       <div class="buttons flex justify-end">
         <div
+          @click="postArticle"
           class="btn border border-indigo-500 p-1 px-4 font-semibold cursor-pointer text-gray-200 ml-2 bg-indigo-500"
         >
           Post

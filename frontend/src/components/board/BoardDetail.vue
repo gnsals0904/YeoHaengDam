@@ -13,6 +13,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  comments: {
+    type: Array,
+    required: true,
+  },
   visible: {
     type: Boolean,
     required: true,
@@ -36,7 +40,7 @@ const fetchComments = async () => {
     const response = await axios.get(
       `http://localhost:8080/api/comment/${props.item.articleId}`
     );
-    comments.value = response.data;
+    props.comments = response.data;
   } catch (error) {
     console.error("댓글 목록 불러오기 실패:", error);
   }
@@ -72,7 +76,6 @@ const postComment = async () => {
     // 성공적으로 댓글이 등록되었을 때
     newComment.value = ""; // 댓글 입력란 초기화
     alert("댓글이 등록되었습니다.");
-    console.log("댓글 등록 후 다시 불러오기");
     fetchComments(); // 댓글 목록 다시 불러오기
   } catch (error) {
     console.error("댓글 등록 실패:", error);
