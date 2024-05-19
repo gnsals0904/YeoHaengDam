@@ -178,7 +178,7 @@ const comments = [
           </a>
         </header>
         <!-- 댓글 -->
-        <div>
+        <div class="mt-5">
           <div v-for="comment in comments" :key="comment.author">
             <BoardComment :comment="comment" />
           </div>
@@ -188,17 +188,17 @@ const comments = [
           <div class="pt-4 pb-1 pr-3">
             <div class="flex items-start">
               <textarea
-                class="w-full resize-none outline-none appearance-none"
-                aria-label="Agrega un comentario..."
-                placeholder="Agrega un comentario..."
+                class="w-full resize-none outline-none appearance-non"
+                aria-label="댓글을 작성해주세요"
+                placeholder="댓글을 작성해주세요"
                 autocomplete="off"
                 autocorrect="off"
                 style="height: 36px"
               ></textarea>
               <button
-                class="mb-2 focus:outline-none border-none bg-transparent text-blue-600"
+                class="mb-4 focus:outline-none border-none text-xl bg-transparent text-blue-600"
               >
-                Publicar
+                >
               </button>
             </div>
           </div>
