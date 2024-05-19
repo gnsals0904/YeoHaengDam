@@ -3,6 +3,8 @@ DROP TABLE IF EXISTS article CASCADE;
 DROP TABLE IF EXISTS notice CASCADE;
 DROP TABLE IF EXISTS article_image CASCADE;
 DROP TABLE IF EXISTS comment CASCADE;
+DROP TABLE IF EXISTS course CASCADE;
+DROP TABLE IF EXISTS schedule CASCADE;
 
 CREATE TABLE users (
     user_id           INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -35,6 +37,25 @@ CREATE TABLE comment(
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (article_id) REFERENCES Article(article_id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE course (
+                        course_id INT AUTO_INCREMENT PRIMARY KEY,
+                        user_id INT NOT NULL,
+                        title VARCHAR(255) NOT NULL,
+                        description TEXT,
+                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE schedule (
+    schedule_id INT AUTO_INCREMENT PRIMARY KEY,
+    course_id INT NOT NULL,
+    spot_id INT NOT NULL,
+    order_index INT NOT NULL,
+    FOREIGN KEY (course_id) REFERENCES course(course_id) ON DELETE CASCADE,
+    FOREIGN KEY (spot_id) REFERENCES attraction_info(content_id) ON DELETE CASCADE
 );
 
 
