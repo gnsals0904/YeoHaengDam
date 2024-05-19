@@ -79,11 +79,9 @@
                article.created_at,
                article.updated_at,
                article_image.image_url,
-               comment.*
         FROM article
             LEFT JOIN users ON article.user_id = users.user_id
             LEFT JOIN article_image ON article.article_id = article_image.article_id
-            LEFT JOIN comment ON article.article_id = comment.article_id
         where article.article_id = #{articleId}
     </select>
 

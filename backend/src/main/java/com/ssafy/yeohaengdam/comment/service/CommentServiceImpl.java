@@ -46,4 +46,9 @@ public class CommentServiceImpl implements CommentService{
                 .build();
         commentMapper.update(updatedComment);
     }
+
+    @Override
+    public List<Detail> findByArticleId(int articleId) {
+        return commentMapper.findByArticleId(articleId);
+    }
 }

@@ -12,6 +12,7 @@ public class CommentData {
         private int commentId;
         private int articleId;
         private int userId;
+        private String nickname;
         private String content;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;

@@ -18,6 +18,8 @@ public class Comment {
 
     private int userId;
 
+    private String nickname;
+
     private String content;
 
     private LocalDateTime createdAt;

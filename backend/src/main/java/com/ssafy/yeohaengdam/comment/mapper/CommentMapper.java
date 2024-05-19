@@ -19,4 +19,6 @@ public interface CommentMapper {
     public Detail findById(int commentId);
 
     public void delete(int commentId);
+
+    public List<Detail> findByArticleId(int articleId);
 }

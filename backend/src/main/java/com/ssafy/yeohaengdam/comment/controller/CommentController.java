@@ -40,4 +40,11 @@ public class CommentController {
         commentService.update(user.getUserId(), update);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/{articleId}")
+    public ResponseEntity<List<Detail>> findByArticleId(@PathVariable(value = "articleId") int articleId){
+        List<Detail> commentList = commentService.findByArticleId(articleId);
+        return ResponseEntity.ok(commentList);
+
+    }
 }

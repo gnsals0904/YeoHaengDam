@@ -6,6 +6,8 @@
     <resultMap id="detail" type="Comment">
         <result column="user_id" property="userId"></result>
         <result column="article_id" property="articleId"></result>
+        <result column="user_id" property="userId"></result>
+        <result column="user_nickname" property="nickname"></result>
         <result column="content" property="content"></result>
         <result column="created_at" property="createdAt"></result>
         <result column="updated_at" property="updatedAt"></result>
@@ -32,4 +34,12 @@
         set content = #{content}
         where comment_id = #{commentId}
     </update>
+
+    <select id="findByArticleId" resultMap="detail">
+        select comment.*,
+               users.nickname as user_nickname
+        from comment
+        LEFT JOIN users on comment.user_id = users.user_id
+        where article_id = #{articleId}
+    </select>
 </mapper>
