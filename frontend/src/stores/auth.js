@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import router from "@/router";
 import client from "@/api/client";
 
+/** TODO : 삭제 필요 */
 export const useAuthStore = defineStore("auth", {
   state: () => {
     // 세션 스토리지에서 사용자 데이터 로드

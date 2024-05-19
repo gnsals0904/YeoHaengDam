@@ -1,7 +1,10 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import axios from "axios";
 import { RouterView } from "vue-router";
 import { useBoardStore } from "@/stores/board";
+import { useRouter } from "vue-router";
+import { useMemberStore } from "@/stores/member";
 import BoardCard from "@/components/board/BoardCard.vue";
 import Pagination from "./Pagination.vue";
 import BoardDetail from "@/components/board/BoardDetail.vue"; // 모달 컴포넌트 가져오기
@@ -14,14 +17,23 @@ const totalPages = ref(5);
 
 const isModalVisible = ref(false);
 const selectedItem = ref(null);
-
+const memberStore = useMemberStore();
+const isLogin = computed(() => memberStore.isLogin);
 function updatePage(newPage) {
   currentPage.value = newPage;
 }
 
-function showModal(item) {
-  selectedItem.value = item;
-  isModalVisible.value = true;
+async function showModal(board) {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/articles/${board.articleId}`
+    );
+    selectedItem.value = response.data;
+    console.log("댓글 : ", selectedItem.value);
+    isModalVisible.value = true;
+  } catch (error) {
+    console.error("Failed to fetch article details:", error);
+  }
 }
 
 function closeModal() {
@@ -47,6 +59,20 @@ function closeModal() {
               :board="board"
               @click="showModal(board)"
             />
+          </div>
+          <div class="flex justify-end">
+            <router-link
+              v-if="isLogin"
+              :to="{ name: 'BoardEditor' }"
+              class="flex items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+              >글 작성하기</router-link
+            >
+            <div
+              v-else
+              class="flex items-center py-3 px-5 text-base font-medium text-center text-gray-700 rounded-lg bg-gray-300"
+            >
+              글을 작성하려면 로그인 해주세요
+            </div>
           </div>
           <Pagination
             :current-page="currentPage"

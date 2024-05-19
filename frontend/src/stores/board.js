@@ -19,11 +19,12 @@ export const useBoardStore = defineStore("board", () => {
       });
   };
 
+  /* TODO : 삭제 필요
   // getArticle 함수를 async 함수로 수정
   const getArticle = async (articleNo) => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/articles/list`,
+        `http://localhost:8080/api/articles`,
         {
           params: { articleNo },
         }
@@ -38,7 +39,7 @@ export const useBoardStore = defineStore("board", () => {
       throw error; // 에러를 재발생시켜 호출 측에서 처리할 수 있도록 함
     }
   };
-
+  */
   const deleteArticle = async (articleNo) => {
     await axios.get(`http://localhost:8080/api/articles/delete`, {
       params: { articleNo },
@@ -60,7 +61,6 @@ export const useBoardStore = defineStore("board", () => {
     boardList,
     selectedBoard,
     getList,
-    getArticle,
     deleteArticle,
     modifyArticle,
   };

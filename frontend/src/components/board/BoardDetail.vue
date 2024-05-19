@@ -18,22 +18,6 @@ const emit = defineEmits(["close"]);
 const closeModal = () => {
   emit("close");
 };
-
-// Sample comments data
-const comments = [
-  {
-    author: "Joshua",
-    text: "Good post",
-    image:
-      "https://images.pexels.com/photos/1450082/pexels-photo-1450082.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
-  },
-  {
-    author: "Kesha",
-    text: "This is amazing",
-    image:
-      "https://images.pexels.com/photos/3861456/pexels-photo-3861456.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260",
-  },
-];
 </script>
 
 <template>
@@ -179,7 +163,7 @@ const comments = [
         </header>
         <!-- 댓글 -->
         <div class="mt-5">
-          <div v-for="comment in comments" :key="comment.author">
+          <div v-for="comment in item.comments" :key="comment.id">
             <BoardComment :comment="comment" />
           </div>
         </div>
