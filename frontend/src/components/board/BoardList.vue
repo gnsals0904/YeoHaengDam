@@ -26,9 +26,12 @@ function updatePage(newPage) {
 async function showModal(board) {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/articles/${board.articleId}`
+      `http://localhost:8080/api/comment/${board.articleId}`
     );
-    selectedItem.value = response.data;
+    selectedItem.value = {
+      ...board,
+      comments: response.data,
+    };
     console.log("댓글 : ", selectedItem.value);
     isModalVisible.value = true;
   } catch (error) {

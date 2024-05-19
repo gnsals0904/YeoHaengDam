@@ -1,7 +1,12 @@
 <script setup>
 import { defineProps, defineEmits } from "vue";
 import BoardComment from "@/components/board/BoardComment.vue";
+import { useMemberStore } from "@/stores/member";
+import { computed } from "vue";
 
+const memberStore = useMemberStore();
+const isLogin = computed(() => memberStore.isLogin);
+const userInfo = computed(() => memberStore.userInfo);
 const props = defineProps({
   item: {
     type: Object,
@@ -18,6 +23,10 @@ const emit = defineEmits(["close"]);
 const closeModal = () => {
   emit("close");
 };
+
+const placeholderText = computed(() => {
+  return memberStore.isLogin ? "댓글을 작성해주세요" : "로그인을 해주세요";
+});
 </script>
 
 <template>
@@ -147,23 +156,28 @@ const closeModal = () => {
         </div>
       </div>
       <!-- 현재 접속한 사용자 부분 -->
-      <div class="col-span-1 rounded-lg relative pl-4 bg-white w-full flex-1">
+      <div class="col-span-1 rounded-lg relative px-4 bg-white w-full flex-1">
         <header class="border-b border-grey-400">
           <a
             href="#"
-            class="block cursor-pointer py-4 flex items-center text-sm outline-none focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out"
+            class="py-4 flex items-center text-sm outline-none focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out"
           >
+            <!--TODO 프로필 이미지로 변경 필요-->
             <img
+              v-if="memberStore.isLogin"
               src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260"
               class="h-9 w-9 rounded-full object-cover"
               alt="user"
             />
-            <p class="block ml-2 font-bold">Paul</p>
+            <p v-if="memberStore.isLogin" class="block mx-2 font-bold">
+              {{ userInfo.nickname }}
+            </p>
+            <p v-else class="block mx-2 font-bold">로그인 해주세요</p>
           </a>
         </header>
         <!-- 댓글 -->
         <div class="mt-5">
-          <div v-for="comment in item.comments" :key="comment.id">
+          <div v-for="comment in item.comments" :key="comment.commentId">
             <BoardComment :comment="comment" />
           </div>
         </div>
@@ -174,10 +188,11 @@ const closeModal = () => {
               <textarea
                 class="w-full resize-none outline-none appearance-non"
                 aria-label="댓글을 작성해주세요"
-                placeholder="댓글을 작성해주세요"
+                :placeholder="placeholderText"
                 autocomplete="off"
                 autocorrect="off"
                 style="height: 36px"
+                :disabled="!memberStore.isLogin"
               ></textarea>
               <button
                 class="mb-4 focus:outline-none border-none text-xl bg-transparent text-blue-600"

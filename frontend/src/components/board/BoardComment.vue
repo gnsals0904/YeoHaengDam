@@ -13,8 +13,8 @@ const props = defineProps({
 <template>
   <div class="text-sm mb-2 flex flex-start items-center">
     <p class="font-bold ml-2">
-      <a class="cursor-pointer">{{ comment.author }}:</a>
-      <span class="text-gray-700 font-medium ml-1">{{ comment.text }}</span>
+      <a>{{ comment.nickname }}:</a>
+      <span class="text-gray-700 font-medium ml-1">{{ comment.content }}</span>
     </p>
   </div>
 </template>
