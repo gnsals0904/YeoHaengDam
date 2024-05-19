@@ -1,7 +1,10 @@
 <script setup>
 import { useMemberStore } from "@/stores/member";
+import { computed } from "vue";
 
 const memberStore = useMemberStore();
+const isLogin = computed(() => memberStore.isLogin);
+const userInfo = computed(() => memberStore.userInfo);
 </script>
 
 <template>
@@ -16,12 +19,22 @@ const memberStore = useMemberStore();
       <router-link :to="{ name: 'Notice' }" class="text-lg"
         >공지사항</router-link
       >
-      <router-link :to="{ name: 'Main' }" class="text-lg">이용방법</router-link>
+
       <router-link :to="{ name: 'List' }" class="text-lg">게시판</router-link>
       <template v-if="memberStore.isLogin">
         <router-link class="text-lg" :to="{ name: 'MyPage' }"
           >마이페이지</router-link
         >
+        <span class="text-lg">
+          {{ userInfo.nickname }} 님 안녕하세요
+          <img
+            src="/party.svg"
+            alt="Party"
+            class="inline-block align-middle"
+            style="height: 24px; width: 24px"
+          />
+        </span>
+
         <button class="text-lg" @click="memberStore.userLogout">
           로그아웃
         </button>
