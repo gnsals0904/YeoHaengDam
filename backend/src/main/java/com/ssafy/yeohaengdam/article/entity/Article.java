@@ -28,7 +28,7 @@ public class Article {
 
     private boolean isLiked;
 
-    private List<String> imageUrls;
+    private List<Image> imageUrls;
 
     private LocalDateTime createdAt;
 

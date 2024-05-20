@@ -38,25 +38,8 @@ public class ArticleController {
      * 게시글 등록
      */
     @PostMapping
-    public ResponseEntity<Void> create(@RequestParam("title") String title,
-                                       @RequestParam("content") String content,
-                                       @RequestPart(required = false) List<MultipartFile> images,
-                                       @CurrentUser User user){
-        if (images != null) {
-            for (MultipartFile file : images) {
-                System.out.println("Filename: " + file.getOriginalFilename());
-                System.out.println("Size: " + file.getSize());
-
-                if (!file.isEmpty()) {
-                    System.out.println("비어있지않음");
-                }
-            }
-        }
-        Create create = new Create();
-        create.setTitle(title);
-        create.setContent(content);
-        System.out.println("image : " + images);
-        System.out.println();
+    public ResponseEntity<Void> create(Create create, @CurrentUser User user,
+                                       @RequestPart(required = false) List<MultipartFile> images){
         articleService.create(create, user.getUserId(), images);
         return ResponseEntity.ok().build();
     }
@@ -76,7 +59,7 @@ public class ArticleController {
      */
     @PatchMapping("/{articleId}")
     public ResponseEntity<Void> update(@PathVariable int articleId,
-                                       @RequestBody Create update, @CurrentUser User user,
+                                       Create update, @CurrentUser User user,
                                        @RequestPart(required = false) List<MultipartFile> images){
 
         articleService.update(articleId, update, user, images);

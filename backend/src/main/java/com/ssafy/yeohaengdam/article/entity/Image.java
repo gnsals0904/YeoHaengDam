@@ -10,8 +10,10 @@ import lombok.*;
 @Getter
 public class Image {
     private Integer id;
-    private String url;
+
+    private String originalName;
+
+    private String storedName;
+
     private Integer articleId;
-
-
 }
