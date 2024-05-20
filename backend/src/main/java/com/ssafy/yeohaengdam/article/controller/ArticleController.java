@@ -56,6 +56,8 @@ public class ArticleController {
      */
     @GetMapping("/{articleId}")
     public ResponseEntity<Detail> findById(@PathVariable int articleId){
+        Detail findArticle = articleService.findById(articleId);
+        System.out.println(findArticle);
         return ResponseEntity.ok(articleService.findById(articleId));
     }
 
@@ -67,7 +69,7 @@ public class ArticleController {
                                        @RequestBody Create update, @CurrentUser User user,
                                        @RequestPart(required = false) List<MultipartFile> images){
 
-        articleService.update(articleId, update, user.getUserId(), images);
+        articleService.update(articleId, update, user, images);
         return ResponseEntity.ok().build();
     }
 
@@ -75,8 +77,10 @@ public class ArticleController {
      * 게시글 삭제
      */
     @DeleteMapping("/{articleId}")
-    public ResponseEntity<Void> delete(@PathVariable int articleId) {
-        articleService.delete(articleId);
+    public ResponseEntity<Void> delete(@CurrentUser User user,
+                                       @PathVariable int articleId) {
+        articleService.delete(articleId, user);
+
         return ResponseEntity.ok().build();
     }
 

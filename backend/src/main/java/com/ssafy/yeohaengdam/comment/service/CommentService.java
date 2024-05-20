@@ -11,9 +11,9 @@ public interface CommentService {
 
     public void create(User user, Create create);
 
-    public void update(int userId, Update update);
+    public void update(User user, Update update);
 
-    public void delete(int userId, int commentId);
+    public void delete(User user, int commentId);
 
     public List<Detail> findByArticleId(int articleId);
 }

@@ -3,6 +3,8 @@ import com.ssafy.yeohaengdam.article.entity.Article;
 import com.ssafy.yeohaengdam.article.entity.Image;
 import com.ssafy.yeohaengdam.article.entity.SearchCriteria;
 import com.ssafy.yeohaengdam.article.mapper.ArticleMapper;
+import com.ssafy.yeohaengdam.user.entity.RoleType;
+import com.ssafy.yeohaengdam.user.entity.User;
 import com.ssafy.yeohaengdam.utils.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -56,7 +58,10 @@ public class ArticleServiceImpl implements ArticleService {
                     .hit(0)
                     .createdAt(now())
                     .build();
-            int articleId = articleMapper.create(newArticle); // 생성된 Article의 ID를 설정
+            articleMapper.create(newArticle); // 생성된 Article의 ID를 설정
+
+            int articleId = newArticle.getArticleId();
+                    System.out.println(articleId);
 
             if (images != null) {
                 for (Image image : imageList) {
@@ -72,8 +77,16 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void update(int articleId, Create update, int userId, List<MultipartFile> images) {
+    public void update(int articleId, Create update, User user, List<MultipartFile> images) {
         List<Image> imageList = new ArrayList<>();
+        Detail article = articleMapper.findById(articleId);
+        
+        if(article.getUserId() != user.getUserId()){
+            if(!user.getRoleType().equals(RoleType.ADMIN)) {
+                throw new IllegalArgumentException("게시글 수정 권한이 없는 사용자입니다.");
+            }
+        }
+
 
         try {
             if (images != null) {
@@ -104,7 +117,14 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void delete(int articleId) {
+    public void delete(int articleId, User user) {
+
+        Detail article = articleMapper.findById(articleId);
+        if(article.getUserId() != user.getUserId()){
+            if(!user.getRoleType().equals(RoleType.ADMIN)) {
+                throw new IllegalArgumentException("게시글 삭제 권한이 없는 사용자입니다.");
+            }
+        }
         articleMapper.delete(articleId);
     }
 }

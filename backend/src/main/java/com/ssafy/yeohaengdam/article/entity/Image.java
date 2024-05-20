@@ -12,4 +12,6 @@ public class Image {
     private Integer id;
     private String url;
     private Integer articleId;
+
+
 }

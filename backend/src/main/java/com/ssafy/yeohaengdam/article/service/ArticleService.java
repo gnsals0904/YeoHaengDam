@@ -2,6 +2,7 @@ package com.ssafy.yeohaengdam.article.service;
 
 import com.ssafy.yeohaengdam.article.dto.ArticleData;
 import com.ssafy.yeohaengdam.article.entity.SearchCriteria;
+import com.ssafy.yeohaengdam.user.entity.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -15,9 +16,9 @@ public interface ArticleService {
 
     public void create(Create create, int userId, List<MultipartFile> images);
 
-    public void update(int articleId, Create update, int userId, List<MultipartFile> images);
+    public void update(int articleId, Create update, User user, List<MultipartFile> images);
 
-    public void delete(int articleId);
+    public void delete(int articleId, User user);
 
     public Detail findById(int articleId);
 }
