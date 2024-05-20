@@ -92,7 +92,7 @@
     </insert>
 
     <insert id="createImage">
-        INSERT INTO article_image (url, article_id)
+        INSERT INTO article_image (image_url, article_id)
         VALUES (#{url}, #{articleId})
     </insert>
 
