@@ -89,6 +89,49 @@ const editArticle = (articleId) => {
   router.push({ name: 'BoardEdit', params: { articleId } });
 };
 
+const deleteArticle = async () => {
+  if (userInfo.value.nickname === props.item.nickname) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(
+            `http://localhost:8080/api/articles/${props.item.articleId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${sessionStorage.getItem(
+                  'accessToken'
+                )}`,
+              },
+            }
+          )
+          .then(() => {
+            Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+            closeModal(); // Close the modal if open
+            router.push({ name: 'Home' }); // Redirect to home or refresh the list
+          })
+          .catch((error) => {
+            console.error('Deletion failed:', error);
+            Swal.fire('Failed!', 'Could not delete the article.', 'error');
+          });
+      }
+    });
+  } else {
+    Swal.fire(
+      'Unauthorized!',
+      'You are not the owner of this article.',
+      'error'
+    );
+  }
+};
+
 // 모달이 열릴 때 댓글 목록을 불러오기
 watch(
   () => props.visible,
