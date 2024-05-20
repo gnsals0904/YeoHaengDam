@@ -55,9 +55,9 @@ async function fetchArticleData() {
     const response = await axios.get(
       `http://localhost:8080/api/notice/${props.noticeId}`
     );
+    console.log("data : ", response.data);
     title.value = response.data.title;
     description.value = response.data.content;
-    // 이미지 데이터 처리 방식에 따라 추가 구현 필요
   } catch (error) {
     console.error("공지사항 불러오기 실패:", error);
   }
@@ -86,7 +86,7 @@ const updateArticle = async () => {
   }
 };
 onMounted(() => {
-  if (route.params.articleId) {
+  if (route.params.noticeId) {
     isEditMode.value = true;
     fetchArticleData();
   } else {
