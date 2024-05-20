@@ -4,6 +4,7 @@ import BoardComment from '@/components/board/BoardComment.vue';
 import { useMemberStore } from '@/stores/member';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import Swal from 'sweetalert2';
 
 const router = useRouter();
 const memberStore = useMemberStore();
@@ -114,8 +115,10 @@ const deleteArticle = async () => {
           )
           .then(() => {
             Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
-            closeModal(); // Close the modal if open
-            router.push({ name: 'Home' }); // Redirect to home or refresh the list
+            closeModal();
+            router
+              .replace({ name: 'List' })
+              .then(() => window.location.reload());
           })
           .catch((error) => {
             console.error('Deletion failed:', error);
@@ -297,7 +300,7 @@ const postComment = async () => {
             <button
               class="flex select-none items-center gap-3 rounded-lg border border-blue-gray-500 py-2 px-4 text-center align-middle text-xs font-bold uppercase text-blue-gray-500 transition-all hover:opacity-75 focus:ring focus:ring-blue-gray-200 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
               type="button"
-              @click="editArticle(item.articleId)"
+              @click="deleteArticle"
             >
               삭제하기
             </button>
