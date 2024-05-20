@@ -1,13 +1,13 @@
 <script setup>
-import { ref, computed } from "vue";
-import axios from "axios";
-import { RouterView } from "vue-router";
-import { useBoardStore } from "@/stores/board";
-import { useRouter } from "vue-router";
-import { useMemberStore } from "@/stores/member";
-import BoardCard from "@/components/board/BoardCard.vue";
-import Pagination from "./Pagination.vue";
-import BoardDetail from "@/components/board/BoardDetail.vue"; // 모달 컴포넌트 가져오기
+import { ref, computed } from 'vue';
+import axios from 'axios';
+import { RouterView } from 'vue-router';
+import { useBoardStore } from '@/stores/board';
+import { useRouter } from 'vue-router';
+import { useMemberStore } from '@/stores/member';
+import BoardCard from '@/components/board/BoardCard.vue';
+import Pagination from './Pagination.vue';
+import BoardDetail from '@/components/board/BoardDetail.vue'; // 모달 컴포넌트 가져오기
 
 const boardStore = useBoardStore();
 boardStore.getList();
@@ -26,19 +26,22 @@ function updatePage(newPage) {
 
 async function showModal(board) {
   try {
+    // 상세 보기
     const articleResponse = await axios.get(
       `http://localhost:8080/api/articles/${board.articleId}`
     );
+    // 댓글 가져오기
     const commentsResponse = await axios.get(
       `http://localhost:8080/api/comment/${board.articleId}`
     );
     selectedItem.value = articleResponse.data;
     comments.value = commentsResponse.data;
-    console.log("게시글 상세 : ", selectedItem.value);
-    console.log("댓글 : ", comments.value);
+    console.log('게시글 상세 받은데이터 : ', articleResponse.data);
+    console.log('게시글 상세 : ', selectedItem.value);
+    console.log('댓글 : ', comments.value);
     isModalVisible.value = true;
   } catch (error) {
-    console.error("Failed to fetch article details or comments:", error);
+    console.error('Failed to fetch article details or comments:', error);
   }
 }
 

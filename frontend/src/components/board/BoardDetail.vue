@@ -1,9 +1,11 @@
 <script setup>
-import { defineProps, defineEmits, ref, computed, watch } from "vue";
-import BoardComment from "@/components/board/BoardComment.vue";
-import { useMemberStore } from "@/stores/member";
-import axios from "axios";
+import { defineProps, defineEmits, ref, computed, watch } from 'vue';
+import BoardComment from '@/components/board/BoardComment.vue';
+import { useMemberStore } from '@/stores/member';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const memberStore = useMemberStore();
 const isLogin = computed(() => memberStore.isLogin);
 const userInfo = computed(() => memberStore.userInfo);
@@ -23,16 +25,16 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["close"]);
-const newComment = ref("");
-const comments = ref([]);
+const emit = defineEmits(['close']);
+const newComment = ref('');
+const localComments = ref([]);
 
 const closeModal = () => {
-  emit("close");
+  emit('close');
 };
 
 const placeholderText = computed(() => {
-  return memberStore.isLogin ? "댓글을 작성해주세요" : "로그인을 해주세요";
+  return memberStore.isLogin ? '댓글을 작성해주세요' : '로그인을 해주세요';
 });
 
 const fetchComments = async () => {
@@ -40,28 +42,28 @@ const fetchComments = async () => {
     const response = await axios.get(
       `http://localhost:8080/api/comment/${props.item.articleId}`
     );
-    props.comments = response.data;
+    localComments.value = response.data; // localComments를 사용
   } catch (error) {
-    console.error("댓글 목록 불러오기 실패:", error);
+    console.error('댓글 목록 불러오기 실패:', error);
   }
 };
 
 const postComment = async () => {
   if (!memberStore.isLogin) {
-    alert("로그인이 필요합니다.");
+    alert('로그인이 필요합니다.');
     return;
   }
 
-  const token = sessionStorage.getItem("accessToken");
+  const token = sessionStorage.getItem('accessToken');
 
   if (!token) {
-    alert("토큰이 없습니다. 다시 로그인해주세요.");
+    alert('토큰이 없습니다. 다시 로그인해주세요.');
     return;
   }
 
   try {
     await axios.post(
-      "http://localhost:8080/api/comment",
+      'http://localhost:8080/api/comment',
       {
         articleId: props.item.articleId,
         content: newComment.value,
@@ -74,13 +76,17 @@ const postComment = async () => {
     );
 
     // 성공적으로 댓글이 등록되었을 때
-    newComment.value = ""; // 댓글 입력란 초기화
-    alert("댓글이 등록되었습니다.");
+    newComment.value = ''; // 댓글 입력란 초기화
+    alert('댓글이 등록되었습니다.');
     fetchComments(); // 댓글 목록 다시 불러오기
   } catch (error) {
-    console.error("댓글 등록 실패:", error);
-    alert("댓글 등록에 실패했습니다. 다시 시도해주세요.");
+    console.error('댓글 등록 실패:', error);
+    alert('댓글 등록에 실패했습니다. 다시 시도해주세요.');
   }
+};
+
+const editArticle = (articleId) => {
+  router.push({ name: 'BoardEdit', params: { articleId } });
 };
 
 // 모달이 열릴 때 댓글 목록을 불러오기
@@ -240,21 +246,9 @@ const postComment = async () => {
           <button
             class="flex select-none items-center gap-3 rounded-lg border border-blue-gray-500 py-2 px-4 text-center align-middle text-xs font-bold uppercase text-blue-gray-500 transition-all hover:opacity-75 focus:ring focus:ring-blue-gray-200 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
             type="button"
+            @click="editArticle(item.articleId)"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-              class="h-4 w-4"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M15.75 4.5a3 3 0 11.825 2.066l-8.421 4.679a3.002 3.002 0 010 1.51l8.421 4.679a3 3 0 11-.729 1.31l-8.421-4.678a3 3 0 110-4.132l8.421-4.679a3 3 0 01-.096-.755z"
-                clip-rule="evenodd"
-              ></path>
-            </svg>
-            Share
+            수정하기
           </button>
         </div>
       </div>
@@ -280,7 +274,7 @@ const postComment = async () => {
         </header>
         <!-- 댓글 -->
         <div class="mt-5">
-          <div v-for="comment in comments" :key="comment.commentId">
+          <div v-for="comment in localComments" :key="comment.commentId">
             <BoardComment :comment="comment" />
           </div>
         </div>

@@ -42,6 +42,16 @@ public class ArticleController {
                                        @RequestParam("content") String content,
                                        @RequestPart(required = false) List<MultipartFile> images,
                                        @CurrentUser User user){
+        if (images != null) {
+            for (MultipartFile file : images) {
+                System.out.println("Filename: " + file.getOriginalFilename());
+                System.out.println("Size: " + file.getSize());
+
+                if (!file.isEmpty()) {
+                    System.out.println("비어있지않음");
+                }
+            }
+        }
         Create create = new Create();
         create.setTitle(title);
         create.setContent(content);

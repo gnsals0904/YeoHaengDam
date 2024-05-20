@@ -19,6 +19,7 @@ export const useMemberStore = defineStore(
     const isLoginError = ref(false);
     const userInfo = ref(null);
     const isValidToken = ref(false);
+    const isAdmin = ref(false);
 
     const userLogin = async (loginUser) => {
       console.log('로그인 시도 : ', loginUser);
@@ -56,7 +57,10 @@ export const useMemberStore = defineStore(
         (response) => {
           if (response.status === httpStatusCode.OK) {
             userInfo.value = response.data;
-            console.log(response.data);
+            if (response.data.roleType === 'ADMIN') {
+              isAdmin.value = true;
+            }
+            console.log('유저 정보 : ', response.data);
             console.log(userInfo.value);
           } else {
             console.log('유저 정보 없음!!!!');
@@ -161,6 +165,7 @@ export const useMemberStore = defineStore(
       isLogin,
       isLoginError,
       userInfo,
+      isAdmin,
       isValidToken,
       userLogin,
       getUserInfo,

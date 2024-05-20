@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 
@@ -23,6 +23,10 @@ const handleFileChange = (event) => {
         : file.size + 'b',
   }));
 };
+
+const props = defineProps({
+  articleId: String, // 라우터에서 받은 게시글 ID
+});
 
 const removeImage = (index) => {
   images.value.splice(index, 1);
@@ -58,6 +62,55 @@ const postArticle = async () => {
     alert('게시글 등록에 실패했습니다. 다시 시도해주세요.');
   }
 };
+
+// 게시글을 저장하는 함수
+const saveArticle = async () => {
+  if (props.articleId) {
+    await updateArticle();
+  } else {
+    await postArticle();
+  }
+};
+
+// 게시글 데이터를 불러오는 함수
+async function fetchArticleData() {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/articles/${props.articleId}`
+    );
+    title.value = response.data.title;
+    description.value = response.data.content;
+    // 이미지 데이터 처리 방식에 따라 추가 구현 필요
+  } catch (error) {
+    console.error('게시글 불러오기 실패:', error);
+  }
+}
+
+// 게시글을 업데이트하는 함수
+const updateArticle = async () => {
+  const formData = new FormData();
+  formData.append('title', title.value);
+  formData.append('content', description.value);
+  // 이미지와 관련된 추가 로직 필요
+  try {
+    await axios.patch(
+      `http://localhost:8080/api/articles/${props.articleId}`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+        },
+      }
+    );
+    alert('게시글이 업데이트되었습니다.');
+    router.push('/'); // 업데이트 후 이동할 경로
+  } catch (error) {
+    console.error('게시글 업데이트 실패:', error);
+    alert('게시글 업데이트에 실패했습니다. 다시 시도해주세요.');
+  }
+};
+onMounted(fetchArticleData);
 </script>
 
 <template>
@@ -119,7 +172,7 @@ const postArticle = async () => {
         <template v-for="(image, index) in images" :key="index">
           <div class="relative w-32 h-32 object-cover rounded">
             <div
-              x-show="image.preview"
+              v-if="image.preview"
               class="relative w-32 h-32 object-cover rounded"
             >
               <img :src="image.url" class="w-32 h-32 object-cover rounded" />
@@ -131,10 +184,8 @@ const postArticle = async () => {
               </button>
               <div x-text="image.size" class="text-xs text-center p-2"></div>
             </div>
-            <div
-              x-show="!image.preview"
-              class="relative w-32 h-32 object-cover rounded"
-            >
+            <!-- 이미지 미리보기가 없을 경우 -->
+            <div v-else class="relative w-32 h-32 object-cover rounded">
               <!-- <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 fill-white stroke-indigo-500" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg> -->
@@ -161,7 +212,7 @@ const postArticle = async () => {
       <!-- Buttons -->
       <div class="buttons flex justify-end">
         <div
-          @click="postArticle"
+          @click="saveArticle"
           class="btn border border-indigo-500 p-1 px-4 font-semibold cursor-pointer text-gray-200 ml-2 bg-indigo-500"
         >
           Post
