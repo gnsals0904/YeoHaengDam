@@ -1,10 +1,10 @@
 <script setup>
-import { defineProps, defineEmits, ref, computed, watch } from 'vue';
-import BoardComment from '@/components/board/BoardComment.vue';
-import { useMemberStore } from '@/stores/member';
-import axios from 'axios';
-import { useRouter } from 'vue-router';
-import Swal from 'sweetalert2';
+import { defineProps, defineEmits, ref, computed, watch } from "vue";
+import BoardComment from "@/components/board/BoardComment.vue";
+import { useMemberStore } from "@/stores/member";
+import axios from "axios";
+import { useRouter } from "vue-router";
+import Swal from "sweetalert2";
 
 const router = useRouter();
 const memberStore = useMemberStore();
@@ -26,16 +26,16 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['close']);
-const newComment = ref('');
+const emit = defineEmits(["close"]);
+const newComment = ref("");
 const localComments = ref([]);
 
 const closeModal = () => {
-  emit('close');
+  emit("close");
 };
 
 const placeholderText = computed(() => {
-  return memberStore.isLogin ? '댓글을 작성해주세요' : '로그인을 해주세요';
+  return memberStore.isLogin ? "댓글을 작성해주세요" : "로그인을 해주세요";
 });
 
 const fetchComments = async () => {
@@ -45,26 +45,26 @@ const fetchComments = async () => {
     );
     localComments.value = response.data; // localComments를 사용
   } catch (error) {
-    console.error('댓글 목록 불러오기 실패:', error);
+    console.error("댓글 목록 불러오기 실패:", error);
   }
 };
 
 const postComment = async () => {
   if (!memberStore.isLogin) {
-    alert('로그인이 필요합니다.');
+    alert("로그인이 필요합니다.");
     return;
   }
 
-  const token = sessionStorage.getItem('accessToken');
+  const token = sessionStorage.getItem("accessToken");
 
   if (!token) {
-    alert('토큰이 없습니다. 다시 로그인해주세요.');
+    alert("토큰이 없습니다. 다시 로그인해주세요.");
     return;
   }
 
   try {
     await axios.post(
-      'http://localhost:8080/api/comment',
+      "http://localhost:8080/api/comment",
       {
         articleId: props.item.articleId,
         content: newComment.value,
@@ -77,29 +77,37 @@ const postComment = async () => {
     );
 
     // 성공적으로 댓글이 등록되었을 때
-    newComment.value = ''; // 댓글 입력란 초기화
-    alert('댓글이 등록되었습니다.');
+    newComment.value = ""; // 댓글 입력란 초기화
+    alert("댓글이 등록되었습니다.");
     fetchComments(); // 댓글 목록 다시 불러오기
   } catch (error) {
-    console.error('댓글 등록 실패:', error);
-    alert('댓글 등록에 실패했습니다. 다시 시도해주세요.');
+    console.error("댓글 등록 실패:", error);
+    alert("댓글 등록에 실패했습니다. 다시 시도해주세요.");
   }
 };
 
 const editArticle = (articleId) => {
-  router.push({ name: 'BoardEdit', params: { articleId } });
+  if (userInfo.value.nickname === props.item.nickname) {
+    router.push({ name: "BoardEdit", params: { articleId } });
+  } else {
+    Swal.fire(
+      "Unauthorized!",
+      "You are not the owner of this article.",
+      "error"
+    );
+  }
 };
 
 const deleteArticle = async () => {
   if (userInfo.value.nickname === props.item.nickname) {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "You won't be able to revert this!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
         axios
@@ -108,29 +116,29 @@ const deleteArticle = async () => {
             {
               headers: {
                 Authorization: `Bearer ${sessionStorage.getItem(
-                  'accessToken'
+                  "accessToken"
                 )}`,
               },
             }
           )
           .then(() => {
-            Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+            Swal.fire("Deleted!", "Your file has been deleted.", "success");
             closeModal();
             router
-              .replace({ name: 'List' })
+              .replace({ name: "List" })
               .then(() => window.location.reload());
           })
           .catch((error) => {
-            console.error('Deletion failed:', error);
-            Swal.fire('Failed!', 'Could not delete the article.', 'error');
+            console.error("Deletion failed:", error);
+            Swal.fire("Failed!", "Could not delete the article.", "error");
           });
       }
     });
   } else {
     Swal.fire(
-      'Unauthorized!',
-      'You are not the owner of this article.',
-      'error'
+      "Unauthorized!",
+      "You are not the owner of this article.",
+      "error"
     );
   }
 };
