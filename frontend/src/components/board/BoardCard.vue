@@ -7,7 +7,6 @@ const props = defineProps({
     required: true,
   },
 });
-console.log("in board", props);
 
 const emit = defineEmits(["click"]); // click 이벤트 정의
 
@@ -25,8 +24,8 @@ function formatImgSrc(imgSrc) {
   if (!imgSrc || imgSrc.length === 0) {
     return "https://source.unsplash.com/800x450/?nature"; // 기본 이미지 URL
   }
-  const baseUrl = "http://localhost:8080/static/images/";
-  return baseUrl + imgSrc[0].storedName; // 첫 번째 이미지의 저장된 이름을 URL로 변환
+  // 객체의 storedName 속성을 사용하여 전체 URL 구성
+  return imgSrc[0].storedName;
 }
 </script>
 
@@ -38,9 +37,7 @@ function formatImgSrc(imgSrc) {
     <div class="relative mb-4 rounded-2xl">
       <div
         class="min-h-[30vh] max-h-[30vh] rounded-2xl w-full bg-contain bg-no-repeat bg-center object-cover transition-transform duration-300 transform group-hover:scale-105"
-        :style="{
-          backgroundImage: `url(${formatImgSrc(board.imageUrls)})`,
-        }"
+        :style="{ backgroundImage: `url(${formatImgSrc(board.imageUrls)})` }"
         :alt="board.title"
       />
       <div
