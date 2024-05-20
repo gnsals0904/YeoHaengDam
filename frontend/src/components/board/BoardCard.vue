@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, defineEmits } from 'vue';
+import { defineProps, defineEmits } from "vue";
 
 const props = defineProps({
   board: {
@@ -7,17 +7,26 @@ const props = defineProps({
     required: true,
   },
 });
+console.log("in board", props);
 
-const emit = defineEmits(['click']); // click 이벤트 정의
+const emit = defineEmits(["click"]); // click 이벤트 정의
 
 const handleClick = () => {
-  emit('click', props.board); // 클릭 시 부모 컴포넌트로 이벤트 전달
+  emit("click", props.board); // 클릭 시 부모 컴포넌트로 이벤트 전달
 };
 
 function formatDateTime(dateTime) {
   // 날짜 형식 변환 함수
-  const [date, time] = dateTime.split('T');
+  const [date, time] = dateTime.split("T");
   return `${date} ${time}`;
+}
+
+function formatImgSrc(imgSrc) {
+  if (!imgSrc || imgSrc.length === 0) {
+    return "https://source.unsplash.com/800x450/?nature"; // 기본 이미지 URL
+  }
+  const baseUrl = "http://localhost:8080/static/images/";
+  return baseUrl + imgSrc[0].storedName; // 첫 번째 이미지의 저장된 이름을 URL로 변환
 }
 </script>
 
@@ -27,12 +36,11 @@ function formatDateTime(dateTime) {
     @click="handleClick"
   >
     <div class="relative mb-4 rounded-2xl">
-      <img :src="'http://localhost:8080/uploads/Lulu_0.jpg'" />
-      <img
-        class="min-h-[30vh] max-h-[30vh] rounded-2xl w-full object-cover transition-transform duration-300 transform group-hover:scale-105"
-        :src="
-          board.imageUrls[0] || 'https://source.unsplash.com/800x450/?nature'
-        "
+      <div
+        class="min-h-[30vh] max-h-[30vh] rounded-2xl w-full bg-contain bg-no-repeat bg-center object-cover transition-transform duration-300 transform group-hover:scale-105"
+        :style="{
+          backgroundImage: `url(${formatImgSrc(board.imageUrls)})`,
+        }"
         :alt="board.title"
       />
       <div

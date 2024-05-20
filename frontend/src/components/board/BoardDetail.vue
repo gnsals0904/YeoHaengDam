@@ -153,6 +153,13 @@ watch(
   }
 );
 
+function formatImgSrc(imgSrc) {
+  if (!imgSrc || imgSrc.length === 0) {
+    return "https://source.unsplash.com/800x450/?nature"; // 기본 이미지 URL
+  }
+  const baseUrl = "http://localhost:8080/static/images/";
+  return baseUrl + imgSrc[0].storedName; // 첫 번째 이미지의 저장된 이름을 URL로 변환
+}
 /*
 const postComment = async () => {
   if (!memberStore.isLogin) {
@@ -199,7 +206,7 @@ const postComment = async () => {
     @click="closeModal"
   >
     <div
-      class="flex rounded-lg bg-white min-h-[20%] max-h-[95%] min-w-[20%] max-w-[90%]"
+      class="flex rounded-lg bg-white min-h-[70%] max-h-[95%] min-w-[65%] max-w-[90%]"
       @click.stop
     >
       <div
@@ -256,12 +263,14 @@ const postComment = async () => {
           </div>
         </div>
         <div
-          class="relative border-t border-b border-t-blue-gray-100 border-b-blue-gray-100 p-0 text-base font-light leading-relaxed text-blue-gray-500 antialiased max-h-[75vh] overflow-y-auto"
+          class="relative border-t border-b border-t-blue-gray-100 border-b-blue-gray-100 text-base font-light leading-relaxed text-blue-gray-500 antialiased max-h-[75vh] overflow-y-auto"
         >
-          <img
+          <div
             :alt="item.title"
-            :src="item.img1 || 'https://source.unsplash.com/800x450/?nature'"
-            class="w-full h-auto max-h-[50vh] object-cover"
+            :style="{
+              backgroundImage: `url(${formatImgSrc(item.imageUrls)})`,
+            }"
+            class="w-auto min-h-[50vh] max-h-[50vh] object-cover bg-contain bg-no-repeat bg-center"
           />
         </div>
 

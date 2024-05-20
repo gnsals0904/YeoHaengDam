@@ -12,7 +12,7 @@
         <result column="hit" property="hit"/>
         <result column="created_at" property="createdAt"/>
         <result column="updated_at" property="updatedAt"/>
-        <collection property="imageUrls" ofType="java.lang.String">
+        <collection property="imageUrls" ofType="Image">
             <result column="original_name" property="originalName"/>
             <result column="stored_name" property="storedName"/>
         </collection>
