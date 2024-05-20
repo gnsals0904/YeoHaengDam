@@ -41,8 +41,8 @@
     </select>
 
     <insert id="create" parameterType="Notice" useGeneratedKeys="true" keyProperty="noticeId">
-        insert into notice(user_id, title, content, now())
-        values (#{userId}, #{title}, #{content}, now())
+        insert into notice(user_id, title, content, created_at)
+        values (#{userId}, #{title}, #{content}, #{createdAt})
     </insert>
 
     <update id="update">
