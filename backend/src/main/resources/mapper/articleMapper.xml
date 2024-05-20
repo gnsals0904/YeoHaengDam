@@ -13,7 +13,8 @@
         <result column="created_at" property="createdAt"/>
         <result column="updated_at" property="updatedAt"/>
         <collection property="imageUrls" ofType="java.lang.String">
-            <result column="image_url" property="url"/>
+            <result column="original_name" property="originalName"/>
+            <result column="stored_name" property="storedName"/>
         </collection>
     </resultMap>
 
@@ -26,33 +27,26 @@
         <result column="hit" property="hit"/>
         <result column="created_at" property="createdAt"/>
         <result column="updated_at" property="updatedAt"/>
-        <collection property="imageUrls" ofType="java.lang.String">
-            <result column="image_url" property="url"/>
-        </collection>
-
-        <collection property="comments" ofType="com.ssafy.yeohaengdam.comment.dto.CommentData$Detail">
-            <id column="comment_id" property="commentId"/>
-            <result column="article_id" property="articleId"/>
-            <result column="user_id" property="userId"/>
-            <result column="content" property="content"/>
-            <result column="created_at" property="createdAt"/>
-            <result column="updated_at" property="updatedAt"/>
+        <collection property="imageUrls" ofType="Image">
+            <result column="original_name" property="originalName"/>
+            <result column="stored_name" property="storedName"/>
         </collection>
     </resultMap>
 
     <select id="list" resultMap="articleList">
         SELECT article.article_id,
-               article.user_id,
-               users.nickname AS user_nickname,
-               article.title,
-               article.content,
-               article.hit,
-               article.created_at,
-               article.updated_at,
-               article_image.image_url
+        article.user_id,
+        users.nickname AS user_nickname,
+        article.title,
+        article.content,
+        article.hit,
+        article.created_at,
+        article.updated_at,
+        article_image.original_name,
+        article_image.stored_name
         FROM article
-                 LEFT JOIN users ON article.user_id = users.user_id
-                 LEFT JOIN article_image ON article.article_id = article_image.article_id
+        LEFT JOIN users ON article.user_id = users.user_id
+        LEFT JOIN article_image ON article.article_id = article_image.article_id
         <where>
             <if test="keyword != null and keyword != ''">
                 AND article.title LIKE CONCAT('%', #{keyword}, '%')
@@ -78,10 +72,11 @@
                article.hit,
                article.created_at,
                article.updated_at,
-               article_image.image_url,
+               article_image.original_name,
+               article_image.stored_name
         FROM article
-            LEFT JOIN users ON article.user_id = users.user_id
-            LEFT JOIN article_image ON article.article_id = article_image.article_id
+                 LEFT JOIN users ON article.user_id = users.user_id
+                 LEFT JOIN article_image ON article.article_id = article_image.article_id
         where article.article_id = #{articleId}
     </select>
 
@@ -92,8 +87,8 @@
     </insert>
 
     <insert id="createImage">
-        INSERT INTO article_image (url, article_id)
-        VALUES (#{url}, #{articleId})
+        INSERT INTO article_image (original_name, stored_name, article_id)
+        VALUES (#{originalName}, #{storedName}, #{articleId})
     </insert>
 
     <update id="update">

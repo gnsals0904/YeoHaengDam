@@ -3,6 +3,8 @@ import com.ssafy.yeohaengdam.article.entity.Article;
 import com.ssafy.yeohaengdam.article.entity.Image;
 import com.ssafy.yeohaengdam.article.entity.SearchCriteria;
 import com.ssafy.yeohaengdam.article.mapper.ArticleMapper;
+import com.ssafy.yeohaengdam.user.entity.RoleType;
+import com.ssafy.yeohaengdam.user.entity.User;
 import com.ssafy.yeohaengdam.utils.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,29 +43,18 @@ public class ArticleServiceImpl implements ArticleService {
     public void create(Create create, int userId, List<MultipartFile> images) {
         List<Image> imageList = new ArrayList<>();
 
+        Article newArticle = Article.builder()
+                .userId(userId)
+                .title(create.getTitle())
+                .content(create.getContent())
+                .hit(0)
+                .createdAt(now())
+                .build();
+        articleMapper.create(newArticle); // 생성된 Article의 ID를 설정
+        int articleId = newArticle.getArticleId();
+
         try {
-            if (images != null) {
-                for (MultipartFile image : images) {
-                    String imagePath = fileService.saveFile(image);
-                    imageList.add(new Image(null, imagePath, null)); // articleId는 나중에 설정
-                }
-            }
-
-            Article newArticle = Article.builder()
-                    .userId(userId)
-                    .title(create.getTitle())
-                    .content(create.getContent())
-                    .hit(0)
-                    .createdAt(now())
-                    .build();
-            int articleId = articleMapper.create(newArticle); // 생성된 Article의 ID를 설정
-
-            if (images != null) {
-                for (Image image : imageList) {
-                    image.setArticleId(articleId);
-                    articleMapper.createImage(image);
-                }
-            }
+            fileService.saveImages(images, articleId);
         } catch (IOException e) {
             throw new RuntimeException("이미지 저장 도중 오류가 발생했습니다.", e);
         } catch (Exception e) {
@@ -72,32 +63,27 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void update(int articleId, Create update, int userId, List<MultipartFile> images) {
+    public void update(int articleId, Create update, User user, List<MultipartFile> images) {
         List<Image> imageList = new ArrayList<>();
+        Detail article = articleMapper.findById(articleId);
+
+        if(article.getUserId() != user.getUserId()){
+            if(!user.getRoleType().equals(RoleType.ADMIN)) {
+                throw new IllegalArgumentException("게시글 수정 권한이 없는 사용자입니다.");
+            }
+        }
+
+        articleMapper.deleteImage(articleId);
+        Article updatedArticle = Article.builder()
+                .articleId(articleId)
+                .title(update.getTitle())
+                .content(update.getContent())
+                .build();
+        articleMapper.update(updatedArticle);
 
         try {
-            if (images != null) {
-                for (MultipartFile image : images) {
-                    String imagePath = fileService.saveFile(image);
-                    imageList.add(new Image(null, imagePath, null)); // articleId는 나중에 설정
-                }
-            }
+            fileService.saveImages(images, articleId);
 
-            articleMapper.deleteImage(articleId);
-            Article updatedArticle = Article.builder()
-                    .articleId(articleId)
-                    .title(update.getTitle())
-                    .content(update.getContent())
-                    .build();
-            articleMapper.update(updatedArticle);
-
-
-            if (images != null) {
-                for (Image image : imageList) {
-                    image.setArticleId(articleId);
-                    articleMapper.createImage(image);
-                }
-            }
         } catch (Exception e) {
             throw new RuntimeException("게시글 수정 도중 오류가 발생했습니다.", e);
         }

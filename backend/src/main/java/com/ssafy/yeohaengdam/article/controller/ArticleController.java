@@ -38,7 +38,7 @@ public class ArticleController {
      * 게시글 등록
      */
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody Create create, @CurrentUser User user,
+    public ResponseEntity<Void> create(Create create, @CurrentUser User user,
                                        @RequestPart(required = false) List<MultipartFile> images){
         articleService.create(create, user.getUserId(), images);
         return ResponseEntity.ok().build();
@@ -57,10 +57,10 @@ public class ArticleController {
      */
     @PatchMapping("/{articleId}")
     public ResponseEntity<Void> update(@PathVariable int articleId,
-                                       @RequestBody Create update, @CurrentUser User user,
+                                       Create update, @CurrentUser User user,
                                        @RequestPart(required = false) List<MultipartFile> images){
 
-        articleService.update(articleId, update, user.getUserId(), images);
+        articleService.update(articleId, update, user, images);
         return ResponseEntity.ok().build();
     }
 
