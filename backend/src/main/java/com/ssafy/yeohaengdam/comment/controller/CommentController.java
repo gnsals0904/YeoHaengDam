@@ -30,14 +30,14 @@ public class CommentController {
     @DeleteMapping("/{commentId}")
     public ResponseEntity<Void> create(@CurrentUser User user,
                                        @PathVariable(value = "commentId") int commentId) {
-        commentService.delete(user.getUserId(), commentId);
+        commentService.delete(user, commentId);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping
     public ResponseEntity<Void> update(@CurrentUser User user,
                                        @RequestBody Update update){
-        commentService.update(user.getUserId(), update);
+        commentService.update(user, update);
         return ResponseEntity.ok().build();
     }
 
