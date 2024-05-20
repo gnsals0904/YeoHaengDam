@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.ssafy.yeohaengdam.article.dto.ArticleData.*;
@@ -39,7 +40,7 @@ public class ArticleController {
      */
     @PostMapping
     public ResponseEntity<Void> create(Create create, @CurrentUser User user,
-                                       @RequestPart(required = false) List<MultipartFile> images){
+                                       @RequestPart(required = false) List<MultipartFile> images) throws IOException {
         articleService.create(create, user.getUserId(), images);
         return ResponseEntity.ok().build();
     }

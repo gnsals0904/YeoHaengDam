@@ -19,7 +19,7 @@ public interface ArticleMapper {
 
     public int delete(int articleId);
 
-    public void createImage(Image image);
+    public void createImage(String storedName, int articleId);
 
     public void deleteImage(int articleId);
 

@@ -5,10 +5,9 @@ import com.ssafy.yeohaengdam.article.entity.SearchCriteria;
 import com.ssafy.yeohaengdam.article.mapper.ArticleMapper;
 import com.ssafy.yeohaengdam.user.entity.RoleType;
 import com.ssafy.yeohaengdam.user.entity.User;
-import com.ssafy.yeohaengdam.utils.FileService;
+import com.ssafy.yeohaengdam.utils.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -23,7 +22,7 @@ import static java.time.LocalDateTime.now;
 public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleMapper articleMapper;
-    private final FileService fileService;
+    private final S3Service s3Service;
 
     @Override
     public List<ArticleInfo> list(SearchCriteria criteria) {
@@ -41,8 +40,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void create(Create create, int userId, List<MultipartFile> images) {
-        List<Image> imageList = new ArrayList<>();
+    public void create(Create create, int userId, List<MultipartFile> images) throws IOException {
 
         Article newArticle = Article.builder()
                 .userId(userId)
@@ -52,14 +50,10 @@ public class ArticleServiceImpl implements ArticleService {
                 .createdAt(now())
                 .build();
         articleMapper.create(newArticle); // 생성된 Article의 ID를 설정
-        int articleId = newArticle.getArticleId();
 
-        try {
-            fileService.saveImages(images, articleId);
-        } catch (IOException e) {
-            throw new RuntimeException("이미지 저장 도중 오류가 발생했습니다.", e);
-        } catch (Exception e) {
-            throw new RuntimeException("게시글 생성 도중 오류가 발생했습니다.", e);
+        for (MultipartFile image: images){
+            String storedName = s3Service.upload(image, "articles");
+            articleMapper.createImage(storedName, newArticle.getArticleId());
         }
     }
 
@@ -82,7 +76,7 @@ public class ArticleServiceImpl implements ArticleService {
         articleMapper.update(updatedArticle);
 
         try {
-            fileService.saveImages(images, articleId);
+//            fileService.saveImages(images, articleId);
 
         } catch (Exception e) {
             throw new RuntimeException("게시글 수정 도중 오류가 발생했습니다.", e);

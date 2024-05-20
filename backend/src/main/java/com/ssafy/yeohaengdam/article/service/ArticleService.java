@@ -14,7 +14,7 @@ public interface ArticleService {
 
     public List<ArticleInfo> list(SearchCriteria searchCriteria);
 
-    public void create(Create create, int userId, List<MultipartFile> images);
+    public void create(Create create, int userId, List<MultipartFile> images) throws IOException;
 
     public void update(int articleId, Create update, User user, List<MultipartFile> images);
 

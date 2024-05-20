@@ -33,6 +33,7 @@ CREATE TABLE comment(
                         comment_id INT AUTO_INCREMENT PRIMARY KEY,
                         article_id INT NOT NULL,
                         user_id INT NOT NULL,
+                        nickname VARCHAR(255) NOT NULL,
                         content TEXT NOT NULL,
                         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -72,7 +73,6 @@ CREATE TABLE notice (
 CREATE TABLE article_image (
                                id INT AUTO_INCREMENT PRIMARY KEY,
                                article_id INT NOT NULL,
-                               original_name VARCHAR(255) NOT NULL,
-                               stored_name VARCHAR(255) NOT NULL,
+                               stored_name VARCHAR(500) NOT NULL,
                                FOREIGN KEY (article_id) REFERENCES Article(article_id) ON DELETE CASCADE
 );

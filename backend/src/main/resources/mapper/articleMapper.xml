@@ -28,7 +28,6 @@
         <result column="created_at" property="createdAt"/>
         <result column="updated_at" property="updatedAt"/>
         <collection property="imageUrls" ofType="Image">
-            <result column="original_name" property="originalName"/>
             <result column="stored_name" property="storedName"/>
         </collection>
     </resultMap>
@@ -42,7 +41,6 @@
         article.hit,
         article.created_at,
         article.updated_at,
-        article_image.original_name,
         article_image.stored_name
         FROM article
         LEFT JOIN users ON article.user_id = users.user_id
@@ -72,7 +70,6 @@
                article.hit,
                article.created_at,
                article.updated_at,
-               article_image.original_name,
                article_image.stored_name
         FROM article
                  LEFT JOIN users ON article.user_id = users.user_id
@@ -87,8 +84,8 @@
     </insert>
 
     <insert id="createImage">
-        INSERT INTO article_image (original_name, stored_name, article_id)
-        VALUES (#{originalName}, #{storedName}, #{articleId})
+        INSERT INTO article_image (stored_name, article_id)
+        VALUES (#{storedName}, #{articleId})
     </insert>
 
     <update id="update">
