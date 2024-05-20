@@ -33,7 +33,6 @@ public class ArticleData {
         private String title;
         private String content;
         private int hit;
-        private List<CommentData.Detail> comments;
         //        private int likeCount;
 //        private boolean isLiked;
         private List<String> imageUrls;

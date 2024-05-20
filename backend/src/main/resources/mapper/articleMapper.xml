@@ -29,15 +29,6 @@
         <collection property="imageUrls" ofType="java.lang.String">
             <result column="image_url" property="url"/>
         </collection>
-
-        <collection property="comments" ofType="com.ssafy.yeohaengdam.comment.dto.CommentData$Detail">
-            <id column="comment_id" property="commentId"/>
-            <result column="article_id" property="articleId"/>
-            <result column="user_id" property="userId"/>
-            <result column="content" property="content"/>
-            <result column="created_at" property="createdAt"/>
-            <result column="updated_at" property="updatedAt"/>
-        </collection>
     </resultMap>
 
     <select id="list" resultMap="articleList">

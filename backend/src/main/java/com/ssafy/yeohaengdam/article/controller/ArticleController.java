@@ -46,6 +46,7 @@ public class ArticleController {
         create.setTitle(title);
         create.setContent(content);
         System.out.println("image : " + images);
+        System.out.println();
         articleService.create(create, user.getUserId(), images);
         return ResponseEntity.ok().build();
     }
