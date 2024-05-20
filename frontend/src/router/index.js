@@ -39,7 +39,7 @@ const router = createRouter({
     },
     { path: "/notice/write", name: "NoticeEditor", component: NoticeEditor },
     {
-      path: "/board/edit/:noticeId",
+      path: "/notice/edit/:noticeId",
       name: "NoticeEdit",
       component: NoticeEditor,
       props: true,
