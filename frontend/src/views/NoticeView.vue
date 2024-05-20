@@ -3,7 +3,9 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import TableRow from '@/components/notice/TableRow.vue';
 import NoticeDetail from '@/components/notice/NoticeDetail.vue';
+import { useMemberStore } from '@/stores/member';
 
+const memberStore = useMemberStore();
 const rows = ref([]);
 const selectedItem = ref(null);
 const isModalVisible = ref(false);
@@ -21,6 +23,7 @@ const fetchNotices = async () => {
   try {
     const response = await axios.get('http://localhost:8080/api/notice/list');
     rows.value = response.data;
+    console.log('isAdmin:', memberStore.isAdmin);
   } catch (error) {
     console.error('Failed to fetch notices:', error);
   }
@@ -49,7 +52,14 @@ onMounted(() => {
         </g>
       </svg>
     </div>
-    <div class="w-full flex justify-end px-2 mt-2">
+    <div class="w-full flex justify-end px-2 mt-2 gap-x-3">
+      <router-link
+        :to="{ name: 'Main' }"
+        v-if="memberStore.isAdmin"
+        class="flex items-center justify-center px-5 text-white rounded-lg bg-red-500 hover:bg-red-700 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+      >
+        공지사항 작성
+      </router-link>
       <div class="w-full sm:w-64 inline-block relative">
         <input
           type=""

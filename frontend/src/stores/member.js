@@ -57,8 +57,9 @@ export const useMemberStore = defineStore(
         (response) => {
           if (response.status === httpStatusCode.OK) {
             userInfo.value = response.data;
+            console.log('isAdmin:', response.data.roleType);
             if (response.data.roleType === 'ADMIN') {
-              console.log('ADMIN 입니다');
+              console.log('관리자입니다');
               isAdmin.value = true;
             }
             console.log('유저 정보 : ', response.data);
@@ -120,7 +121,7 @@ export const useMemberStore = defineStore(
           isLogin.value = false;
           userInfo.value = null;
           isValidToken.value = false;
-
+          isAdmin.value = false;
           sessionStorage.removeItem('accessToken');
           sessionStorage.removeItem('refreshToken');
           // 히스토리를 날리고 Landing 페이지로 이동
@@ -154,7 +155,7 @@ export const useMemberStore = defineStore(
       isLogin.value = false;
       userInfo.value = null;
       isValidToken.value = false;
-
+      isAdmin.value = false;
       sessionStorage.removeItem('accessToken');
       sessionStorage.removeItem('refreshToken');
       // 히스토리를 날리고 Landing 페이지로 이동
