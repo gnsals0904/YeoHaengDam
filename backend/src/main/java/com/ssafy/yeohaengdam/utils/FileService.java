@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 @RequiredArgsConstructor
 public class FileService {
 
-    private final String uploadDir = "upload";
+    private final String uploadDir = System.getProperty("user.dir") + "/uploads";
 
     public String saveFile(MultipartFile file) throws IOException {
         if (file.isEmpty()) {

@@ -78,7 +78,7 @@
                article.hit,
                article.created_at,
                article.updated_at,
-               article_image.image_url,
+               article_image.image_url
         FROM article
             LEFT JOIN users ON article.user_id = users.user_id
             LEFT JOIN article_image ON article.article_id = article_image.article_id

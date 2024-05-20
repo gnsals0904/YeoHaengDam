@@ -38,8 +38,14 @@ public class ArticleController {
      * 게시글 등록
      */
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody Create create, @CurrentUser User user,
-                                       @RequestPart(required = false) List<MultipartFile> images){
+    public ResponseEntity<Void> create(@RequestParam("title") String title,
+                                       @RequestParam("content") String content,
+                                       @RequestPart(required = false) List<MultipartFile> images,
+                                       @CurrentUser User user){
+        Create create = new Create();
+        create.setTitle(title);
+        create.setContent(content);
+        System.out.println("image : " + images);
         articleService.create(create, user.getUserId(), images);
         return ResponseEntity.ok().build();
     }

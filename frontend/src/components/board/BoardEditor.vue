@@ -1,26 +1,26 @@
 <script setup>
-import { ref } from "vue";
-import axios from "axios";
-import { useRouter } from "vue-router";
+import { ref } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
-const title = ref("");
-const description = ref("");
+const title = ref('');
+const description = ref('');
 const images = ref([]);
-
 const handleFileChange = (event) => {
   images.value = Array.from(event.target.files).map((file) => ({
     url: URL.createObjectURL(file),
+    file, // 원본 파일 객체를 저장
     name: file.name,
-    preview: ["jpg", "jpeg", "png", "gif"].includes(
-      file.name.split(".").pop().toLowerCase()
+    preview: ['jpg', 'jpeg', 'png', 'gif'].includes(
+      file.name.split('.').pop().toLowerCase()
     ),
     size:
       file.size > 1024
         ? file.size > 1048576
-          ? Math.round(file.size / 1048576) + "mb"
-          : Math.round(file.size / 1024) + "kb"
-        : file.size + "b",
+          ? Math.round(file.size / 1048576) + 'mb'
+          : Math.round(file.size / 1024) + 'kb'
+        : file.size + 'b',
   }));
 };
 
@@ -29,31 +29,33 @@ const removeImage = (index) => {
 };
 
 const postArticle = async () => {
-  const token = sessionStorage.getItem("accessToken");
+  const token = sessionStorage.getItem('accessToken');
   if (!token) {
-    alert("로그인이 필요합니다.");
+    alert('로그인이 필요합니다.');
     return;
   }
 
   const formData = new FormData();
-  formData.append("title", title.value);
-  formData.append("content", description.value);
+  formData.append('title', title.value);
+  formData.append('content', description.value);
   images.value.forEach((image) => {
-    formData.append("images", image.file);
+    formData.append('images', image.file);
+    console.log('images : ', image.file);
+    console.log('images : ' + image.file);
   });
 
   try {
-    await axios.post("http://localhost:8080/api/articles", formData, {
+    await axios.post('http://localhost:8080/api/articles', formData, {
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
+        'Content-Type': 'multipart/form-data',
       },
     });
-    alert("게시글이 등록되었습니다.");
-    router.push("/"); // 게시글 등록 후 이동할 경로
+    alert('게시글이 등록되었습니다.');
+    router.push('/'); // 게시글 등록 후 이동할 경로
   } catch (error) {
-    console.error("게시글 등록 실패:", error);
-    alert("게시글 등록에 실패했습니다. 다시 시도해주세요.");
+    console.error('게시글 등록 실패:', error);
+    alert('게시글 등록에 실패했습니다. 다시 시도해주세요.');
   }
 };
 </script>
