@@ -10,6 +10,7 @@ const route = useRoute();
 const tripData = ref([]);
 const selectedItem = ref(null);
 const modalVisible = ref(false);
+const loading = ref(true); // 로딩 상태 추가
 
 onMounted(async () => {
   const { sidoCode, gugunCode, contentCode } = route.query;
@@ -34,6 +35,8 @@ onMounted(async () => {
     } catch (error) {
       console.error('Error fetching trip data:', error);
       alert('여행 정보를 가져오는 데 실패했습니다.');
+    } finally {
+      loading.value = false; // 데이터 로딩이 완료되면 로딩 상태를 false로 변경
     }
   } else {
     alert('필요한 매개변수가 URL에 포함되지 않았습니다.');
@@ -102,6 +105,7 @@ const closeModal = () => {
         v-for="(item, index) in tripData"
         :key="index"
         :item="item"
+        :loading="loading.value"
         @click="showModal"
       />
     </div>

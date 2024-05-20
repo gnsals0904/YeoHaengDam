@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, defineEmits } from 'vue';
+import { defineProps, defineEmits, ref, onMounted } from 'vue';
 
 const props = defineProps({
   item: {
@@ -9,6 +9,17 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['click']);
+const imageLoaded = ref(false);
+
+const handleImageLoad = () => {
+  imageLoaded.value = true;
+};
+
+onMounted(() => {
+  const img = new Image();
+  img.src = props.item.img2 || 'noimage.PNG';
+  img.onload = handleImageLoad;
+});
 </script>
 
 <template>
@@ -17,7 +28,14 @@ const emit = defineEmits(['click']);
     @click="emit('click', item)"
   >
     <div class="w-full md:w-1/3 grid place-items-center">
+      <div
+        v-if="!imageLoaded"
+        class="w-full h-full rounded overflow-hidden shadow-lg animate-pulse"
+      >
+        <div class="h-full bg-gray-300"></div>
+      </div>
       <img
+        v-else
         :src="item.img2 || 'noimage.PNG'"
         alt="위치 이미지"
         class="rounded-xl object-cover"

@@ -18,13 +18,18 @@ public class FileService {
     private String uploadDir;
 
     public String saveFile(MultipartFile file) throws IOException {
-        System.out.println(System.getProperty("user.dir"));
+        // 현재 작업 디렉토리를 기준으로 절대 경로 생성
+        String projectDir = System.getProperty("user.dir");
+        Path uploadPath = Paths.get(projectDir, uploadDir);
+
+        System.out.println("Current directory: " + projectDir);
+        System.out.println("Upload directory: " + uploadPath.toString());
+
         if (file.isEmpty()) {
             throw new IllegalArgumentException("File is empty");
         }
 
         String fileName = file.getOriginalFilename();
-        Path uploadPath = Paths.get(uploadDir);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
