@@ -1,9 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter();
+const route = useRoute();
 const title = ref('');
 const description = ref('');
 const images = ref([]);
@@ -23,6 +24,7 @@ const handleFileChange = (event) => {
         : file.size + 'b',
   }));
 };
+const isEditMode = ref(false);
 
 const props = defineProps({
   articleId: String, // 라우터에서 받은 게시글 ID
@@ -110,7 +112,14 @@ const updateArticle = async () => {
     alert('게시글 업데이트에 실패했습니다. 다시 시도해주세요.');
   }
 };
-onMounted(fetchArticleData);
+onMounted(() => {
+  if (route.params.articleId) {
+    isEditMode.value = true;
+    fetchArticleData();
+  } else {
+    isEditMode.value = false;
+  }
+});
 </script>
 
 <template>
@@ -215,7 +224,7 @@ onMounted(fetchArticleData);
           @click="saveArticle"
           class="btn border border-indigo-500 p-1 px-4 font-semibold cursor-pointer text-gray-200 ml-2 bg-indigo-500"
         >
-          Post
+          {{ isEditMode.valueOf ? 'Update' : 'Post' }}
         </div>
       </div>
     </div>
