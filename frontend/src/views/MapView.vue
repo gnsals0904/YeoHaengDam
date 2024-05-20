@@ -1,16 +1,18 @@
 <script setup>
-import { KakaoMap, KakaoMapMarker } from 'vue3-kakao-maps';
-import { onMounted, ref, computed } from 'vue';
-import { useRoute } from 'vue-router';
-import LocationBox from '@/components/map/LocationBox.vue';
-import LocationDetail from '@/components/map/LocationDetail.vue';
-import axios from 'axios';
+import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
+import { onMounted, ref, computed } from "vue";
+import { useRoute } from "vue-router";
+import LocationBox from "@/components/map/LocationBox.vue";
+import LocationDetail from "@/components/map/LocationDetail.vue";
+import MapNavigation from "@/components/map/MapNavigation.vue";
+import axios from "axios";
 
 const route = useRoute();
 const tripData = ref([]);
 const selectedItem = ref(null);
 const modalVisible = ref(false);
 const loading = ref(true); // 로딩 상태 추가
+const drawerOpen = ref(false);
 
 onMounted(async () => {
   const { sidoCode, gugunCode, contentCode } = route.query;
@@ -18,7 +20,7 @@ onMounted(async () => {
   if (sidoCode && gugunCode && contentCode) {
     try {
       const response = await axios.get(
-        'http://localhost:8080/api/spot/listSpot',
+        "http://localhost:8080/api/spot/listSpot",
         {
           params: {
             sidoCode: parseInt(sidoCode),
@@ -31,15 +33,15 @@ onMounted(async () => {
         ...item,
         infoVisible: false,
       }));
-      console.log('Trip Data:', tripData.value);
+      console.log("Trip Data:", tripData.value);
     } catch (error) {
-      console.error('Error fetching trip data:', error);
-      alert('여행 정보를 가져오는 데 실패했습니다.');
+      console.error("Error fetching trip data:", error);
+      alert("여행 정보를 가져오는 데 실패했습니다.");
     } finally {
       loading.value = false; // 데이터 로딩이 완료되면 로딩 상태를 false로 변경
     }
   } else {
-    alert('필요한 매개변수가 URL에 포함되지 않았습니다.');
+    alert("필요한 매개변수가 URL에 포함되지 않았습니다.");
   }
 });
 
@@ -70,10 +72,14 @@ const closeModal = () => {
   modalVisible.value = false;
   selectedItem.value = null;
 };
+
+const toggleDrawer = () => {
+  drawerOpen.value = !drawerOpen.value;
+};
 </script>
 
 <template>
-  <div class="map-container flex">
+  <div :class="['map-container', { 'drawer-open': drawerOpen }]">
     <KakaoMap
       :lat="defaultCoordinate.lat"
       :lng="defaultCoordinate.lng"
@@ -109,24 +115,29 @@ const closeModal = () => {
         @click="showModal"
       />
     </div>
+    <MapNavigation @toggle="toggleDrawer"></MapNavigation>
+    <LocationDetail
+      v-if="selectedItem"
+      :item="selectedItem"
+      :visible="modalVisible"
+      @close="closeModal"
+    />
   </div>
-
-  <LocationDetail
-    v-if="selectedItem"
-    :item="selectedItem"
-    :visible="modalVisible"
-    @close="closeModal"
-  />
 </template>
 
 <style scoped>
 .map-container {
   display: flex;
-  height: 100vh; /* Adjust height to fill the screen */
+  height: 100vh;
+  transition: margin-right 0.5s;
+}
+
+.drawer-open {
+  margin-right: 250px; /* 드로어 너비에 맞게 조정 */
 }
 
 .locations-list {
   padding: 10px;
-  border-left: 2px solid #ccc; /* Adds a line to separate from the map */
+  border-left: 2px solid #ccc;
 }
 </style>

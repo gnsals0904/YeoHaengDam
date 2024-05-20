@@ -157,8 +157,8 @@ function formatImgSrc(imgSrc) {
   if (!imgSrc || imgSrc.length === 0) {
     return "https://source.unsplash.com/800x450/?nature"; // 기본 이미지 URL
   }
-  const baseUrl = "http://localhost:8080/static/images/";
-  return baseUrl + imgSrc[0].storedName; // 첫 번째 이미지의 저장된 이름을 URL로 변환
+  // 객체의 storedName 속성을 사용하여 전체 URL 구성
+  return imgSrc[0].storedName;
 }
 /*
 const postComment = async () => {
