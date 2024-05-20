@@ -65,16 +65,18 @@ async function fetchArticleData() {
 
 // 게시글을 업데이트하는 함수
 const updateArticle = async () => {
-  const formData = new FormData();
-  formData.append("title", title.value);
-  formData.append("content", description.value);
+  const articleData ={
+    title : title.value,
+    content : description.value,
+  }
   try {
     await axios.patch(
       `http://localhost:8080/api/notice/${props.noticeId}`,
-      formData,
+      articleData,
       {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+          "Content-Type": "application/json",
         },
       }
     );

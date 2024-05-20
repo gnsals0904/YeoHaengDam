@@ -34,7 +34,7 @@
         notice.title,
         notice.content,
         notice.created_at,
-        notice.updated_at,
+        notice.updated_at
         FROM notice
         LEFT JOIN users ON notice.user_id = users.user_id
         where notice_id = #{noticeId}
