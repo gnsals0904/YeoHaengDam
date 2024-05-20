@@ -1,6 +1,7 @@
 package com.ssafy.yeohaengdam.utils;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,9 +14,11 @@ import java.nio.file.Paths;
 @RequiredArgsConstructor
 public class FileService {
 
-    private final String uploadDir = System.getProperty("user.dir") + "/backend/src/main/webapp/uploads";
+    @Value("${app.upload.dir}")
+    private String uploadDir;
 
     public String saveFile(MultipartFile file) throws IOException {
+        System.out.println(System.getProperty("user.dir"));
         if (file.isEmpty()) {
             throw new IllegalArgumentException("File is empty");
         }
