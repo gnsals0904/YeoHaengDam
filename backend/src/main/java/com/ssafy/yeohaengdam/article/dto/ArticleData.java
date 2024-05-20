@@ -1,5 +1,6 @@
 package com.ssafy.yeohaengdam.article.dto;
 
+import com.ssafy.yeohaengdam.article.entity.Image;
 import com.ssafy.yeohaengdam.comment.dto.CommentData;
 import com.ssafy.yeohaengdam.comment.entity.Comment;
 import jakarta.validation.constraints.NotNull;
@@ -20,7 +21,7 @@ public class ArticleData {
         private int hit;
 //        private int likeCount;
 //        private boolean isLiked;
-        private List<String> imageUrls;
+        private List<Image> imageUrls;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
     }
@@ -35,7 +36,7 @@ public class ArticleData {
         private int hit;
         //        private int likeCount;
 //        private boolean isLiked;
-        private List<String> imageUrls;
+        private List<Image> imageUrls;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
     }
