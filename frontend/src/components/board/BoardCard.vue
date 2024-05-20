@@ -27,10 +27,11 @@ function formatDateTime(dateTime) {
     @click="handleClick"
   >
     <div class="relative mb-4 rounded-2xl">
+      <img :src="'http://localhost:8080/uploads/Lulu_0.jpg'" />
       <img
         class="min-h-[30vh] max-h-[30vh] rounded-2xl w-full object-cover transition-transform duration-300 transform group-hover:scale-105"
         :src="
-          board.imageUrls[0].url || 'https://source.unsplash.com/800x450/?nature'
+          board.imageUrls[0] || 'https://source.unsplash.com/800x450/?nature'
         "
         :alt="board.title"
       />
@@ -83,7 +84,7 @@ function formatDateTime(dateTime) {
         <img
           class="h-12 w-12 rounded-full object-cover max-w-none"
           :src="
-            board.imageUrls[0].url ||
+            board.imageUrls ||
             'https://source.unsplash.com/800x450/?Beautifulgirl'
           "
           :alt="board.title"

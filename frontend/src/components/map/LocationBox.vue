@@ -32,7 +32,10 @@ onMounted(() => {
         v-if="!imageLoaded"
         class="w-full h-full rounded overflow-hidden shadow-lg animate-pulse"
       >
-        <div class="h-full bg-gray-300"></div>
+        <div class="h-3/6 bg-gray-300"></div>
+        <div class="h-1/6 bg-white"></div>
+        <div class="h-1/6 mx-2 bg-gray-300"></div>
+        <div class="h-1/6 bg-white"></div>
       </div>
       <img
         v-else

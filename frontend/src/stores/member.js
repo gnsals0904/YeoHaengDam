@@ -58,6 +58,7 @@ export const useMemberStore = defineStore(
           if (response.status === httpStatusCode.OK) {
             userInfo.value = response.data;
             if (response.data.roleType === 'ADMIN') {
+              console.log('ADMIN 입니다');
               isAdmin.value = true;
             }
             console.log('유저 정보 : ', response.data);

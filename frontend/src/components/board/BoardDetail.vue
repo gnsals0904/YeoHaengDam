@@ -243,13 +243,22 @@ const postComment = async () => {
               </p>
             </div>
           </div>
-          <button
-            class="flex select-none items-center gap-3 rounded-lg border border-blue-gray-500 py-2 px-4 text-center align-middle text-xs font-bold uppercase text-blue-gray-500 transition-all hover:opacity-75 focus:ring focus:ring-blue-gray-200 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-            type="button"
-            @click="editArticle(item.articleId)"
-          >
-            수정하기
-          </button>
+          <div class="flex gap-3">
+            <button
+              class="flex select-none items-center gap-3 rounded-lg border border-blue-gray-500 py-2 px-4 text-center align-middle text-xs font-bold uppercase text-blue-gray-500 transition-all hover:opacity-75 focus:ring focus:ring-blue-gray-200 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              type="button"
+              @click="editArticle(item.articleId)"
+            >
+              수정하기
+            </button>
+            <button
+              class="flex select-none items-center gap-3 rounded-lg border border-blue-gray-500 py-2 px-4 text-center align-middle text-xs font-bold uppercase text-blue-gray-500 transition-all hover:opacity-75 focus:ring focus:ring-blue-gray-200 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              type="button"
+              @click="editArticle(item.articleId)"
+            >
+              삭제하기
+            </button>
+          </div>
         </div>
       </div>
       <!-- 현재 접속한 사용자 부분 -->
