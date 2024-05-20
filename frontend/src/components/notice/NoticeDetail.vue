@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, defineEmits } from "vue";
+import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
   item: {
@@ -12,10 +12,10 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits(['close']);
 
 const closeModal = () => {
-  emit("close");
+  emit('close');
 };
 </script>
 
@@ -34,19 +34,14 @@ const closeModal = () => {
         class="flex shrink-0 items-center justify-between p-4 text-2xl font-semibold leading-snug text-blue-gray-900 antialiased"
       >
         <div class="flex items-center gap-3">
-          <img
-            :alt="item.title"
-            :src="item.img2 || 'noimage.PNG'"
-            class="relative inline-block h-9 w-9 rounded-full object-cover object-center"
-          />
           <div class="-mt-px flex flex-col">
             <p
-              class="block text-sm font-medium leading-normal text-blue-gray-900 antialiased"
+              class="block text-xl font-medium leading-normal text-pink-500 antialiased"
             >
               {{ item.title }}
             </p>
-            <p class="block text-xs font-normal text-gray-700 antialiased">
-              @{{ item.addr1 }}
+            <p class="block text-lg font-normal text-gray-700 antialiased">
+              {{ item.nickname }}
             </p>
           </div>
         </div>
@@ -77,56 +72,7 @@ const closeModal = () => {
         </div>
       </div>
       <div class="p-4 text-blue-gray-500 overflow-auto max-h-[20vh]">
-        <p>{{ item.description }}</p>
-      </div>
-      <div
-        class="flex shrink-0 flex-wrap items-center justify-between p-4 text-blue-gray-500"
-      >
-        <div class="flex items-center gap-16">
-          <div>
-            <p
-              class="block text-sm font-normal leading-normal text-gray-700 antialiased"
-            >
-              Views
-            </p>
-            <p
-              class="block text-base font-medium leading-relaxed text-blue-gray-900 antialiased"
-            >
-              44,082,044
-            </p>
-          </div>
-          <div>
-            <p
-              class="block text-sm font-normal leading-normal text-gray-700 antialiased"
-            >
-              Downloads
-            </p>
-            <p
-              class="block text-base font-medium leading-relaxed text-blue-gray-900 antialiased"
-            >
-              553,031
-            </p>
-          </div>
-        </div>
-        <button
-          class="flex select-none items-center gap-3 rounded-lg border border-blue-gray-500 py-2 px-4 text-center align-middle text-xs font-bold uppercase text-blue-gray-500 transition-all hover:opacity-75 focus:ring focus:ring-blue-gray-200 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-          type="button"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            aria-hidden="true"
-            class="h-4 w-4"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M15.75 4.5a3 3 0 11.825 2.066l-8.421 4.679a3.002 3.002 0 010 1.51l8.421 4.679a3 3 0 11-.729 1.31l-8.421-4.678a3 3 0 110-4.132l8.421-4.679a3 3 0 01-.096-.755z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-          Share
-        </button>
+        <p>{{ item.content }}</p>
       </div>
     </div>
   </div>

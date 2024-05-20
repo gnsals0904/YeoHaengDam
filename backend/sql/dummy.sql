@@ -33,4 +33,4 @@ INSERT INTO comment (article_id, user_id, content, created_at, updated_at) VALUE
                                                                                (4, 3, 'This helped me understand the subject better.', NOW(), NOW()),
                                                                                (4, 4, 'Could you explain this section further?', NOW(), NOW()),
                                                                                (5, 1, 'Well written and easy to follow.', NOW(), NOW()),
-                                                                               (5, 2, 'Looking forward to reading more from you.', NOW(), NOW()));
+                                                                               (5, 2, 'Looking forward to reading more from you.', NOW(), NOW());

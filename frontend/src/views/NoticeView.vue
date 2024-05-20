@@ -1,20 +1,10 @@
 <script setup>
-import TableRow from "@/components/notice/TableRow.vue";
-import { ref } from "vue";
-import NoticeDetail from "@/components/notice/NoticeDetail.vue";
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import TableRow from '@/components/notice/TableRow.vue';
+import NoticeDetail from '@/components/notice/NoticeDetail.vue';
 
-// 가상의 데이터
-const rows = [
-  { title: "Intro to CSS", author: "Adam", views: 858 },
-  {
-    title:
-      "A Long and Winding Tour of the History of UI Frameworks and Tools and the Impact on Design",
-    author: "Adam",
-    views: 112,
-  },
-  { title: "Intro to JavaScript", author: "Chris", views: 1280 },
-];
-
+const rows = ref([]);
 const selectedItem = ref(null);
 const isModalVisible = ref(false);
 
@@ -26,6 +16,19 @@ const handleRowClick = (item) => {
 const closeModal = () => {
   isModalVisible.value = false;
 };
+
+const fetchNotices = async () => {
+  try {
+    const response = await axios.get('http://localhost:8080/api/notice/list');
+    rows.value = response.data;
+  } catch (error) {
+    console.error('Failed to fetch notices:', error);
+  }
+};
+
+onMounted(() => {
+  fetchNotices();
+});
 </script>
 
 <template>
