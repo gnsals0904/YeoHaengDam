@@ -16,6 +16,7 @@ public class FileService {
     private final String uploadDir = System.getProperty("user.dir") + "/backend/src/main/webapp/uploads";
 
     public String saveFile(MultipartFile file) throws IOException {
+        System.out.println(System.getProperty("user.dir"));
         if (file.isEmpty()) {
             throw new IllegalArgumentException("File is empty");
         }
