@@ -13,7 +13,7 @@ import NoticeView from '@/views/NoticeView.vue';
 import LandingView from '@/views/LandingView.vue';
 import BoardEditor from '@/components/board/BoardEditor.vue';
 import NoticeEditor from '@/components/notice/NoticeEditor.vue';
-import EmailVerification from '@/components/common/TempEmailVerification.vue';
+import EmailVerification from '@/components/common/EmailVerification.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

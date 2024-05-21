@@ -31,20 +31,56 @@ const resendCode = () => {
 <template>
   <div class="modal-overlay" v-if="visible">
     <div class="modal-container">
-      <h2 class="text-center">Email Verification</h2>
-      <p class="text-center">
+      <h2 class="text-center font-semibold text-3xl">Email Verification</h2>
+      <p class="text-center mt-5 mb-5">
         We have sent a code to your email {{ obfuscatedEmail }}
       </p>
-      <div class="code-inputs">
-        <input v-model="code1" maxlength="1" />
-        <input v-model="code2" maxlength="1" />
-        <input v-model="code3" maxlength="1" />
-        <input v-model="code4" maxlength="1" />
+      <div
+        class="code-inputs flex flex-row items-center justify-between mx-auto w-full max-w-xs"
+      >
+        <div class="w-16 h-16">
+          <input
+            class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700"
+            v-model="code1"
+            maxlength="1"
+          />
+        </div>
+        <div class="w-16 h-16">
+          <input
+            class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700"
+            v-model="code2"
+            maxlength="1"
+          />
+        </div>
+        <div class="w-16 h-16">
+          <input
+            class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700"
+            v-model="code3"
+            maxlength="1"
+          />
+        </div>
+        <div class="w-16 h-16">
+          <input
+            class="w-full h-full flex flex-col items-center justify-center text-center px-5 outline-none rounded-xl border border-gray-200 text-lg bg-white focus:bg-gray-50 focus:ring-1 ring-blue-700"
+            v-model="code4"
+            maxlength="1"
+          />
+        </div>
       </div>
-      <button @click="verifyCode">Verify Account</button>
-      <p class="text-center">
-        Didn't receive code? <a @click="resendCode">Resend</a>
-      </p>
+      <div class="flex flex-col space-y-5 mt-5">
+        <button
+          class="rounded-xl outline-none py-3 bg-blue-700 border-none text-white text-sm shadow-sm"
+          @click="verifyCode"
+        >
+          Verify Account
+        </button>
+        <p class="text-center flex flex-col justify-center">
+          Didn't receive code?
+          <a class="text-lg items-center text-blue-600" @click="resendCode"
+            >Resend</a
+          >
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -66,12 +102,5 @@ const resendCode = () => {
   padding: 2rem;
   border-radius: 0.5rem;
   text-align: center;
-}
-.code-inputs input {
-  width: 2rem;
-  height: 2rem;
-  margin: 0 0.5rem;
-  text-align: center;
-  font-size: 1.5rem;
 }
 </style>

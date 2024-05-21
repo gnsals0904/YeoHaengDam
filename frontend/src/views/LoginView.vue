@@ -28,6 +28,8 @@ const login = async () => {
   if (isLogin.value) {
     getUserInfo(token);
     router.replace('/');
+  } else {
+    alert('아이디와 비밀번호를 확인해주세요');
   }
 };
 </script>
