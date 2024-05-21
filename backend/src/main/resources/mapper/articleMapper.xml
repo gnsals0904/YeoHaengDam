@@ -114,5 +114,13 @@
         where article_id = #{articleId}
     </update>
 
+    <select id="findByUserId">
+        select *
+        from article
+        where user_id = #{userId}
+        ORDER BY article_id DESC
+        LIMIT #{start}, #{size}
+    </select>
+
 
 </mapper>

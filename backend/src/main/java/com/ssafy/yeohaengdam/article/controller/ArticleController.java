@@ -1,6 +1,7 @@
 package com.ssafy.yeohaengdam.article.controller;
 
 import com.ssafy.yeohaengdam.article.dto.ArticleData;
+import com.ssafy.yeohaengdam.article.entity.Article;
 import com.ssafy.yeohaengdam.article.entity.SearchCriteria;
 import com.ssafy.yeohaengdam.article.service.ArticleService;
 import com.ssafy.yeohaengdam.auth.dto.JwtToken;
@@ -32,6 +33,18 @@ public class ArticleController {
     @GetMapping("/list")
     public ResponseEntity<List<ArticleInfo>> list(@ModelAttribute SearchCriteria searchCriteria){
         return ResponseEntity.ok(articleService.list(searchCriteria));
+    }
+
+    /**
+     * 내 글 목록 조회
+     * @param user
+     * @param searchCriteria
+     * @return
+     */
+    @GetMapping
+    public ResponseEntity<List<ArticleInfo>> findByUserId(@CurrentUser User user,
+                                                          @ModelAttribute SearchCriteria searchCriteria){
+        return ResponseEntity.ok(articleService.findByUserId(user.getUserId(), searchCriteria));
     }
 
 

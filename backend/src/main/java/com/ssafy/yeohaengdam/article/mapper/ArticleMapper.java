@@ -2,6 +2,7 @@ package com.ssafy.yeohaengdam.article.mapper;
 
 import com.ssafy.yeohaengdam.article.entity.Article;
 import com.ssafy.yeohaengdam.article.entity.Image;
+import com.ssafy.yeohaengdam.article.entity.SearchCriteria;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -24,4 +25,6 @@ public interface ArticleMapper {
     public void deleteImage(int articleId);
 
     public void updateHit(int articleId);
+
+    List<ArticleInfo> findByUserId(int userId, int start, int size);
 }

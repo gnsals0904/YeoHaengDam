@@ -40,6 +40,12 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public List<ArticleInfo> findByUserId(int userId, SearchCriteria criteria) {
+        int start = (criteria.getPage() - 1) * criteria.getSize();
+        return articleMapper.findByUserId(userId, start, criteria.getSize());
+    }
+
+    @Override
     public void create(Create create, int userId, List<MultipartFile> images) throws IOException {
 
         Article newArticle = Article.builder()
@@ -96,4 +102,6 @@ public class ArticleServiceImpl implements ArticleService {
         }
         articleMapper.delete(articleId);
     }
+
+
 }
