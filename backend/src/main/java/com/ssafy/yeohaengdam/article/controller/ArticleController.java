@@ -32,7 +32,7 @@ public class ArticleController {
      */
     @GetMapping("/list")
     public ResponseEntity<List<ArticleInfo>> list(@ModelAttribute SearchCriteria searchCriteria){
-        System.out.println(searchCriteria);
+        System.out.println("검색조건 : " + searchCriteria);
         return ResponseEntity.ok(articleService.list(searchCriteria));
     }
 

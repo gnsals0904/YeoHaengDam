@@ -140,12 +140,17 @@
             </if>
         </where>
         ORDER BY
-        <if test="sortBy != null and sortBy != ''">
-            ${sortBy}
-        </if>
-        <if test="sortBy == null or sortBy == ''">
-            article.created_at ASC
-        </if>
+        <choose>
+            <when test="sortBy == 'hit'">
+                ${sortBy} ASC
+            </when>
+            <when test="sortBy != null and sortBy != ''">
+                ${sortBy}
+            </when>
+            <otherwise>
+                article.created_at ASC
+            </otherwise>
+        </choose>
         limit #{start}, #{size}
     </select>
 
