@@ -21,7 +21,7 @@ public class EmailService {
     private static int number;
 
     public static void createNumber() {
-        number = (int) (Math.random() * (90000)) + 100000;
+        number = (int) (Math.random() * (9000)) + 1000;
     }
 
     public MimeMessage createMail(String mail) {
