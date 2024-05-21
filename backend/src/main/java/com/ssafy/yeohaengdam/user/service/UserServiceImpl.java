@@ -2,11 +2,14 @@ package com.ssafy.yeohaengdam.user.service;
 
 import com.ssafy.yeohaengdam.user.entity.User;
 import com.ssafy.yeohaengdam.user.mapper.UserMapper;
+import com.ssafy.yeohaengdam.utils.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.function.Function;
 
@@ -19,6 +22,7 @@ public class UserServiceImpl implements UserService{
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final PasswordService passwordService;
+    private final S3Service s3Service;
 
     @Override
     public void join(Join join) {
@@ -31,17 +35,25 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void updateUser(Update update) {
+    public void updateUser(Update update, @RequestPart MultipartFile image) {
         User user = userMapper.findByEmail(update.getEmail());
         if(user == null){
             throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
+        }
+        String imageUrl = null;
+        if(image != null) {
+            try {
+                imageUrl = s3Service.upload(image, "user/images");
+            } catch (Exception e) {
+                throw new RuntimeException("이미지 저장 도중 오류가 발생했습니다.");
+            }
         }
 
         User updatedUser = User.builder()
                 .userId(user.getUserId())
                 .email(user.getEmail())
                 .nickname(update.getNickname())
-                .profileImage(update.getProfileImage())
+                .profileImage(imageUrl)
                 .roleType(user.getRoleType())
                 .build();
 

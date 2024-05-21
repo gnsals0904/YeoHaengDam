@@ -89,7 +89,7 @@ function formatImgSrc(imgSrc) {
         <img
           class="h-12 w-12 rounded-full object-cover max-w-none"
           :src="
-            board.imageUrls ||
+            board.profileImage ||
             'https://source.unsplash.com/800x450/?Beautifulgirl'
           "
           :alt="board.title"

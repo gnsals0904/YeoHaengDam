@@ -7,6 +7,7 @@
         <id column="article_id" property="articleId"/>
         <result column="user_id" property="userId"/>
         <result column="user_nickname" property="nickname"/>
+        <result column="profileImage" property="profileImage"/>
         <result column="title" property="title"/>
         <result column="content" property="content"/>
         <result column="hit" property="hit"/>
@@ -22,6 +23,7 @@
         <id column="article_id" property="articleId"/>
         <result column="user_id" property="userId"/>
         <result column="user_nickname" property="nickname"/>
+        <result column="profileImage" property="profileImage"/>
         <result column="title" property="title"/>
         <result column="content" property="content"/>
         <result column="hit" property="hit"/>
@@ -36,6 +38,7 @@
         SELECT article.article_id,
         article.user_id,
         users.nickname AS user_nickname,
+        users.profile_image as profileImage,
         article.title,
         article.content,
         article.hit,
@@ -65,6 +68,7 @@
         SELECT article.article_id,
                article.user_id,
                users.nickname AS user_nickname,
+                users.profile_image as profileImage,
                article.title,
                article.content,
                article.hit,

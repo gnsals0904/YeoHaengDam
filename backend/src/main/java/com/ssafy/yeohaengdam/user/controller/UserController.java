@@ -3,6 +3,7 @@ package com.ssafy.yeohaengdam.user.controller;
 import com.ssafy.yeohaengdam.core.annotation.CurrentUser;
 import com.ssafy.yeohaengdam.user.entity.User;
 import com.ssafy.yeohaengdam.user.service.UserService;
+import jakarta.mail.Multipart;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.Map;
@@ -58,8 +60,10 @@ public class UserController {
      */
     @PutMapping("/update")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Void> update(@RequestBody Update update){
-        userService.updateUser(update);
+    public ResponseEntity<Void> update(@CurrentUser User user,
+                                       Update update,
+                                       @RequestPart MultipartFile image){
+        userService.updateUser(update, image);
         return ResponseEntity.ok().build();
     }
 

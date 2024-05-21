@@ -51,9 +51,11 @@ public class ArticleServiceImpl implements ArticleService {
                 .build();
         articleMapper.create(newArticle); // 생성된 Article의 ID를 설정
 
-        for (MultipartFile image: images){
-            String storedName = s3Service.upload(image, "articles");
-            articleMapper.createImage(storedName, newArticle.getArticleId());
+        if(images != null) {
+            for (MultipartFile image : images) {
+                String storedName = s3Service.upload(image, "articles");
+                articleMapper.createImage(storedName, newArticle.getArticleId());
+            }
         }
     }
 
