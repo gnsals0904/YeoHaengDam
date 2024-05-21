@@ -42,3 +42,4 @@ out/
 .env
 
 sql/Dump20230324.sql
+sql/dummy.sql
