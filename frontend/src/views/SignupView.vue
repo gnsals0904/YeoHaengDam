@@ -1,24 +1,31 @@
 <script setup>
-import { ref } from "vue";
-import { joinUser } from "@/api/user";
-import { useRouter } from "vue-router";
-import axios from "axios";
-import { showConfetti } from "@/util/confetti";
+import { ref } from 'vue';
+import { joinUser } from '@/api/user';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
+import { showConfetti } from '@/util/confetti';
+import EmailVerification from '@/components/common/EmailVerification.vue';
 
 /** 회원 가입 */
-const nickname = ref("");
-const email = ref("");
-const password = ref("");
-const passwordConfirmation = ref("");
+const nickname = ref('');
+const email = ref('');
+const password = ref('');
+const passwordConfirmation = ref('');
 const isNicknameAvailable = ref(false);
 const hasCheckedNickname = ref(false);
 const isNicknameConfirmed = ref(false);
+const isEmailConfirmed = ref(false);
+const emailVerificationVisible = ref(false);
 const router = useRouter();
 
 /** 회원 가입 */
 const handleSignUp = async () => {
   if (!hasCheckedNickname.value) {
-    alert("닉네임 중복체크를 해주세요.");
+    alert('닉네임 중복체크를 해주세요.');
+    return;
+  }
+  if (!isEmailConfirmed.value) {
+    alert('이메일 인증을 완료해주세요.');
     return;
   }
   const user = {
@@ -28,14 +35,14 @@ const handleSignUp = async () => {
   };
   console.log(user);
   const result = await joinUser(user);
-  console.log("회원가입 결과:", result);
+  console.log('회원가입 결과:', result);
 
   if (result.success) {
-    alert("회원가입이 완료되었습니다.");
+    alert('회원가입이 완료되었습니다.');
     showConfetti();
-    router.replace("/login");
+    router.replace('/login');
   } else {
-    alert("회원가입에 실패했습니다.");
+    alert('회원가입에 실패했습니다.');
   }
 };
 
@@ -52,7 +59,7 @@ const toggleConfirmPasswordVisibility = () => {
 /** 닉네임 중복 체크 */
 const nicknameCheck = async () => {
   if (!nickname.value) {
-    alert("닉네임을 입력해주세요.");
+    alert('이메일을 입력해주세요.');
     return;
   }
   try {
@@ -61,7 +68,7 @@ const nicknameCheck = async () => {
     );
     if (response.data.available) {
       const confirmUse = confirm(
-        "사용 가능한 닉네임입니다. 이 닉네임을 사용하시겠습니까?"
+        '사용 가능한 닉네임입니다. 이 닉네임을 사용하시겠습니까?'
       );
       if (confirmUse) {
         isNicknameAvailable.value = true;
@@ -69,12 +76,50 @@ const nicknameCheck = async () => {
         hasCheckedNickname.value = true;
       }
     } else {
-      alert("이미 사용 중인 닉네임입니다.");
+      alert('이미 사용 중인 닉네임입니다.');
       isNicknameAvailable.value = false;
     }
   } catch (error) {
-    console.error("닉네임 중복체크 오류:", error);
-    alert("중복 체크 중 오류가 발생했습니다.");
+    console.error('닉네임 중복체크 오류:', error);
+    alert('중복 체크 중 오류가 발생했습니다.');
+  }
+};
+
+/** 이메일 체크 */
+const emailCheck = async () => {
+  if (!email.value) {
+    alert('이메일을 입력해주세요.');
+    return;
+  }
+  try {
+    const response = await axios.post(
+      `http://localhost:8080/api/auth/checkEmail/${email.value}`
+    );
+    if (response.data.available) {
+      // 이메일로 인증 코드 전송 후 모달을 띄움
+      emailVerificationVisible.value = true;
+    }
+  } catch (error) {
+    console.error('이메일 인증 오류:', error);
+    alert('이메일 인증 중 오류가 발생했습니다.');
+  }
+};
+
+const verifyEmailCode = async (code) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:8080/api/auth/checkCode`,
+      { email: email.value, code }
+    );
+    if (response.data.success) {
+      emailVerificationVisible.value = false;
+      alert('이메일 인증이 완료되었습니다.');
+    } else {
+      alert('잘못된 인증 코드입니다.');
+    }
+  } catch (error) {
+    console.error('이메일 인증 코드 확인 오류:', error);
+    alert('이메일 인증 코드 확인 중 오류가 발생했습니다.');
   }
 };
 </script>
@@ -83,7 +128,7 @@ const nicknameCheck = async () => {
   <div class="w-full min-h-screen flex items-center justify-center">
     <div class="w-full h-screen flex items-center justify-center">
       <div
-        class="w-full sm:w-5/6 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/4 h-full bg-white flex items-center justify-center"
+        class="w-full sm:w-5/6 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-2/6 h-full bg-white flex items-center justify-center"
       >
         <div class="w-full px-12">
           <h2
@@ -125,14 +170,22 @@ const nicknameCheck = async () => {
 
             <div class="flex flex-col my-4">
               <label for="email" class="text-gray-700">Email Address</label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                class="mt-2 p-2 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
-                placeholder="Enter your email"
-                v-model="email"
-              />
+              <div class="flex items-center mt-2">
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  class="flex-grow p-2 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
+                  placeholder="Enter your email"
+                  v-model="email"
+                />
+                <button
+                  class="ml-2 bg-blue-600 hover:bg-blue-700 rounded-lg px-4 py-2 text-gray-100 hover:shadow-xl transition duration-150 uppercase"
+                  @click="emailCheck"
+                >
+                  이메일 인증
+                </button>
+              </div>
             </div>
 
             <div class="flex flex-col my-4">
