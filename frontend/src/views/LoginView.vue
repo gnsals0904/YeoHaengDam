@@ -28,6 +28,8 @@ const login = async () => {
   if (isLogin.value) {
     getUserInfo(token);
     router.replace('/');
+  } else {
+    alert('아이디와 비밀번호를 확인해주세요');
   }
 };
 </script>
@@ -100,6 +102,6 @@ const login = async () => {
 <style>
 .login_img_section {
   background: linear-gradient(rgba(2, 2, 2, 0.7), rgba(0, 0, 0, 0.7)),
-    url(https://source.unsplash.com/1600x900/?ocean) center center;
+    url('/signimg.jpg') center center;
 }
 </style>

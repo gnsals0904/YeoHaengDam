@@ -8,7 +8,7 @@ const userInfo = computed(() => memberStore.userInfo);
 </script>
 
 <template>
-  <header class="flex justify-between items-center py-4">
+  <header class="flex justify-between items-center py-4 z-50">
     <div class="flex items-center space-x-4">
       <router-link :to="{ name: 'Landing' }" class="text-3xl font-bold"
         >여행담</router-link
