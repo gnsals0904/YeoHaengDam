@@ -30,6 +30,8 @@ public class NoticeData {
 
         public String content;
 
+        public int totalCount;
+
         public LocalDateTime createdAt;
 
         public LocalDateTime updatedAt;

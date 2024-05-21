@@ -22,6 +22,8 @@ public class ArticleData {
         private int hit;
 //        private int likeCount;
 //        private boolean isLiked;
+
+        private int totalCount;
         private List<Image> imageUrls;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
@@ -38,6 +40,7 @@ public class ArticleData {
         private int hit;
         //        private int likeCount;
 //        private boolean isLiked;
+        private int totalCount;
         private List<Image> imageUrls;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;

@@ -27,7 +27,9 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<ArticleInfo> list(SearchCriteria criteria) {
 
-        return articleMapper.list(criteria.getKeyword(), criteria.getSortBy());
+        int start = (criteria.getPage() - 1) * criteria.getSize();
+
+        return articleMapper.list(criteria.getKeyword(), criteria.getSortBy(), start, criteria.getSize());
     }
 
     @Override
@@ -38,7 +40,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<ArticleInfo> findByUserId(int userId, SearchCriteria criteria) {
-        return articleMapper.findByUserId(userId, criteria.getKeyword(), criteria.getSortBy());
+
+        int start = (criteria.getPage() - 1) * criteria.getSize();
+        return articleMapper.findByUserId(userId, criteria.getKeyword(), criteria.getSortBy(), start, criteria.getSize());
     }
 
     @Override

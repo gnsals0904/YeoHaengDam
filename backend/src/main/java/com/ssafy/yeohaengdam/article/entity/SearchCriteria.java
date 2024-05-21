@@ -12,4 +12,8 @@ public class SearchCriteria {
     private String keyword;
 
     private String SortBy;
+
+    private int page = 1;
+
+    private int size = 10;
 }

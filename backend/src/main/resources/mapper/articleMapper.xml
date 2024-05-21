@@ -11,6 +11,7 @@
         <result column="title" property="title"/>
         <result column="content" property="content"/>
         <result column="hit" property="hit"/>
+        <result column="totalCount" property="totalCount"/>
         <result column="created_at" property="createdAt"/>
         <result column="updated_at" property="updatedAt"/>
         <collection property="imageUrls" ofType="Image">
@@ -27,6 +28,7 @@
         <result column="title" property="title"/>
         <result column="content" property="content"/>
         <result column="hit" property="hit"/>
+        <result column="totalCount" property="totalCount"/>
         <result column="created_at" property="createdAt"/>
         <result column="updated_at" property="updatedAt"/>
         <collection property="imageUrls" ofType="Image">
@@ -44,7 +46,14 @@
         article.hit,
         article.created_at,
         article.updated_at,
-        article_image.stored_name
+        article_image.stored_name,
+        (SELECT COUNT(*) FROM article
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND article.title LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
+        ) AS totalCount
         FROM article
         LEFT JOIN users ON article.user_id = users.user_id
         LEFT JOIN article_image ON article.article_id = article_image.article_id
@@ -58,8 +67,9 @@
             ${sortBy}
         </if>
         <if test="sortBy == null or sortBy == ''">
-            article.created_at DESC
+            article.created_at ASC
         </if>
+        limit #{start}, #{size}
     </select>
 
     <select id = "findById" resultMap="detail">
@@ -113,8 +123,15 @@
         where article_id = #{articleId}
     </update>
 
-    <select id="findByUserId">
-        select *
+    <select id="findByUserId" resultMap="articleList">
+        select *,
+        (SELECT COUNT(*) FROM article where user_id = #{userId}
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND article.title LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
+        ) AS totalCount
         from article
         where user_id = #{userId}
         <where>
@@ -127,8 +144,9 @@
             ${sortBy}
         </if>
         <if test="sortBy == null or sortBy == ''">
-            article.created_at DESC
+            article.created_at ASC
         </if>
+        limit #{start}, #{size}
     </select>
 
 

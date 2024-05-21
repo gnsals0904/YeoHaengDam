@@ -1,10 +1,14 @@
 <script setup>
-import { defineProps, defineEmits } from 'vue';
-import { useMemberStore } from '@/stores/member';
-import { useRouter } from 'vue-router';
+import { defineProps, defineEmits, computed } from "vue";
+import { useMemberStore } from "@/stores/member";
+import { useRouter } from "vue-router";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 const memberStore = useMemberStore();
 const router = useRouter();
+const isLogin = computed(() => memberStore.isLogin);
+const userInfo = computed(() => memberStore.userInfo);
 const props = defineProps({
   item: {
     type: Object,
@@ -22,8 +26,55 @@ const closeModal = () => {
   emit('close');
 };
 
-const editArticle = (noticeId) => {
-  router.push({ name: 'NoticeEdit', params: { noticeId } });
+const editNotice = (noticeId) => {
+  router.push({ name: "NoticeEdit", params: { noticeId } });
+};
+
+
+
+const deleteNotice = async () => {
+  if (userInfo.value.roleType === `ADMIN`) {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(
+            `http://localhost:8080/api/notice/${props.item.noticeId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${sessionStorage.getItem(
+                  "accessToken"
+                )}`,
+              },
+            }
+          )
+          .then(() => {
+            Swal.fire("Deleted!", "Your file has been deleted.", "success");
+            closeModal();
+            router
+              .replace({ name: "List" })
+              .then(() => window.location.reload());
+          })
+          .catch((error) => {
+            console.error("Deletion failed:", error);
+            Swal.fire("Failed!", "Could not delete the article.", "error");
+          });
+      }
+    });
+  } else {
+    Swal.fire(
+      "Unauthorized!",
+      "You are not the owner of this article.",
+      "error"
+    );
+  }
 };
 </script>
 
@@ -87,11 +138,19 @@ const editArticle = (noticeId) => {
       <div class="flex justify-end">
         <button
           type="button"
-          @click="editArticle(item.noticeId)"
+          @click="editNotice(item.noticeId)"
           v-if="memberStore.isAdmin"
           class="flex items-center justify-center px-5 mr-5 mb-5 text-white rounded-lg bg-red-500 hover:bg-red-700 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
         >
           공지사항 수정
+        </button>
+        <button
+          type="button"
+          @click="deleteNotice(item.noticeId)"
+          v-if="memberStore.isAdmin"
+          class="flex items-center justify-center px-5 mr-5 mb-5 text-white rounded-lg bg-red-500 hover:bg-red-700 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+        >
+          공지사항 삭제
         </button>
       </div>
     </div>

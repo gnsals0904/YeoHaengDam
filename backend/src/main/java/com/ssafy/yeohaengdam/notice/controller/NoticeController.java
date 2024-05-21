@@ -1,6 +1,7 @@
 package com.ssafy.yeohaengdam.notice.controller;
 
 
+import com.ssafy.yeohaengdam.article.entity.SearchCriteria;
 import com.ssafy.yeohaengdam.core.annotation.CurrentUser;
 import com.ssafy.yeohaengdam.notice.dto.NoticeData;
 import com.ssafy.yeohaengdam.notice.service.NoticeService;
@@ -22,8 +23,8 @@ public class NoticeController {
     private final NoticeService noticeService;
 
     @GetMapping("/list")
-    public ResponseEntity<List<Detail>> findAll(){
-        return ResponseEntity.ok(noticeService.findAll());
+    public ResponseEntity<List<Detail>> findAll(SearchCriteria searchCriteria){
+        return ResponseEntity.ok(noticeService.findAll(searchCriteria));
     }
 
     @PostMapping
