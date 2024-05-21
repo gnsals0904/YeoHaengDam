@@ -1,9 +1,18 @@
 <script setup>
 import { defineProps } from "vue";
+import { useRouter } from "vue-router";
 
 const props = defineProps({
   course: Object,
 });
+const router = useRouter();
+
+const navigateToDetail = () => {
+  router.push({
+    name: "CourseDetail",
+    params: { courseId: props.course.courseId },
+  });
+};
 </script>
 
 <template>
@@ -15,11 +24,12 @@ const props = defineProps({
           {{ course.description }}
         </p>
       </div>
-      <a
+      <button
         class="bg-[#00B8D4] hover:bg-[#0097A7] text-white font-bold py-2 px-4 rounded-lg transition-colors"
+        @click="navigateToDetail"
       >
         자세히 보기
-      </a>
+      </button>
     </div>
   </div>
 </template>
