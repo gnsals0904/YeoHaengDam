@@ -24,6 +24,8 @@ public class CourseController {
     @PostMapping("/save")
     public ResponseEntity<Void> save(@CurrentUser User user,
                                      @RequestBody Save save){
+        System.out.println("save " + save);
+        System.out.println("니가 원하는 파일이름들" + save.getSchedules());
         courseService.save(user.getUserId(), save);
         return ResponseEntity.ok().build();
     }

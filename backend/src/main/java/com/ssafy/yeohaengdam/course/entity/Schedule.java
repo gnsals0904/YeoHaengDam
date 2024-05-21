@@ -1,15 +1,13 @@
 package com.ssafy.yeohaengdam.course.entity;
 
 import com.ssafy.yeohaengdam.spot.entity.Spot;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@ToString
 public class Schedule {
 
     private int scheduleId;

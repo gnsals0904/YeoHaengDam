@@ -1,9 +1,9 @@
 <script setup>
-import { defineEmits, defineProps, ref, watch } from 'vue';
-import draggable from 'vuedraggable';
-import LocationBox from '@/components/map/LocationBox.vue';
+import { defineEmits, defineProps, ref, watch } from "vue";
+import draggable from "vuedraggable";
+import LocationBox from "@/components/map/LocationBox.vue";
 
-const emit = defineEmits(['toggle', 'update:planData']);
+const emit = defineEmits(["toggle", "update:planData", "save-plan"]);
 const props = defineProps({
   planData: Array,
   loading: Boolean,
@@ -15,8 +15,13 @@ const localPlanData = ref([...props.planData]);
 
 // planData 변화 감지 및 부모 컴포넌트에 업데이트 전달
 watch(localPlanData, (newVal) => {
-  emit('update:planData', newVal);
+  emit("update:planData", newVal);
 });
+
+const savePlan = () => {
+  console.log("savePlan 버튼 클릭 !");
+  emit("save-plan");
+};
 </script>
 
 <template>
@@ -34,6 +39,7 @@ watch(localPlanData, (newVal) => {
       <div class="w-6 h-1 mb-3 -rotate-45 bg-white rounded-lg"></div>
       <div class="w-6 h-1 rotate-45 bg-white rounded-lg"></div>
     </label>
+    <!-- side bar content-->
     <div
       class="fixed min-w-[500px] top-0 right-0 z-20 h-full transition-all duration-500 transform translate-x-full bg-white shadow-lg peer-checked:translate-x-0"
     >
@@ -56,6 +62,14 @@ watch(localPlanData, (newVal) => {
             </template>
           </draggable>
         </div>
+      </div>
+      <div class="flex justify-end">
+        <button
+          class="mr-5 bg-blue-600 hover:bg-blue-700 rounded-lg px-4 py-2 text-gray-100 hover:shadow-xl transition duration-150 uppercase"
+          @click="savePlan"
+        >
+          여행 계획 저장하기
+        </button>
       </div>
     </div>
   </div>
