@@ -26,17 +26,19 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<ArticleInfo> list(SearchCriteria criteria) {
-        int start = (criteria.getPage() - 1) * criteria.getSize();
-        System.out.println(criteria.getPage());
-        System.out.println(criteria.getKeyword());
 
-        return articleMapper.list(criteria.getKeyword(), criteria.getSortBy(), start, criteria.getSize());
+        return articleMapper.list(criteria.getKeyword(), criteria.getSortBy());
     }
 
     @Override
     public Detail findById(int articleId){
         articleMapper.updateHit(articleId);
         return articleMapper.findById(articleId);
+    }
+
+    @Override
+    public List<ArticleInfo> findByUserId(int userId, SearchCriteria criteria) {
+        return articleMapper.findByUserId(userId, criteria.getKeyword(), criteria.getSortBy());
     }
 
     @Override
@@ -51,9 +53,11 @@ public class ArticleServiceImpl implements ArticleService {
                 .build();
         articleMapper.create(newArticle); // 생성된 Article의 ID를 설정
 
-        for (MultipartFile image: images){
-            String storedName = s3Service.upload(image, "articles");
-            articleMapper.createImage(storedName, newArticle.getArticleId());
+        if(images != null) {
+            for (MultipartFile image : images) {
+                String storedName = s3Service.upload(image, "articles");
+                articleMapper.createImage(storedName, newArticle.getArticleId());
+            }
         }
     }
 
@@ -94,4 +98,6 @@ public class ArticleServiceImpl implements ArticleService {
         }
         articleMapper.delete(articleId);
     }
+
+
 }

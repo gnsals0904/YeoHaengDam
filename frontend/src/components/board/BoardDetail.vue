@@ -220,7 +220,7 @@ const postComment = async () => {
             <img
               :alt="item.title"
               :src="
-                item.img2 ||
+                item.profileImage ||
                 'https://source.unsplash.com/800x450/?Beautifulgirl'
               "
               class="relative inline-block h-9 w-9 rounded-full object-cover object-center"
@@ -334,7 +334,10 @@ const postComment = async () => {
             <!--TODO 프로필 이미지로 변경 필요-->
             <img
               v-if="memberStore.isLogin"
-              src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260"
+              :src="
+                userInfo.profileImage ||
+                'https://source.unsplash.com/800x450/?Beautifulgirl'
+              "
               class="h-9 w-9 rounded-full object-cover"
               alt="user"
             />

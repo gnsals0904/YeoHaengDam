@@ -1,233 +1,169 @@
-<script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
-import { useRouter } from 'vue-router';
-import { useMemberStore } from '@/stores/member';
-
-const memberStore = useMemberStore();
-const { getUserInfo } = memberStore;
-const router = useRouter();
-const token = sessionStorage.getItem('accessToken');
-const nickname = ref('닉네임');
-const email = ref('email@example.com');
-const password = ref('');
-const passwordConfirmation = ref('');
-const isNicknameAvailable = ref(false);
-const hasCheckedNickname = ref(false);
-const isNicknameEditable = ref(false);
-const isNicknameConfirmed = ref(false);
-const isDisabled = ref(true);
-const isEditing = ref(false);
-const nicknameDisabled = ref(true);
-
-const toggleEdit = () => {
-  isDisabled.value = !isDisabled.value;
-  isEditing.value = !isEditing.value;
-  nicknameDisabled.value = !nicknameDisabled.value;
-};
-
-/** 닉네임 중복 체크 */
-const nicknameCheck = async () => {
-  if (!nickname.value) {
-    alert('닉네임을 입력해주세요.');
-    return;
-  }
-  try {
-    const response = await axios.get(
-      `http://localhost:8080/api/users/check_nickname/${nickname.value}`
-    );
-    if (response.data.available) {
-      const confirmUse = confirm(
-        '사용 가능한 닉네임입니다. 이 닉네임을 사용하시겠습니까?'
-      );
-      if (confirmUse) {
-        isNicknameAvailable.value = true;
-        isNicknameConfirmed.value = true;
-        hasCheckedNickname.value = true;
-        // 닉네임 필드 비활성화
-        isNicknameEditable.value = true;
-      }
-    } else {
-      alert('이미 사용 중인 닉네임입니다.');
-      isNicknameAvailable.value = false;
-    }
-  } catch (error) {
-    console.error('닉네임 중복체크 오류:', error);
-    alert('중복 체크 중 오류가 발생했습니다.');
-  }
-};
-
-const handleUpdate = async () => {
-  const user = {
-    nickname: nickname.value,
-    email: email.value,
-    password: password.value,
-  };
-
-  try {
-    const response = await axios.put(
-      'http://localhost:8080/api/users/update',
-      user
-    );
-    if (response.status === 200) {
-      alert('정보가 성공적으로 업데이트되었습니다.');
-      router.replace('/');
-    }
-  } catch (error) {
-    console.error('업데이트 에러:', error);
-    alert('정보 업데이트 중 문제가 발생했습니다.');
-  }
-  toggleEdit();
-};
-
-const goEditPwd = () => {
-  router.push({ name: 'EditPwd' });
-};
-
-onMounted(async () => {
-  if (token) {
-    await getUserInfo(token);
-    nickname.value = memberStore.userInfo.nickname;
-    email.value = memberStore.userInfo.email;
-    password.value = memberStore.userInfo.password;
-    passwordConfirmation.value = memberStore.userInfo.password;
-  }
-});
+b<script setup>
+import router from '@/router';
 </script>
 
 <template>
-  <div class="w-full min-h-screen flex items-center justify-center">
-    <div class="w-full h-screen flex items-center justify-center">
-      <div
-        class="hidden lg:flex lg:w-1/2 xl:w-2/3 2xl:w-3/4 h-full bg-cover"
-        style="background-image: url('/signimg.jpg')"
-      >
-        <div
-          class="w-full h-full flex flex-col items-center justify-center bg-black bg-opacity-30"
-        >
-          <div class="flex items-center justify-center space-x-2">
+  <div class="grid min-h-screen w-full overflow-hidden lg:grid-cols-[280px_1fr]">
+    <div class="hidden border-r bg-gradient-to-b from-[#00B8D4] to-[#0097A7] lg:block">
+      <div class="flex flex-col gap-2">
+        <div class="flex h-[60px] items-center px-6">
+          <a class="flex items-center gap-2 font-semibold text-white" href="#">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-16 w-16 xl:h-20 xl:w-20 2xl:h-24 2xl:w-24 text-gray-100"
-              fill="none"
+              width="24"
+              height="24"
               viewBox="0 0 24 24"
+              fill="none"
               stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="h-6 w-6 text-white"
             >
-              <path
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span class="">마이페이지</span>
+          </a>
+        </div>
+        <div class="flex-1">
+          <nav class="grid items-start px-4 text-sm font-medium">
+            <a
+              class="flex items-center gap-3 rounded-lg px-3 py-2 text-white transition-all hover:bg-[#0097A7] dark:bg-[#0097A7] dark:text-white dark:hover:bg-[#008394]"
+              @click="router.push('/mypage/edit')"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
+                class="h-4 w-4 text-white"
+              >
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              개인정보 확인/수정
+            </a>
+            <a
+              class="flex items-center gap-3 rounded-lg px-3 py-2 text-white transition-all hover:bg-[#0097A7] dark:text-gray-400 dark:hover:text-white"
+              @click="router.push('/mypage/articles')"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
                 stroke-width="2"
-                d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"
-              ></path>
-            </svg>
-            <h1
-              class="text-3xl xl:text-4xl 2xl:text-5xl font-bold text-gray-100 tracking-wider"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="h-4 w-4 text-white"
+              >
+                <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
+                <path d="M10 9H8"></path>
+                <path d="M16 13H8"></path>
+                <path d="M16 17H8"></path>
+              </svg>
+              내 글 목록
+            </a>
+            <a
+              class="flex items-center gap-3 rounded-lg px-3 py-2 text-white transition-all hover:bg-[#0097A7] dark:text-gray-400 dark:hover:text-white"
+              @click="router.push('/mypage/course')"
             >
-              여행담
-            </h1>
-          </div>
-          <p class="text-gray-300 mt-4 px-16 text-center">
-            지금 가입하고 여행 계획을 세워보세요
-          </p>
-          <a
-            href="#"
-            class="mt-6 bg-gray-100 hover:bg-gray-200 px-6 py-2 rounded text-sm uppercase text-gray-900 transition duration-150"
-            title="Learn More"
-            >Learn More</a
-          >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="h-4 w-4 text-white"
+              >
+                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              내 여행 경로
+            </a>
+            <a
+              class="flex items-center gap-3 rounded-lg px-3 py-2 text-white transition-all hover:bg-[#0097A7] dark:text-gray-400 dark:hover:text-white"
+              href="#"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="h-4 w-4 text-white"
+              >
+                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              설정
+            </a>
+          </nav>
         </div>
       </div>
-      <div
-        class="w-full sm:w-5/6 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/4 h-full bg-white flex items-center justify-center"
-      >
-        <div class="w-full px-12">
-          <h1
-            class="text-center text-3xl font-bold tracking-wide text-gray-800"
-          >
-            My Page
-          </h1>
-
-          <form class="my-8 text-sm" @submit.prevent>
-            <div class="flex flex-col my-4">
-              <label for="nickname" class="text-gray-700">Nick Name</label>
-              <div class="flex items-center mt-2">
-                <input
-                  type="text"
-                  name="nickname"
-                  id="nickname"
-                  class="flex-grow p-2 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
-                  placeholder="Enter your nickname"
-                  v-model="nickname"
-                  :disabled="nicknameDisabled || isNicknameEditable"
-                />
-                <button
-                  class="ml-2 bg-blue-600 hover:bg-blue-700 rounded-lg px-4 py-2 text-gray-100 hover:shadow-xl transition duration-150 uppercase"
-                  @click="nicknameCheck"
-                >
-                  중복 검사
-                </button>
-              </div>
-            </div>
-
-            <div class="flex flex-col my-4">
-              <label for="email" class="text-gray-700">Email Address</label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                class="mt-2 p-2 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
-                placeholder="Enter your email"
-                v-model="email"
-                :disabled="isDisabled"
-              />
-            </div>
-            <div class="flex items-center">
-              <input
-                type="checkbox"
-                name="remember_me"
-                id="remember_me"
-                class="mr-2 focus:ring-0 rounded"
-              />
-              <label for="remember_me" class="text-gray-700"
-                >I accept the
-                <a
-                  href="#"
-                  class="text-blue-600 hover:text-blue-700 hover:underline"
-                  >terms</a
-                >
-                and
-                <a
-                  href="#"
-                  class="text-blue-600 hover:text-blue-700 hover:underline"
-                  >privacy policy</a
-                ></label
+    </div>
+    <div class="flex flex-col">
+      <main class="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
+        <div class="bg-gradient-to-r from-[#00B8D4] to-[#0097A7] rounded-lg p-6 shadow-lg">
+          <h2 class="text-2xl font-bold text-white mb-4">마이페이지</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white rounded-lg p-4 shadow-lg">
+              <h3 class="text-lg font-bold mb-2">개인정보 확인/수정</h3>
+              <p class="text-gray-500 mb-4">자신의 개인정보를 확인하고 수정할 수 있습니다.</p>
+              <button @click="router.push('/mypage/edit')"
+                class="bg-[#00B8D4] hover:bg-[#0097A7] text-white font-bold py-2 px-4 rounded-lg transition-colors"
               >
+                바로가기
+              </button>
             </div>
-            <button
-              class="bg-gray-300 hover:bg-gray-200 rounded-lg px-8 py-2 mt-5 text-blue-600 hover:shadow-xl transition duration-150 uppercase w-full"
-              @click="goEditPwd"
-            >
-              비밀번호 변경하기
+            <div class="bg-white rounded-lg p-4 shadow-lg">
+              <h3 class="text-lg font-bold mb-2">내 글 목록</h3>
+              <p class="text-gray-500 mb-4">자신이 작성한 글 목록을 확인할 수 있습니다.</p>
+              <button @click="router.push('/mypage/articles')"
+                class="bg-[#00B8D4] hover:bg-[#0097A7] text-white font-bold py-2 px-4 rounded-lg transition-colors"
+              >
+                바로가기
+              </button>
+            </div>
+            <div class="bg-white rounded-lg p-4 shadow-lg">
+              <h3 class="text-lg font-bold mb-2">내 여행 경로</h3>
+              <p class="text-gray-500 mb-4">자신의 여행 경로를 확인할 수 있습니다.</p>
+              <button @click="router.push('/mypage/course')"
+                class="bg-[#00B8D4] hover:bg-[#0097A7] text-white font-bold py-2 px-4 rounded-lg transition-colors"
+              >
+                바로가기
             </button>
-            <div class="my-4 flex items-center justify-end space-x-4">
-              <button
-                v-if="!isEditing"
-                class="bg-blue-600 hover:bg-blue-700 rounded-lg px-8 py-2 text-gray-100 hover:shadow-xl transition duration-150 uppercase w-full"
-                @click="toggleEdit"
-              >
-                수정
-              </button>
-              <button
-                v-else
-                class="bg-blue-600 hover:bg-blue-700 rounded-lg px-8 py-2 text-gray-100 hover:shadow-xl transition duration-150 uppercase w-full"
-                @click="handleUpdate"
-              >
-                수정 완료
-              </button>
             </div>
-          </form>
+            <div class="bg-white rounded-lg p-4 shadow-lg">
+              <h3 class="text-lg font-bold mb-2">설정</h3>
+              <p class="text-gray-500 mb-4">다양한 설정을 변경할 수 있습니다.</p>
+              <button @click="router.push('/mypage/setting')"
+                class="bg-[#00B8D4] hover:bg-[#0097A7] text-white font-bold py-2 px-4 rounded-lg transition-colors"
+              >
+                바로가기
+            </button>
+            </div>
+          </div>
         </div>
-      </div>
+        
+      </main>
     </div>
   </div>
 </template>

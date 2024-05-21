@@ -22,9 +22,15 @@
                 where email = #{email}
         </select>
 
+        <update id="updateProfile">
+                update users
+                set profile_image = #{profileImage}
+                where email = #{email}
+        </update>
+
         <update id = "update">
                 update users
-                set nickname = #{nickname}, profile_image = #{profileImage}
+                set nickname = #{nickname}
                 where email = #{email}
         </update>
 

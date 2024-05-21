@@ -23,8 +23,6 @@ public class UserData {
     public static class Update{
         private String email;
 
-        private String profileImage;
-
         @NotBlank(message = "닉네임을 입력해주세요")
         private String nickname;
     }

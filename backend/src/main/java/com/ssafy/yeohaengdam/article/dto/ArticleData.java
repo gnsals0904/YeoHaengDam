@@ -16,6 +16,7 @@ public class ArticleData {
         private int articleId;
         private int userId;
         private String nickname;
+        private String profileImage;
         private String title;
         private String content;
         private int hit;
@@ -31,6 +32,7 @@ public class ArticleData {
         private int articleId;
         private int userId;
         private String nickname;
+        private String profileImage;
         private String title;
         private String content;
         private int hit;
