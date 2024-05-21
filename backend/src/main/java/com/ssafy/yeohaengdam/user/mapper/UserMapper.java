@@ -19,4 +19,6 @@ public interface UserMapper {
     public boolean checkNickname(String nickname);
 
     public void updatePassword(User user);
+
+    public void updateProfile(String email, String profileImage);
 }

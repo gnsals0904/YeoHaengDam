@@ -1,5 +1,6 @@
 package com.ssafy.yeohaengdam.user.service;
 
+import com.ssafy.yeohaengdam.core.annotation.CurrentUser;
 import com.ssafy.yeohaengdam.user.entity.User;
 import com.ssafy.yeohaengdam.user.mapper.UserMapper;
 import com.ssafy.yeohaengdam.utils.S3Service;
@@ -32,28 +33,35 @@ public class UserServiceImpl implements UserService{
                 .nickname(join.getNickname())
                 .build();
         userMapper.join(newUser);
+
     }
 
     @Override
-    public void updateUser(Update update, @RequestPart MultipartFile image) {
-        User user = userMapper.findByEmail(update.getEmail());
-        if(user == null){
-            throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
-        }
+    public void updateImage(@CurrentUser User user, @RequestPart MultipartFile image){
+
         String imageUrl = null;
         if(image != null) {
             try {
                 imageUrl = s3Service.upload(image, "user/images");
+                userMapper.updateProfile(user.getEmail(), imageUrl);
             } catch (Exception e) {
                 throw new RuntimeException("이미지 저장 도중 오류가 발생했습니다.");
             }
+        }else{
+            userMapper.updateProfile(user.getEmail(), imageUrl);
         }
+    }
 
+    @Override
+    public void updateUser(Update update) {
+        User user = userMapper.findByEmail(update.getEmail());
+        if(user == null){
+            throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
+        }
         User updatedUser = User.builder()
                 .userId(user.getUserId())
                 .email(user.getEmail())
                 .nickname(update.getNickname())
-                .profileImage(imageUrl)
                 .roleType(user.getRoleType())
                 .build();
 

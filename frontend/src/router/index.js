@@ -13,6 +13,7 @@ import NoticeView from "@/views/NoticeView.vue";
 import LandingView from "@/views/LandingView.vue";
 import BoardEditor from "@/components/board/BoardEditor.vue";
 import NoticeEditor from "@/components/notice/NoticeEditor.vue";
+import MypageEditor from '@/components/mypage/MypageEditor.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,6 +32,7 @@ const router = createRouter({
     { path: "/notice", name: "Notice", component: NoticeView },
     { path: "/landing3", name: "Landing3", component: LandingView },
     { path: "/board/write", name: "BoardEditor", component: BoardEditor },
+    { path: "/mypage/edit", name: "MypageEditor", component: MypageEditor },
     {
       path: "/board/edit/:articleId",
       name: "BoardEdit",

@@ -61,9 +61,17 @@ public class UserController {
     @PutMapping("/update")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> update(@CurrentUser User user,
-                                       Update update,
-                                       @RequestPart MultipartFile image){
-        userService.updateUser(update, image);
+                                       Update update){
+        userService.updateUser(update);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/updateProfile")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Void> updateProfile(@CurrentUser User user,
+                                              @RequestPart MultipartFile image){
+        System.out.println(image);
+        userService.updateImage(user, image);
         return ResponseEntity.ok().build();
     }
 
