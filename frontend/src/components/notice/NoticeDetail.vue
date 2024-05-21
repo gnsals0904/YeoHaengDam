@@ -20,10 +20,10 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits(['close']);
 
 const closeModal = () => {
-  emit("close");
+  emit('close');
 };
 
 const editNotice = (noticeId) => {

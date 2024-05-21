@@ -75,12 +75,17 @@ public class AuthController {
 
     @PostMapping("/checkEmail")
     public ResponseEntity<Void> checkEmail(@RequestBody Email email) {
+        System.out.println("email : " + email.getEmail());
         emailService.sendEmail(email.getEmail());
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/checkCode")
-    public ResponseEntity<Boolean> checkCode(@RequestBody Email email){
-        return ResponseEntity.ok(emailService.verifyCode(email));
+    @PostMapping("/checkCode")
+    public ResponseEntity<?> checkCode(@RequestBody Email email){
+        System.out.println(email);
+        if(emailService.verifyCode(email)){
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }

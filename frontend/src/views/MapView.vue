@@ -1,11 +1,13 @@
 <script setup>
-import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
-import { onMounted, ref, computed } from "vue";
-import { useRoute } from "vue-router";
-import LocationBox from "@/components/map/LocationBox.vue";
-import LocationDetail from "@/components/map/LocationDetail.vue";
-import MapNavigation from "@/components/map/MapNavigation.vue";
-import axios from "axios";
+import { KakaoMap, KakaoMapMarker } from 'vue3-kakao-maps';
+import { onMounted, ref, computed } from 'vue';
+import { useRoute } from 'vue-router';
+import LocationBox from '@/components/map/LocationBox.vue';
+import LocationDetail from '@/components/map/LocationDetail.vue';
+import MapNavigation from '@/components/map/MapNavigation.vue';
+import axios from 'axios';
+// import Draggable from 'vuedraggable';
+import draggable from 'vuedraggable';
 
 const route = useRoute();
 const tripData = ref([]);
@@ -13,6 +15,7 @@ const selectedItem = ref(null);
 const modalVisible = ref(false);
 const loading = ref(true); // 로딩 상태 추가
 const drawerOpen = ref(false);
+const planData = ref([]);
 
 onMounted(async () => {
   const { sidoCode, gugunCode, contentCode } = route.query;
@@ -20,7 +23,7 @@ onMounted(async () => {
   if (sidoCode && gugunCode && contentCode) {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/spot/listSpot",
+        'http://localhost:8080/api/spot/listSpot',
         {
           params: {
             sidoCode: parseInt(sidoCode),
@@ -33,15 +36,15 @@ onMounted(async () => {
         ...item,
         infoVisible: false,
       }));
-      console.log("Trip Data:", tripData.value);
+      console.log('Trip Data:', tripData.value);
     } catch (error) {
-      console.error("Error fetching trip data:", error);
-      alert("여행 정보를 가져오는 데 실패했습니다.");
+      console.error('Error fetching trip data:', error);
+      alert('여행 정보를 가져오는 데 실패했습니다.');
     } finally {
       loading.value = false; // 데이터 로딩이 완료되면 로딩 상태를 false로 변경
     }
   } else {
-    alert("필요한 매개변수가 URL에 포함되지 않았습니다.");
+    alert('필요한 매개변수가 URL에 포함되지 않았습니다.');
   }
 });
 
@@ -76,6 +79,10 @@ const closeModal = () => {
 const toggleDrawer = () => {
   drawerOpen.value = !drawerOpen.value;
 };
+
+const updatePlanData = (newData) => {
+  planData.value = newData;
+};
 </script>
 
 <template>
@@ -107,15 +114,23 @@ const toggleDrawer = () => {
       />
     </KakaoMap>
     <div class="locations-list flex-1 h-screen overflow-auto min-w-[500px]">
-      <LocationBox
-        v-for="(item, index) in tripData"
-        :key="index"
-        :item="item"
-        :loading="loading.value"
-        @click="showModal"
-      />
+      <draggable v-model="tripData" group="locations" item-key="contentId">
+        <template #item="{ element, index }">
+          <LocationBox
+            :item="element"
+            :loading="loading"
+            @click="showModal(element)"
+          />
+        </template>
+      </draggable>
     </div>
-    <MapNavigation @toggle="toggleDrawer"></MapNavigation>
+    <MapNavigation
+      @toggle="toggleDrawer"
+      :planData="planData"
+      @update:planData="updatePlanData"
+      :loading="loading"
+      :showModal="showModal"
+    />
     <LocationDetail
       v-if="selectedItem"
       :item="selectedItem"
@@ -133,7 +148,7 @@ const toggleDrawer = () => {
 }
 
 .drawer-open {
-  margin-right: 250px; /* 드로어 너비에 맞게 조정 */
+  margin-right: 550px; /* 드로어 너비에 맞게 조정 */
 }
 
 .locations-list {

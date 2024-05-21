@@ -8,7 +8,7 @@ const userInfo = computed(() => memberStore.userInfo);
 </script>
 
 <template>
-  <header class="flex justify-between items-center py-4">
+  <header class="flex justify-between items-center py-4 z-50">
     <div class="flex items-center space-x-4">
       <router-link :to="{ name: 'Landing' }" class="text-3xl font-bold"
         >여행담</router-link
@@ -25,15 +25,22 @@ const userInfo = computed(() => memberStore.userInfo);
         <router-link class="text-lg" :to="{ name: 'MyPage' }"
           >마이페이지</router-link
         >
-        <span class="text-lg">
-          {{ userInfo.nickname }} 님 안녕하세요
-          <img
-            src="/party.svg"
-            alt="Party"
-            class="inline-block align-middle"
-            style="height: 24px; width: 24px"
-          />
-        </span>
+        <span class="text-lg flex items-center">
+  <img 
+    v-if="memberStore.isLogin"
+    :src="userInfo.profileImage || 'https://source.unsplash.com/800x450/?Beautifulgirl'"
+    class="h-9 w-9 rounded-full object-cover mr-2"
+    alt="user"
+  />
+  {{ userInfo.nickname }} 님 안녕하세요
+  <img
+    src="/party.svg"
+    alt="Party"
+    class="inline-block align-middle ml-2"
+    style="height: 24px; width: 24px"
+  />
+</span>
+
 
         <button class="text-lg" @click="memberStore.userLogout">
           로그아웃

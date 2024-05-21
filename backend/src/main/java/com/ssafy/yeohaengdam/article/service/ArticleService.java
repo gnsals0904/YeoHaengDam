@@ -21,4 +21,6 @@ public interface ArticleService {
     public void delete(int articleId, User user);
 
     public Detail findById(int articleId);
+
+    List<ArticleInfo> findByUserId(int userId, SearchCriteria searchCriteria);
 }
