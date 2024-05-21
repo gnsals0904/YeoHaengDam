@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { showConfetti } from '@/util/confetti';
 import EmailVerification from '@/components/common/EmailVerification.vue';
+import CustomLoading from '@/components/common/CustomLoading.vue';
 
 /** 회원 가입 */
 const nickname = ref('');
@@ -16,6 +17,7 @@ const hasCheckedNickname = ref(false);
 const isNicknameConfirmed = ref(false);
 const isEmailConfirmed = ref(false);
 const emailVerificationVisible = ref(false);
+const isLoading = ref(false);
 const router = useRouter();
 
 /** 회원 가입 */
@@ -91,6 +93,7 @@ const emailCheck = async (emailInput) => {
     alert('이메일을 입력해주세요.');
     return;
   }
+  isLoading.value = true;
   try {
     const response = await axios.post(
       `http://localhost:8080/api/auth/checkEmail`,
@@ -104,6 +107,8 @@ const emailCheck = async (emailInput) => {
   } catch (error) {
     console.error('이메일 인증 오류:', error);
     alert('이메일 인증 중 오류가 발생했습니다.');
+  } finally {
+    isLoading.value = false; // 로딩 상태 종료
   }
 };
 
@@ -377,9 +382,7 @@ const verifyEmailCode = async (code) => {
       </div>
       <div
         class="hidden lg:flex lg:w-1/2 xl:w-2/3 2xl:w-3/4 h-full bg-cover"
-        style="
-          background-image: url('https://source.unsplash.com/1600x900/?ocean');
-        "
+        style="background-image: url('/signimg.jpg')"
       >
         <div
           class="w-full h-full flex flex-col items-center justify-center bg-black bg-opacity-30"
@@ -423,6 +426,7 @@ const verifyEmailCode = async (code) => {
       @verified="verifyEmailCode"
       @close="emailVerificationVisible = false"
     />
+    <CustomLoading v-if="isLoading" />
   </div>
 </template>
 

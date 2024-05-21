@@ -14,6 +14,14 @@ export default {
       colors: {
         'regal-blue': '#e8f0fe',
       },
+      inset: {
+        '500px': '500px',
+      },
+    },
+    variants: {
+      extend: {
+        inset: ['peer-checked'],
+      },
     },
   },
   plugins: [],

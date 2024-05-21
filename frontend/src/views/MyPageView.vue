@@ -100,9 +100,7 @@ onMounted(async () => {
     <div class="w-full h-screen flex items-center justify-center">
       <div
         class="hidden lg:flex lg:w-1/2 xl:w-2/3 2xl:w-3/4 h-full bg-cover"
-        style="
-          background-image: url('https://source.unsplash.com/1600x900/?ocean');
-        "
+        style="background-image: url('/signimg.jpg')"
       >
         <div
           class="w-full h-full flex flex-col items-center justify-center bg-black bg-opacity-30"
