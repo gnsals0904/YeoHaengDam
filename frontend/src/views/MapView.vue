@@ -7,7 +7,7 @@ import LocationDetail from '@/components/map/LocationDetail.vue';
 import MapNavigation from '@/components/map/MapNavigation.vue';
 import axios from 'axios';
 // import Draggable from 'vuedraggable';
-import { Draggable } from 'vuedraggable';
+import draggable from 'vuedraggable';
 
 const route = useRoute();
 const tripData = ref([]);
@@ -79,6 +79,10 @@ const closeModal = () => {
 const toggleDrawer = () => {
   drawerOpen.value = !drawerOpen.value;
 };
+
+const updatePlanData = (newData) => {
+  planData.value = newData;
+};
 </script>
 
 <template>
@@ -110,7 +114,7 @@ const toggleDrawer = () => {
       />
     </KakaoMap>
     <div class="locations-list flex-1 h-screen overflow-auto min-w-[500px]">
-      <Draggable v-model="tripData" group="locations" item-key="contentId">
+      <draggable v-model="tripData" group="locations" item-key="contentId">
         <template #item="{ element, index }">
           <LocationBox
             :item="element"
@@ -118,22 +122,15 @@ const toggleDrawer = () => {
             @click="showModal(element)"
           />
         </template>
-      </Draggable>
-
-      <!-- <LocationBox
-            v-for="(item, index) in tripData"
-            :key="index"
-            :item="item"
-            :loading="loading.value"
-            @click="showModal"
-          /> -->
+      </draggable>
     </div>
-    <MapNavigation @toggle="toggleDrawer">
-      <Draggable v-model="planData" :move="true" class="p-4">
-        <template #item="{ element, index }">
-          <LocationBox :item="element" @click="showModal" />
-        </template> </Draggable
-    ></MapNavigation>
+    <MapNavigation
+      @toggle="toggleDrawer"
+      :planData="planData"
+      @update:planData="updatePlanData"
+      :loading="loading"
+      :showModal="showModal"
+    />
     <LocationDetail
       v-if="selectedItem"
       :item="selectedItem"
@@ -151,7 +148,7 @@ const toggleDrawer = () => {
 }
 
 .drawer-open {
-  margin-right: 500px; /* 드로어 너비에 맞게 조정 */
+  margin-right: 550px; /* 드로어 너비에 맞게 조정 */
 }
 
 .locations-list {

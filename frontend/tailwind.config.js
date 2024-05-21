@@ -16,6 +16,12 @@ export default {
       },
       inset: {
         '500px': '500px',
+        '550px': '550px',
+        '560px': '560px',
+      },
+      screens: {
+        // 커스텀 브레이크포인트 추가
+        'custom-min-width': '30rem',
       },
     },
     variants: {

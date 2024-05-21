@@ -15,7 +15,16 @@ const handleImageLoad = () => {
   imageLoaded.value = true;
 };
 
+function formatImgSrc(imgSrc) {
+  if (!imgSrc || imgSrc.length === 0) {
+    return 'noimage.PNG'; // 기본 이미지 URL
+  }
+  // 객체의 storedName 속성을 사용하여 전체 URL 구성
+  return imgSrc;
+}
+
 onMounted(() => {
+  console.log('Item:', props.item);
   const img = new Image();
   img.src = props.item.img2 || 'noimage.PNG';
   img.onload = handleImageLoad;
@@ -24,10 +33,10 @@ onMounted(() => {
 
 <template>
   <div
-    class="mb-4 relative flex flex-col md:flex-row md:space-x-5 space-y-3 md:space-y-0 rounded-xl shadow-lg p-2 max-w-xs md:max-w-3xl mx-auto border border-blue-500 before:absolute before:-bottom-2 before:-right-2 before:h-4 before:w-4 before:border-b before:border-r before:border-blue-500 before:transition-all before:duration-300 before:ease-in-out after:absolute after:-top-2 after:-left-2 after:h-4 after:w-4 after:border-t after:border-l after:border-blue-500 after:transition-all after:duration-300 after:ease-in-out hover:before:h-[calc(100%+16px)] hover:before:w-[calc(100%+16px)] hover:after:h-[calc(100%+16px)] hover:after:w-[calc(100%+16px)]"
+    class="mb-4 relative flex flex-col md:flex-row md:space-x-5 space-y-3 md:space-y-0 rounded-xl shadow-lg p-2 max-w-xs md:max-h-32 md:max-w-lg mx-auto border border-blue-500 before:absolute before:-bottom-2 before:-right-2 before:h-4 before:w-4 before:border-b before:border-r before:border-blue-500 before:transition-all before:duration-300 before:ease-in-out after:absolute after:-top-2 after:-left-2 after:h-4 after:w-4 after:border-t after:border-l after:border-blue-500 after:transition-all after:duration-300 after:ease-in-out hover:before:h-[calc(100%+16px)] hover:before:w-[calc(100%+16px)] hover:after:h-[calc(100%+16px)] hover:after:w-[calc(100%+16px)]"
     @click="emit('click', item)"
   >
-    <div class="w-full md:w-1/3 grid place-items-center">
+    <div class="md:w-1/3 grid place-items-center">
       <div
         v-if="!imageLoaded"
         class="w-full h-full rounded overflow-hidden shadow-lg animate-pulse"
@@ -37,12 +46,17 @@ onMounted(() => {
         <div class="h-1/6 mx-2 bg-gray-300"></div>
         <div class="h-1/6 bg-white"></div>
       </div>
-      <img
+      <div
+        v-else
+        class="w-full h-full rounded-xl max-h-30 bg-contain bg-no-repeat bg-center object-cover"
+        :style="{ backgroundImage: `url(${formatImgSrc(item.img2)})` }"
+      ></div>
+      <!-- <img
         v-else
         :src="item.img2 || 'noimage.PNG'"
         alt="위치 이미지"
-        class="rounded-xl object-cover"
-      />
+        class="rounded-xl max-h-30 object-contain"
+      /> -->
     </div>
     <div class="w-full md:w-2/3 flex flex-col space-y-2 p-1">
       <div class="flex justify-between item-center">

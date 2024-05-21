@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, defineEmits } from "vue";
+import { defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
   board: {
@@ -8,21 +8,21 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["click"]); // click 이벤트 정의
+const emit = defineEmits(['click']); // click 이벤트 정의
 
 const handleClick = () => {
-  emit("click", props.board); // 클릭 시 부모 컴포넌트로 이벤트 전달
+  emit('click', props.board); // 클릭 시 부모 컴포넌트로 이벤트 전달
 };
 
 function formatDateTime(dateTime) {
   // 날짜 형식 변환 함수
-  const [date, time] = dateTime.split("T");
+  const [date, time] = dateTime.split('T');
   return `${date} ${time}`;
 }
 
 function formatImgSrc(imgSrc) {
   if (!imgSrc || imgSrc.length === 0) {
-    return "https://source.unsplash.com/800x450/?nature"; // 기본 이미지 URL
+    return 'https://source.unsplash.com/800x450/?nature'; // 기본 이미지 URL
   }
   // 객체의 storedName 속성을 사용하여 전체 URL 구성
   return imgSrc[0].storedName;
