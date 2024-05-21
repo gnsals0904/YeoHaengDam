@@ -1,4 +1,4 @@
-<script setup>
+b<script setup>
 import router from '@/router';
 </script>
 
@@ -30,7 +30,7 @@ import router from '@/router';
           <nav class="grid items-start px-4 text-sm font-medium">
             <a
               class="flex items-center gap-3 rounded-lg px-3 py-2 text-white transition-all hover:bg-[#0097A7] dark:bg-[#0097A7] dark:text-white dark:hover:bg-[#008394]"
-              href="#"
+              @click="router.push('/mypage/edit')"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +51,7 @@ import router from '@/router';
             </a>
             <a
               class="flex items-center gap-3 rounded-lg px-3 py-2 text-white transition-all hover:bg-[#0097A7] dark:text-gray-400 dark:hover:text-white"
-              href="#"
+              @click="router.push('/mypage/articles')"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +75,7 @@ import router from '@/router';
             </a>
             <a
               class="flex items-center gap-3 rounded-lg px-3 py-2 text-white transition-all hover:bg-[#0097A7] dark:text-gray-400 dark:hover:text-white"
-              href="#"
+              @click="router.push('/mypage/course')"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -129,7 +129,6 @@ import router from '@/router';
               <p class="text-gray-500 mb-4">자신의 개인정보를 확인하고 수정할 수 있습니다.</p>
               <button @click="router.push('/mypage/edit')"
                 class="bg-[#00B8D4] hover:bg-[#0097A7] text-white font-bold py-2 px-4 rounded-lg transition-colors"
-                href="#"
               >
                 바로가기
               </button>
@@ -137,32 +136,29 @@ import router from '@/router';
             <div class="bg-white rounded-lg p-4 shadow-lg">
               <h3 class="text-lg font-bold mb-2">내 글 목록</h3>
               <p class="text-gray-500 mb-4">자신이 작성한 글 목록을 확인할 수 있습니다.</p>
-              <a
+              <button @click="router.push('/mypage/articles')"
                 class="bg-[#00B8D4] hover:bg-[#0097A7] text-white font-bold py-2 px-4 rounded-lg transition-colors"
-                href="#"
               >
                 바로가기
-              </a>
+              </button>
             </div>
             <div class="bg-white rounded-lg p-4 shadow-lg">
               <h3 class="text-lg font-bold mb-2">내 여행 경로</h3>
               <p class="text-gray-500 mb-4">자신의 여행 경로를 확인할 수 있습니다.</p>
-              <a
+              <button @click="router.push('/mypage/course')"
                 class="bg-[#00B8D4] hover:bg-[#0097A7] text-white font-bold py-2 px-4 rounded-lg transition-colors"
-                href="#"
               >
                 바로가기
-              </a>
+            </button>
             </div>
             <div class="bg-white rounded-lg p-4 shadow-lg">
               <h3 class="text-lg font-bold mb-2">설정</h3>
               <p class="text-gray-500 mb-4">다양한 설정을 변경할 수 있습니다.</p>
-              <a
+              <button @click="router.push('/mypage/setting')"
                 class="bg-[#00B8D4] hover:bg-[#0097A7] text-white font-bold py-2 px-4 rounded-lg transition-colors"
-                href="#"
               >
                 바로가기
-              </a>
+            </button>
             </div>
           </div>
         </div>
