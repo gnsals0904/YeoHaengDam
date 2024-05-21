@@ -35,16 +35,17 @@ watch(localPlanData, (newVal) => {
       <div class="w-6 h-1 rotate-45 bg-white rounded-lg"></div>
     </label>
     <div
-      class="fixed overflow-auto min-w-[500px] top-0 right-0 z-20 h-full transition-all duration-500 transform translate-x-full bg-white shadow-lg peer-checked:translate-x-0"
+      class="fixed min-w-[500px] top-0 right-0 z-20 h-full transition-all duration-500 transform translate-x-full bg-white shadow-lg peer-checked:translate-x-0"
     >
       <div class="px-6 py-4">
         <h2 class="text-lg font-semibold">나만의 여행 계획 세우기</h2>
         <p class="text-gray-500">This is a drawer.</p>
-        <div class="locations-list flex-1 h-screen overflow-auto min-w-[500px]">
+        <div class="locations-list flex-1 min-w-[500px]">
           <draggable
             v-model="localPlanData"
             group="locations"
-            class="w-full h-full"
+            class="overflow-scroll max-h-96"
+            :style="{ height: `50%` }"
           >
             <template #item="{ element, index }">
               <LocationBox
