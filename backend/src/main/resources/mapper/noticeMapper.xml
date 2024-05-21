@@ -9,6 +9,7 @@
         <result column="user_nickname" property="nickname"/>
         <result column="title" property="title"/>
         <result column="content" property="content"/>
+        <result column="totalCount" property="totalCount"/>
         <result column="created_at" property="createdAt"/>
         <result column="updated_at" property="updatedAt"/>
     </resultMap>
@@ -21,10 +22,29 @@
             notice.title,
             notice.content,
             notice.created_at,
-            notice.updated_at
+            notice.updated_at,
+        (SELECT COUNT(*) FROM notice
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND notice.title LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
+        ) AS totalCount
         FROM notice
         LEFT JOIN users ON notice.user_id = users.user_id
-        ORDER BY notice.notice_id DESC;
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND notice.title LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
+        ORDER BY
+        <if test="sortBy != null and sortBy != ''">
+            ${sortBy}
+        </if>
+        <if test="sortBy == null or sortBy == ''">
+            notice.created_at ASC
+        </if>
+        limit #{start}, #{size}
     </select>
 
     <select id = "findById" resultMap="NoticeDetail">

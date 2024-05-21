@@ -1,6 +1,5 @@
 package com.ssafy.yeohaengdam.notice.mapper;
 
-import com.ssafy.yeohaengdam.notice.dto.NoticeData;
 import com.ssafy.yeohaengdam.notice.entity.Notice;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,7 +11,7 @@ import static com.ssafy.yeohaengdam.notice.dto.NoticeData.*;
 public interface NoticeMapper {
 
 
-    public List<Detail> findAll();
+    public List<Detail> findAll(String keyword, int start, String sortBy, int size);
 
     public void create(Notice Notice);
 

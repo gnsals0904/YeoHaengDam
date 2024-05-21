@@ -1,5 +1,6 @@
 package com.ssafy.yeohaengdam.notice.service;
 
+import com.ssafy.yeohaengdam.article.entity.SearchCriteria;
 import com.ssafy.yeohaengdam.notice.entity.Notice;
 import com.ssafy.yeohaengdam.notice.mapper.NoticeMapper;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,9 @@ public class NoticeServiceImpl implements NoticeService{
     private final NoticeMapper noticeMapper;
 
     @Override
-    public List<Detail> findAll() {
-        return noticeMapper.findAll();
+    public List<Detail> findAll(SearchCriteria searchCriteria) {
+        int start = searchCriteria.getPage() - 1;
+        return noticeMapper.findAll(searchCriteria.getKeyword(), start, searchCriteria.getSortBy(), searchCriteria.getSize());
     }
 
     @Override

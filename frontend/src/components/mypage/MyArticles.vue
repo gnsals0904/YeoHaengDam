@@ -1,8 +1,9 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import MyPageSide from '@/components/common/MyPageSide.vue';
 import BoardDetail from "@/components/board/BoardDetail.vue"; // 모달 컴포넌트 가져오기
+import Pagination from "@/components/common/Pagination.vue";
 
 // 데이터 변수 설정
 const articles = ref([]);
@@ -10,22 +11,37 @@ const selectedItem = ref(null);
 const token = sessionStorage.getItem('accessToken'); // 토큰을 세션 스토리지에서 가져옵니다.
 const comments = ref([]);
 const isModalVisible = ref(false);
+const currentPage = ref(1);
+const totalElements = ref(0); // 전체 게시글 수
+const pageSize = ref(10); // 페이지당 게시글 수
+const totalPages = computed(() => Math.ceil(totalElements.value / pageSize.value)); // 총 페이지 수 계산
 
 // 데이터 가져오기 함수
-const fetchArticles = async () => {
+async function fetchArticles(page) {
+  
   try {
     const response = await axios.get('http://localhost:8080/api/articles', {
       headers: {
         'Authorization': `Bearer ${token}` // Authorization 헤더에 토큰을 추가합니다.
-      }
+      },
+      params: {
+        page,
+        size: 10, // 페이지당 10개의 콘텐츠를 가져옴
+      },
     });
+    console.log(response);
     articles.value = response.data;
+    totalElements.value = response.data[0].totalCount;
   } catch (error) {
     console.error('Error fetching articles:', error);
   }
 };
 
 // 컴포넌트가 마운트될 때 데이터 가져오기
+function updatePage(newPage) {
+  currentPage.value = newPage;
+  fetchArticles(newPage); // 페이지 변경 시 데이터 다시 로드
+}
 onMounted(() => {
   fetchArticles();
 });
@@ -88,7 +104,14 @@ function closeModal() {
           <div class="text-right">
             <p class="text-gray-500">조회수: {{ article.hit }}</p>
           </div>
-        </div>
+          </div>
+          <Pagination
+            :value="currentPage"
+            :total-page-count="totalPages"
+            :page-display-count="5"
+            @change="updatePage"
+          />
+        
       </div>
     </div>
   </div>

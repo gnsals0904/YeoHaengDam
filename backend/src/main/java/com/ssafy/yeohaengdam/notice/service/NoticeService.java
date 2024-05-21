@@ -1,5 +1,7 @@
 package com.ssafy.yeohaengdam.notice.service;
 
+import com.ssafy.yeohaengdam.article.entity.SearchCriteria;
+
 import java.util.List;
 
 import static com.ssafy.yeohaengdam.notice.dto.NoticeData.*;
@@ -7,7 +9,7 @@ import static com.ssafy.yeohaengdam.notice.dto.NoticeData.*;
 
 public interface NoticeService {
 
-    public List<Detail> findAll();
+    public List<Detail> findAll(SearchCriteria searchCriteria);
 
     public void create(int userId, Create create);
 

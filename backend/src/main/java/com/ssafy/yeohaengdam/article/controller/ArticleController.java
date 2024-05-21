@@ -32,6 +32,7 @@ public class ArticleController {
      */
     @GetMapping("/list")
     public ResponseEntity<List<ArticleInfo>> list(@ModelAttribute SearchCriteria searchCriteria){
+        System.out.println(searchCriteria);
         return ResponseEntity.ok(articleService.list(searchCriteria));
     }
 
