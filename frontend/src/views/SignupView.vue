@@ -86,18 +86,20 @@ const nicknameCheck = async () => {
 };
 
 /** 이메일 체크 */
-const emailCheck = async () => {
+const emailCheck = async (emailInput) => {
   if (!email.value) {
     alert('이메일을 입력해주세요.');
     return;
   }
   try {
     const response = await axios.post(
-      `http://localhost:8080/api/auth/checkEmail/${email.value}`
+      `http://localhost:8080/api/auth/checkEmail`,
+      { email: email.value, emailInput }
     );
-    if (response.data.available) {
-      // 이메일로 인증 코드 전송 후 모달을 띄움
+    if (response.status === 200) {
       emailVerificationVisible.value = true;
+    } else {
+      alert('이메일 인증이 완료되지 않았습니다.');
     }
   } catch (error) {
     console.error('이메일 인증 오류:', error);
@@ -109,10 +111,11 @@ const verifyEmailCode = async (code) => {
   try {
     const response = await axios.post(
       `http://localhost:8080/api/auth/checkCode`,
-      { email: email.value, code }
+      { email: email.value, code: code }
     );
-    if (response.data.success) {
+    if (response.status == 200) {
       emailVerificationVisible.value = false;
+      isEmailConfirmed.value = true;
       alert('이메일 인증이 완료되었습니다.');
     } else {
       alert('잘못된 인증 코드입니다.');
@@ -154,7 +157,7 @@ const verifyEmailCode = async (code) => {
                   type="text"
                   name="nickname"
                   id="nickname"
-                  class="flex-grow p-2 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
+                  class="disabled:bg-regal-blue flex-grow p-2 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
                   placeholder="Enter your nickname"
                   v-model="nickname"
                   :disabled="isNicknameConfirmed"
@@ -175,9 +178,10 @@ const verifyEmailCode = async (code) => {
                   type="email"
                   name="email"
                   id="email"
-                  class="flex-grow p-2 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
+                  class="disabled:bg-regal-blue flex-grow p-2 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
                   placeholder="Enter your email"
                   v-model="email"
+                  :disabled="isEmailConfirmed"
                 />
                 <button
                   class="ml-2 bg-blue-600 hover:bg-blue-700 rounded-lg px-4 py-2 text-gray-100 hover:shadow-xl transition duration-150 uppercase"
@@ -413,6 +417,12 @@ const verifyEmailCode = async (code) => {
         </div>
       </div>
     </div>
+    <EmailVerification
+      :visible="emailVerificationVisible"
+      :email="email"
+      @verified="verifyEmailCode"
+      @close="emailVerificationVisible = false"
+    />
   </div>
 </template>
 

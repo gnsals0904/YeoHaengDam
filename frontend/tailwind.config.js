@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["src/**/*.vue", "index.html"],
+  content: ['src/**/*.vue', 'index.html'],
   theme: {
     extend: {
       flexGrow: {
@@ -9,7 +9,10 @@ export default {
         6: 6,
       },
       flex: {
-        3: "3 3 0%",
+        3: '3 3 0%',
+      },
+      colors: {
+        'regal-blue': '#e8f0fe',
       },
     },
   },

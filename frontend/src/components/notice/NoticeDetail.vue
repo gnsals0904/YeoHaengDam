@@ -1,7 +1,7 @@
 <script setup>
-import { defineProps, defineEmits } from "vue";
-import { useMemberStore } from "@/stores/member";
-import { useRouter } from "vue-router";
+import { defineProps, defineEmits } from 'vue';
+import { useMemberStore } from '@/stores/member';
+import { useRouter } from 'vue-router';
 
 const memberStore = useMemberStore();
 const router = useRouter();
@@ -16,14 +16,14 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["close"]);
+const emit = defineEmits(['close']);
 
 const closeModal = () => {
-  emit("close");
+  emit('close');
 };
 
 const editArticle = (noticeId) => {
-  router.push({ name: "NoticeEdit", params: { noticeId } });
+  router.push({ name: 'NoticeEdit', params: { noticeId } });
 };
 </script>
 
