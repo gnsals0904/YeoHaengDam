@@ -6,6 +6,8 @@ import LocationBox from '@/components/map/LocationBox.vue';
 import LocationDetail from '@/components/map/LocationDetail.vue';
 import MapNavigation from '@/components/map/MapNavigation.vue';
 import axios from 'axios';
+// import Draggable from 'vuedraggable';
+import { Draggable } from 'vuedraggable';
 
 const route = useRoute();
 const tripData = ref([]);
@@ -13,6 +15,7 @@ const selectedItem = ref(null);
 const modalVisible = ref(false);
 const loading = ref(true); // 로딩 상태 추가
 const drawerOpen = ref(false);
+const planData = ref([]);
 
 onMounted(async () => {
   const { sidoCode, gugunCode, contentCode } = route.query;
@@ -107,15 +110,30 @@ const toggleDrawer = () => {
       />
     </KakaoMap>
     <div class="locations-list flex-1 h-screen overflow-auto min-w-[500px]">
-      <LocationBox
-        v-for="(item, index) in tripData"
-        :key="index"
-        :item="item"
-        :loading="loading.value"
-        @click="showModal"
-      />
+      <Draggable v-model="tripData" group="locations" item-key="contentId">
+        <template #item="{ element, index }">
+          <LocationBox
+            :item="element"
+            :loading="loading"
+            @click="showModal(element)"
+          />
+        </template>
+      </Draggable>
+
+      <!-- <LocationBox
+            v-for="(item, index) in tripData"
+            :key="index"
+            :item="item"
+            :loading="loading.value"
+            @click="showModal"
+          /> -->
     </div>
-    <MapNavigation @toggle="toggleDrawer"></MapNavigation>
+    <MapNavigation @toggle="toggleDrawer">
+      <Draggable v-model="planData" :move="true" class="p-4">
+        <template #item="{ element, index }">
+          <LocationBox :item="element" @click="showModal" />
+        </template> </Draggable
+    ></MapNavigation>
     <LocationDetail
       v-if="selectedItem"
       :item="selectedItem"
