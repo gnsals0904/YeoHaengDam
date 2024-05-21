@@ -11,7 +11,7 @@ import static com.ssafy.yeohaengdam.article.dto.ArticleData.*;
 
 @Mapper
 public interface ArticleMapper {
-    public List<ArticleInfo> list(String keyword, String sortBy, int start, int size);
+    public List<ArticleInfo> list(String keyword, String sortBy);
 
     public Detail findById(int articleId);
     public int create(Article article);
@@ -26,5 +26,5 @@ public interface ArticleMapper {
 
     public void updateHit(int articleId);
 
-    List<ArticleInfo> findByUserId(int userId, int start, int size);
+    List<ArticleInfo> findByUserId(int userId, String keyword, String sortBy);
 }

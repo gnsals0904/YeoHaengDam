@@ -60,7 +60,6 @@
         <if test="sortBy == null or sortBy == ''">
             article.created_at DESC
         </if>
-        LIMIT #{start}, #{size}
     </select>
 
     <select id = "findById" resultMap="detail">
@@ -118,8 +117,18 @@
         select *
         from article
         where user_id = #{userId}
-        ORDER BY article_id DESC
-        LIMIT #{start}, #{size}
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND article.title LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+        </where>
+        ORDER BY
+        <if test="sortBy != null and sortBy != ''">
+            ${sortBy}
+        </if>
+        <if test="sortBy == null or sortBy == ''">
+            article.created_at DESC
+        </if>
     </select>
 
 
