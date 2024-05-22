@@ -17,7 +17,7 @@ import MypageEditor from "@/components/mypage/MypageEditor.vue";
 import MyArticles from "@/components/mypage/MyArticles.vue";
 import MyCourse from "@/components/mypage/MyCourse.vue";
 import EmailVerification from "@/components/common/EmailVerification.vue";
-import CourseDetail from "@/components/mypage/course/CourseDetail.vue";
+import CourseDetail from "@/components/mypage/Course/CourseDetail.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
