@@ -1,6 +1,6 @@
 <script setup>
-import { defineProps } from "vue";
-import { useRouter } from "vue-router";
+import { defineProps } from 'vue';
+import { useRouter } from 'vue-router';
 
 const props = defineProps({
   course: Object,
@@ -9,8 +9,12 @@ const router = useRouter();
 
 const navigateToDetail = () => {
   router.push({
-    name: "CourseDetail",
+    name: 'CourseDetail',
     params: { courseId: props.course.courseId },
+    query: {
+      title: props.course.title,
+      description: props.course.description,
+    },
   });
 };
 </script>

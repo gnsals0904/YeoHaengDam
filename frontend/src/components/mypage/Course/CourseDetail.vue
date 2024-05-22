@@ -12,7 +12,11 @@ const loading = ref(true);
 const routeData = ref(null); // 추가: 경로 데이터를 저장할 변수
 const markerList = ref([]); // 마커 데이터를 저장할 변수
 const kakaoApiKey = import.meta.env.VITE_VUE_APP_KAKAO_API_REST_KEY;
-
+const props = defineProps({
+  courseId: String,
+  title: String,
+  description: String,
+});
 // 기본 좌표를 서울 시청으로 설정하되, planData에 값이 있으면 첫 번째 데이터의 좌표를 사용
 const defaultCoordinate = computed(() => {
   if (planData.value.length > 0) {
@@ -29,15 +33,16 @@ const defaultCoordinate = computed(() => {
 
 const savePlanData = async () => {
   const token = sessionStorage.getItem('accessToken');
-  const courseId = route.params.courseId;
   const updateData = {
-    courseId: courseId,
-    title: '제목 예시',
-    description: '설명 예시',
+    courseId: props.courseId,
+    title: props.title,
+    description: props.description,
     schedules: planData.value.map((spot, index) => ({
       spot: { ...spot },
+      orderIndex: index,
     })),
   };
+  console.log(updateData);
   try {
     const response = await axios.patch(
       'http://localhost:8080/api/course/update',
@@ -113,7 +118,7 @@ const fetchRoute = async () => {
       }
     );
     routeData.value = response.data;
-    console.log('Route Data:', routeData.value);
+    console.log('받은 데이터:', routeData.value);
     processRouteData();
   } catch (error) {
     console.error('Error fetching route data:', error);
@@ -202,6 +207,20 @@ const ordermargin = '35px';
         >
           저장하기
         </button>
+      </div>
+      <!-- 총 이동 경로 -->
+      <div
+        v-if="
+          routeData &&
+          routeData.routes &&
+          routeData.routes.length > 0 &&
+          routeData.routes[0].summary
+        "
+      >
+        <div>총 이동 경로 : {{ routeData.routes[0].summary.distance }}m</div>
+      </div>
+      <div v-else>
+        <div>Distance information is not available</div>
       </div>
     </div>
   </div>
