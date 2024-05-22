@@ -1,6 +1,7 @@
 <script setup>
-import { defineProps } from "vue";
-
+import { defineProps, onMounted } from "vue";
+import OpenAI from "openai";
+/** 모달 창 관련 */
 const props = defineProps({
   visible: {
     type: Boolean,
@@ -11,6 +12,33 @@ const props = defineProps({
 const emit = defineEmits(["close"]);
 const closeModal = () => {
   emit("close");
+};
+
+// chatGPT description
+const ApiKey = import.meta.env.VITE_VUE_APP_OPEN_API_KEY;
+const getGPTResponse = async () => {
+  try {
+    const openai = new OpenAI({
+      apiKey: ApiKey,
+      dangerouslyAllowBrowser: true,
+    });
+
+    const prompt = "안녕? 미국의 수도가 어딘지 알고있니?";
+
+    const response = await openai.chat.completions.create({
+      messages: [
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      model: "gpt-3.5-turbo",
+    });
+    console.log("chatGPT 전체 응답", response);
+    console.log("chatGPT 결과: ", response.choices[0].message.content);
+  } catch (error) {
+    console.log("chatGPT: 🚨 에러가 발생했습니다.");
+  }
 };
 </script>
 
@@ -35,8 +63,9 @@ const closeModal = () => {
           <div class="space-y-4">
             <button
               class="p-3 bg-black rounded-full text-white w-full font-semibold"
+              @click="getGPTResponse"
             >
-              Allow notifications
+              GPT 테스트
             </button>
             <button
               class="p-3 bg-white border rounded-full w-full font-semibold"
