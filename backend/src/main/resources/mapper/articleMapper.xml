@@ -63,12 +63,20 @@
             </if>
         </where>
         ORDER BY
-        <if test="sortBy != null and sortBy != ''">
-            ${sortBy}
-        </if>
-        <if test="sortBy == null or sortBy == ''">
-            article.created_at ASC
-        </if>
+        <choose>
+            <when test="sortBy == 'hit'">
+                ${sortBy} DESC
+            </when>
+            <when test="sortBy == 'updated_at'">
+                ${sortBy} DESC
+            </when>
+            <when test="sortBy == 'created_at'">
+                ${sortBy} DESC
+            </when>
+            <when test="sortBy != null and sortBy != ''">
+                ${sortBy}
+            </when>
+        </choose>
         limit #{start}, #{size}
     </select>
 
@@ -92,8 +100,8 @@
 
 
     <insert id="create" parameterType="Article" useGeneratedKeys="true" keyProperty="articleId">
-        insert into article(user_id, title, content, created_at)
-        values (#{userId}, #{title}, #{content}, #{createdAt})
+        insert into article(user_id, title, content, created_at, updated_at())
+        values (#{userId}, #{title}, #{content}, #{createdAt}, now())
     </insert>
 
     <insert id="createImage">
@@ -148,7 +156,7 @@
                 ${sortBy}
             </when>
             <otherwise>
-                article.created_at ASC
+                article.created_at DESC
             </otherwise>
         </choose>
         limit #{start}, #{size}
