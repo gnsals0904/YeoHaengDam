@@ -40,9 +40,14 @@ const router = createRouter({
     { path: '/mypage/articles', name: 'MyArticles', component: MyArticles },
     { path: '/mypage/course', name: 'MyCourse', component: MyCourse },
     {
-      path: '/mypage/course/:courseId',
+      path: '/course/:courseId',
       name: 'CourseDetail',
       component: CourseDetail,
+      props: (route) => ({
+        courseId: route.params.courseId,
+        title: route.query.title,
+        description: route.query.description,
+      }),
     },
     {
       path: '/emailverify',

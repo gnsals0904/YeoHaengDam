@@ -62,9 +62,9 @@
 
     <select id="findById" resultMap="detail">
         select c.course_id, c.user_id, c.title, c.description,
-               s.schedule_id, s.spot_id, s.order_index,
-            a.title as attraction_title, a.latitude, a.longitude, a.first_image, a.first_image2,
-            ad.overview
+        s.schedule_id, s.spot_id, s.order_index,
+        a.title as attraction_title, a.latitude, a.longitude, a.first_image, a.first_image2, a.content_id,
+        ad.overview
         from course c
         LEFT JOIN schedule s ON s.course_id = c.course_id
         LEFT JOIN attraction_info a ON s.spot_id = a.content_id
