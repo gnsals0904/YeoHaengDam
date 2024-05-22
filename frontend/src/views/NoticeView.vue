@@ -12,9 +12,8 @@ const selectedItem = ref(null);
 const isModalVisible = ref(false);
 const currentPage = ref(1);
 const totalElements = ref(0);
-const pageSize = ref(0);
+const pageSize = ref(10);
 const totalPages = computed(() => Math.ceil(totalElements.value / pageSize.value));
-
 
 const handleRowClick = (item) => {
   selectedItem.value = item;
@@ -27,15 +26,14 @@ const closeModal = () => {
 
 async function fetchNotices(page) {
   try {
-    const response = await axios.get('http://localhost:8080/api/notice/list', {
+    const response = await axios.get("http://localhost:8080/api/notice/list", {
       params: {
         page,
         size: 10, // 페이지당 10개의 콘텐츠를 가져옴
       },
     });
     rows.value = response.data;
-    console.log
-
+    console.log(response);
 
     totalElements.value = response.data[0].totalCount;
 
@@ -44,7 +42,7 @@ async function fetchNotices(page) {
   } catch (error) {
     console.error("Failed to fetch notices:", error);
   }
-};
+}
 
 function updatePage(newPage) {
   currentPage.value = newPage;
@@ -60,6 +58,13 @@ onMounted(() => {
   <div class="bg-white pb-4 px-4 rounded-md w-full">
     <div class="flex justify-between w-full pt-6">
       <p class="ml-3 text-2xl">공지 사항</p>
+      <svg width="14" height="4" viewBox="0 0 14 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g opacity="0.4">
+          <circle cx="2.19796" cy="1.80139" r="1.38611" fill="#222222" />
+          <circle cx="11.9013" cy="1.80115" r="1.38611" fill="#222222" />
+          <circle cx="7.04991" cy="1.80115" r="1.38611" fill="#222222" />
+        </g>
+      </svg>
     </div>
     <div class="w-full flex justify-end px-2 mt-2 gap-x-3">
       <router-link
@@ -69,7 +74,6 @@ onMounted(() => {
       >
         공지사항 작성
       </router-link>
-      
     </div>
     <div class="overflow-x-auto mt-6">
       <table class="table-auto border-collapse w-full">
@@ -98,19 +102,14 @@ onMounted(() => {
       </table>
     </div>
     <Pagination
-            :value="currentPage"
-            :total-page-count="totalPages"
-            :page-display-count="5"
-            @change="updatePage"
-          />
-        
+      :value="currentPage"
+      :total-page-count="totalPages"
+      :page-display-count="5"
+      @change="updatePage"
+    />
   </div>
 
-  <NoticeDetail
-    :item="selectedItem"
-    :visible="isModalVisible"
-    @close="closeModal"
-  />
+  <NoticeDetail :item="selectedItem" :visible="isModalVisible" @close="closeModal" />
 </template>
 
 <style scoped></style>
