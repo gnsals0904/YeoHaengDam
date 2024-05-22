@@ -1,6 +1,6 @@
 <script setup>
-import { useMemberStore } from '@/stores/member';
-import { computed } from 'vue';
+import { useMemberStore } from "@/stores/member";
+import { computed } from "vue";
 
 const memberStore = useMemberStore();
 const isLogin = computed(() => memberStore.isLogin);
@@ -14,33 +14,34 @@ const userInfo = computed(() => memberStore.userInfo);
         >여행담</router-link
       >
     </div>
-    <nav class="hidden md:flex space-x-6">
+    <nav class="md:flex flex space-x-6">
       <router-link :to="{ name: 'Main' }" class="text-lg">여행지</router-link>
       <router-link :to="{ name: 'Notice' }" class="text-lg"
         >공지사항</router-link
       >
-
       <router-link :to="{ name: 'List' }" class="text-lg">게시판</router-link>
       <template v-if="memberStore.isLogin">
         <router-link class="text-lg" :to="{ name: 'MyPage' }"
           >마이페이지</router-link
         >
         <span class="text-lg flex items-center">
-  <img 
-    v-if="memberStore.isLogin"
-    :src="userInfo.profileImage || 'https://source.unsplash.com/800x450/?Beautifulgirl'"
-    class="h-9 w-9 rounded-full object-cover mr-2"
-    alt="user"
-  />
-  {{ userInfo.nickname }} 님 안녕하세요
-  <img
-    src="/party.svg"
-    alt="Party"
-    class="inline-block align-middle ml-2"
-    style="height: 24px; width: 24px"
-  />
-</span>
-
+          <img
+            v-if="memberStore.isLogin"
+            :src="
+              userInfo.profileImage ||
+              'https://source.unsplash.com/800x450/?Beautifulgirl'
+            "
+            class="h-9 w-9 rounded-full object-cover mr-2"
+            alt="user"
+          />
+          {{ userInfo.nickname }} 님 안녕하세요
+          <img
+            src="/party.svg"
+            alt="Party"
+            class="inline-block align-middle ml-2"
+            style="height: 24px; width: 24px"
+          />
+        </span>
 
         <button class="text-lg" @click="memberStore.userLogout">
           로그아웃
