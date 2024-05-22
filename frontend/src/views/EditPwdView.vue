@@ -9,7 +9,9 @@ const { getUserInfo } = memberStore;
 const router = useRouter();
 const token = sessionStorage.getItem("accessToken");
 const nickname = ref("닉네임");
-const email = ref("email@example.com");
+const email = ref("sgo722@naver.com");
+
+const currentPassword = ref("");
 const password = ref("");
 const passwordConfirmation = ref("");
 
@@ -36,10 +38,7 @@ const handleUpdate = async () => {
   };
 
   try {
-    const response = await axios.put(
-      "http://localhost:8080/api/users/update",
-      user
-    );
+    const response = await axios.put("http://localhost:8080/api/users/update", user);
     if (response.status === 200) {
       alert("정보가 성공적으로 업데이트되었습니다.");
       router.replace("/");
@@ -58,28 +57,19 @@ const handleUpdate = async () => {
         class="w-full sm:w-5/6 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/4 h-full bg-white flex items-center justify-center"
       >
         <div class="w-full px-12">
-          <h1
-            class="text-center text-3xl font-bold tracking-wide text-gray-800"
-          >
-            패스워드 변경
-          </h1>
+          <h1 class="text-center text-3xl font-bold tracking-wide text-gray-800">패스워드 변경</h1>
 
           <form class="my-8 text-sm" @submit.prevent>
             <div class="flex flex-col my-4">
-              <label for="basicPassword" class="text-gray-700"
-                >기존 비밀번호</label
-              >
-              <div
-                x-data="{ show: false }"
-                class="relative flex items-center mt-2"
-              >
+              <label for="currentPassword" class="text-gray-700">기존 비밀번호</label>
+              <div x-data="{ show: false }" class="relative flex items-center mt-2">
                 <input
                   :type="showPrevPassword ? 'text' : 'password'"
-                  name="basicPassword"
-                  id="basicPassword"
+                  name="currentPassword"
+                  id="currentPassword"
                   class="flex-1 p-2 pr-10 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
                   placeholder="Enter your password"
-                  v-model="password"
+                  v-model="currentPassword"
                 />
                 <button
                   @click="togglePrevPasswordVisibility"
@@ -128,13 +118,8 @@ const handleUpdate = async () => {
             </div>
 
             <div class="flex flex-col my-4">
-              <label for="password" class="text-gray-700"
-                >변경할 비밀번호</label
-              >
-              <div
-                x-data="{ show: false }"
-                class="relative flex items-center mt-2"
-              >
+              <label for="password" class="text-gray-700">변경할 비밀번호</label>
+              <div x-data="{ show: false }" class="relative flex items-center mt-2">
                 <input
                   :type="showPassword ? 'text' : 'password'"
                   name="password"
@@ -193,10 +178,7 @@ const handleUpdate = async () => {
               <label for="password_confirmation" class="text-gray-700"
                 >변경할 비밀번호를 한번 더 입력해주세요</label
               >
-              <div
-                x-data="{ show: false }"
-                class="relative flex items-center mt-2"
-              >
+              <div x-data="{ show: false }" class="relative flex items-center mt-2">
                 <input
                   :type="showConfirmPassword ? 'text' : 'password'"
                   name="password_confirmation"
@@ -254,7 +236,7 @@ const handleUpdate = async () => {
             <div class="my-4 flex items-center justify-end space-x-4">
               <button
                 class="bg-blue-600 hover:bg-blue-700 rounded-lg px-8 py-2 text-gray-100 hover:shadow-xl transition duration-150 uppercase w-full"
-                @click="toggleEdit"
+                @click="handleUpdate"
               >
                 수정
               </button>
@@ -264,13 +246,9 @@ const handleUpdate = async () => {
       </div>
       <div
         class="hidden lg:flex lg:w-1/2 xl:w-2/3 2xl:w-3/4 h-full bg-cover"
-        style="
-          background-image: url('https://source.unsplash.com/1600x900/?ocean');
-        "
+        style="background-image: url('https://source.unsplash.com/1600x900/?ocean')"
       >
-        <div
-          class="w-full h-full flex flex-col items-center justify-center bg-black bg-opacity-30"
-        >
+        <div class="w-full h-full flex flex-col items-center justify-center bg-black bg-opacity-30">
           <div class="flex items-center justify-center space-x-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -286,15 +264,11 @@ const handleUpdate = async () => {
                 d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"
               ></path>
             </svg>
-            <h1
-              class="text-3xl xl:text-4xl 2xl:text-5xl font-bold text-gray-100 tracking-wider"
-            >
+            <h1 class="text-3xl xl:text-4xl 2xl:text-5xl font-bold text-gray-100 tracking-wider">
               여행담
             </h1>
           </div>
-          <p class="text-gray-300 mt-4 px-16 text-center">
-            지금 가입하고 여행 계획을 세워보세요
-          </p>
+          <p class="text-gray-300 mt-4 px-16 text-center">지금 가입하고 여행 계획을 세워보세요</p>
           <a
             href="#"
             class="mt-6 bg-gray-100 hover:bg-gray-200 px-6 py-2 rounded text-sm uppercase text-gray-900 transition duration-150"

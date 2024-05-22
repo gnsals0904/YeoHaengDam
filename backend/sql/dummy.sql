@@ -1,11 +1,11 @@
 INSERT INTO users (email, password, nickname, profile_image)
 VALUES
-    ('minho@example.com', 'securePass1', '민호', ''),
-    ('soojin@example.com', 'strongPass2', '수진', ''),
-    ('hyunjin@example.com', 'safePass3', '현진', ''),
-    ('eunji@example.com', 'protectPass4', '은지', ''),
-    ('jaehyun@example.com', 'hiddenPass5', '재현', ''),
-    ('yuna@example.com', 'securePass6', '유나', '');
+    ('minho@example.com', 'securePass1', '민호', 'https://yeohaengdam.s3.ap-northeast-2.amazonaws.com/user/images/profile01.png'),
+    ('soojin@example.com', 'strongPass2', '수진', 'https://yeohaengdam.s3.ap-northeast-2.amazonaws.com/user/images/profile02.png'),
+    ('hyunjin@example.com', 'safePass3', '현진', 'https://yeohaengdam.s3.ap-northeast-2.amazonaws.com/user/images/profile03.png'),
+    ('eunji@example.com', 'protectPass4', '은지', 'https://yeohaengdam.s3.ap-northeast-2.amazonaws.com/user/images/profile06.png'),
+    ('jaehyun@example.com', 'hiddenPass5', '재현', 'https://yeohaengdam.s3.ap-northeast-2.amazonaws.com/user/images/profile05.png'),
+    ('yuna@example.com', 'securePass6', '유나', 'https://yeohaengdam.s3.ap-northeast-2.amazonaws.com/user/images/profile04.png');
 
 INSERT INTO users (email, password, nickname, profile_image)
 VALUES
