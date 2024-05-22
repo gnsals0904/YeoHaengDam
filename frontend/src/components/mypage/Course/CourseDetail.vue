@@ -1,7 +1,7 @@
 <script setup>
 import { KakaoMap, KakaoMapMarker, KakaoMapPolyline } from 'vue3-kakao-maps';
 import { useRoute } from 'vue-router';
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 import LocationBox from '@/components/map/LocationBox.vue';
 import draggable from 'vuedraggable';
 import axios from 'axios';
@@ -27,13 +27,45 @@ const defaultCoordinate = computed(() => {
   };
 });
 
+const savePlanData = async () => {
+  const token = sessionStorage.getItem('accessToken');
+  const courseId = route.params.courseId;
+  const updateData = {
+    courseId: courseId,
+    title: '제목 예시',
+    description: '설명 예시',
+    schedules: planData.value.map((spot, index) => ({
+      spot: { ...spot },
+    })),
+  };
+  try {
+    const response = await axios.patch(
+      'http://localhost:8080/api/course/update',
+      updateData,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log('Plan data saved successfully:', response.data);
+  } catch (error) {
+    console.error('Error saving plan data:', error);
+  }
+};
+
 const fetchCourseDetails = async () => {
   const courseId = route.params.courseId;
   try {
     const response = await axios.get(
       `http://localhost:8080/api/course/${courseId}`
     );
+    // planData.value = addCustomAttributes(
+    //   response.data.schedules.map((schedule) => schedule.spot)
+    // );
     planData.value = response.data.schedules.map((schedule) => schedule.spot);
+    await fetchRoute(); // 초기 로드 시 경로 데이터를 가져옴
     console.log(planData.value);
     loading.value = false;
   } catch (error) {
@@ -90,13 +122,16 @@ const fetchRoute = async () => {
 
 // 경로 데이터를 처리하여 마커 리스트를 생성하는 함수
 const processRouteData = () => {
+  if (!routeData.value) return;
+
+  markerList.value = [];
   const vertexes = routeData.value.routes[0].sections.flatMap((section) =>
     section.roads.flatMap((road) => road.vertexes)
   );
   for (let i = 0; i < vertexes.length; i += 2) {
     markerList.value.push({ lat: vertexes[i + 1], lng: vertexes[i] });
   }
-  console.log(markerList.value);
+  console.log('markerList ', markerList.value);
 };
 
 const image = {
@@ -107,8 +142,20 @@ const image = {
 
 onMounted(async () => {
   await fetchCourseDetails();
-  await fetchRoute();
 });
+
+watch(
+  planData,
+  async (newVal, oldVal) => {
+    console.log('planData updated:', newVal);
+    if (newVal !== oldVal) {
+      await fetchRoute();
+    }
+  },
+  { deep: true }
+);
+
+const ordermargin = '35px';
 </script>
 
 <template>
@@ -126,27 +173,36 @@ onMounted(async () => {
         :lat="item.latitude"
         :lng="item.longitude"
         :clickable="true"
+        :order="index + 1"
+        :order-bottom-margin="ordermargin"
+        :image="image"
       />
       <KakaoMapPolyline :latLngList="markerList" />
-      <!-- <KakaoMapMarkerPolyline
-        :markerList="markerList"
-        :showMarkerOrder="false"
-        strokeColor="#C74C5E"
-        :strokeOpacity="1"
-        strokeStyle="shortdot"
-      /> -->
     </KakaoMap>
-
-    <div class="locations-list flex-1 h-screen overflow-auto min-w-[500px]">
-      <draggable v-model="planData" group="locations" item-key="contentId">
-        <template #item="{ element, index }">
-          <LocationBox
-            :item="element"
-            :loading="loading"
-            @click="showModal(element)"
-          />
-        </template>
-      </draggable>
+    <div class="flex flex-col">
+      <p>저장된 여행 경로</p>
+      <p>드래그해서 순서를 바꿔서 경로를 저장해보세요!</p>
+      <div
+        class="locations-list flex-1 overflow-auto overflow-y-auto min-w-[500px] max-h-[50vh]"
+      >
+        <draggable v-model="planData" group="locations" item-key="contentId">
+          <template #item="{ element, index }">
+            <LocationBox
+              :item="element"
+              :loading="loading"
+              @click="showModal(element)"
+            />
+          </template>
+        </draggable>
+      </div>
+      <div class="flex justify-end">
+        <button
+          class="mr-8 mt-5 inline-flex justify-center items-center py-2 px-7 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+          @click="savePlanData"
+        >
+          저장하기
+        </button>
+      </div>
     </div>
   </div>
 </template>
