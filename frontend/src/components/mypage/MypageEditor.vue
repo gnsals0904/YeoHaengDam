@@ -36,6 +36,7 @@ const nicknameCheck = async () => {
     alert("닉네임을 입력해주세요.");
     return;
   }
+  
   try {
     const response = await axios.get(
       `http://localhost:8080/api/users/check_nickname/${nickname.value}`
@@ -96,8 +97,14 @@ const handleUpdate = async () => {
 
   try {
     const response = await axios.put(
-      "http://localhost:8080/api/users/update",
-      user
+      'http://localhost:8080/api/users/update_nickname',
+      user,
+      {
+        headers: {
+              Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+      }
     );
     if (response.status === 200) {
       alert("정보가 성공적으로 업데이트되었습니다.");
@@ -179,10 +186,10 @@ onMounted(async () => {
               type="email"
               name="email"
               id="email"
-              class="mt-2 p-2 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
+              class="bg-gray-200 mt-2 p-2 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
               placeholder="Enter your email"
               v-model="email"
-              :disabled="isDisabled"
+              disabled
             />
           </div>
           <div class="flex items-center">
