@@ -9,6 +9,8 @@ import axios from 'axios';
 const route = useRoute();
 const planData = ref([]);
 const loading = ref(true);
+const routeData = ref(null); // 추가: 경로 데이터를 저장할 변수
+const kakaoApiKey = import.meta.env.VITE_VUE_APP_KAKAO_API_REST_KEY;
 
 // 기본 좌표를 서울 시청으로 설정하되, planData에 값이 있으면 첫 번째 데이터의 좌표를 사용
 const defaultCoordinate = computed(() => {
@@ -39,8 +41,54 @@ const fetchCourseDetails = async () => {
   }
 };
 
+// Kakao Mobility API로 경로 데이터를 요청하는 함수
+const fetchRoute = async () => {
+  const origin = planData.value[0];
+  const destination = planData.value[planData.value.length - 1];
+  const waypoints = planData.value.slice(1, -1).map((spot, index) => ({
+    name: `name${index}`,
+    x: spot.longitude,
+    y: spot.latitude,
+  }));
+
+  const requestData = {
+    origin: {
+      x: origin.longitude,
+      y: origin.latitude,
+    },
+    destination: {
+      x: destination.longitude,
+      y: destination.latitude,
+    },
+    waypoints: waypoints,
+    priority: 'RECOMMEND',
+    car_fuel: 'GASOLINE',
+    car_hipass: false,
+    alternatives: false,
+    road_details: false,
+  };
+
+  try {
+    const response = await axios.post(
+      'https://apis-navi.kakaomobility.com/v1/waypoints/directions',
+      requestData,
+      {
+        headers: {
+          Authorization: `KakaoAK ${kakaoApiKey}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    routeData.value = response.data;
+    console.log('Route Data:', routeData.value);
+  } catch (error) {
+    console.error('Error fetching route data:', error);
+  }
+};
+
 onMounted(async () => {
-  fetchCourseDetails();
+  await fetchCourseDetails();
+  await fetchRoute();
 });
 </script>
 
