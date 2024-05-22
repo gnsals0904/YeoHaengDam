@@ -259,7 +259,12 @@ const ordermargin = "35px";
       <InfoCardSlide v-if="routeInfo" :routeInfo="routeInfo"></InfoCardSlide>
     </div>
   </div>
-  <AIModal :visible="visibleAIModal" @close="closeModal"></AIModal>
+  <AIModal
+    :visible="visibleAIModal"
+    @close="closeModal"
+    :planData="planData"
+    :routeData="routeData"
+  ></AIModal>
 </template>
 
 <style scoped>

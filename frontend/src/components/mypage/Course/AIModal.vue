@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, onMounted } from "vue";
+import { defineProps, onMounted, ref } from "vue";
 import OpenAI from "openai";
 /** 모달 창 관련 */
 const props = defineProps({
@@ -7,11 +7,33 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  planData: {
+    type: Object,
+    required: true,
+  },
+  routeData: {
+    type: Object,
+  },
 });
-
+console.log("ai modal :", props.planData);
+console.log("ai modal :", props.routeData);
 const emit = defineEmits(["close"]);
 const closeModal = () => {
   emit("close");
+};
+
+const guides = ref(null);
+const prompt = ref(null);
+// 경로 데이터를 파싱하여 guides 배열에 이름과 guidance를 함께 저장하는 함수
+const findRoadInfo = () => {
+  // props.routeData에서 guides 배열 추출
+  const guidesData = props.routeData.guides;
+
+  // guides 배열에 이름과 guidance를 함께 저장
+  guides.value = guidesData.map((guide) => ({
+    name: guide.name,
+    guidance: guide.guidance,
+  }));
 };
 
 // chatGPT description
@@ -24,7 +46,8 @@ const getGPTResponse = async () => {
     });
 
     const prompt = "안녕? 미국의 수도가 어딘지 알고있니?";
-
+    findRoadInfo();
+    // guides 배열을 돌면서 문자열을 만든다.
     const response = await openai.chat.completions.create({
       messages: [
         {
@@ -32,7 +55,7 @@ const getGPTResponse = async () => {
           content: prompt,
         },
       ],
-      model: "gpt-3.5-turbo",
+      model: "gpt-4-turbo",
     });
     console.log("chatGPT 전체 응답", response);
     console.log("chatGPT 결과: ", response.choices[0].message.content);
