@@ -2,11 +2,12 @@
 import { KakaoMap, KakaoMapMarker, KakaoMapPolyline } from "vue3-kakao-maps";
 import { useRoute } from "vue-router";
 import { onMounted, ref, computed, watch } from "vue";
+import draggable from "vuedraggable";
+import axios from "axios";
 
 import InfoCardSlide from "@/components/common/InfoCardSlide.vue";
 import LocationBox from "@/components/map/LocationBox.vue";
-import draggable from "vuedraggable";
-import axios from "axios";
+import AIModal from "@/components/mypage/Course/AIModal.vue";
 
 const route = useRoute();
 const planData = ref([]);
@@ -14,6 +15,13 @@ const loading = ref(true);
 const routeData = ref(null); // 추가: 경로 데이터를 저장할 변수
 const routeInfo = ref(null);
 const markerList = ref([]); // 마커 데이터를 저장할 변수
+const visibleAIModal = ref(false);
+const showAIModal = () => {
+  visibleAIModal.value = !visibleAIModal.value;
+};
+const closeModal = () => {
+  visibleAIModal.value = !visibleAIModal.value;
+};
 const kakaoApiKey = import.meta.env.VITE_VUE_APP_KAKAO_API_REST_KEY;
 const props = defineProps({
   courseId: String,
@@ -235,6 +243,12 @@ const ordermargin = "35px";
       </div>
       <div class="flex justify-end">
         <button
+          class="mr-8 mt-2 mb-5 inline-flex justify-center items-center py-2 px-7 text-base font-medium text-center text-white rounded-lg bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:focus:ring-green-900"
+          @click="showAIModal"
+        >
+          AI 이용하기
+        </button>
+        <button
           class="mr-8 mt-2 mb-5 inline-flex justify-center items-center py-2 px-7 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
           @click="savePlanData"
         >
@@ -245,6 +259,7 @@ const ordermargin = "35px";
       <InfoCardSlide v-if="routeInfo" :routeInfo="routeInfo"></InfoCardSlide>
     </div>
   </div>
+  <AIModal :visible="visibleAIModal" @close="closeModal"></AIModal>
 </template>
 
 <style scoped>

@@ -12,31 +12,36 @@ const boardStore = useBoardStore();
 const currentPage = ref(1);
 const totalElements = ref(0); // 전체 게시글 수
 const pageSize = ref(8); // 페이지당 게시글 수
-const totalPages = computed(() => Math.ceil(totalElements.value / pageSize.value)); // 총 페이지 수 계산
+const totalPages = computed(() =>
+  Math.ceil(totalElements.value / pageSize.value)
+); // 총 페이지 수 계산
 const isModalVisible = ref(false);
 const selectedItem = ref(null);
 const memberStore = useMemberStore();
 const isLogin = computed(() => memberStore.isLogin);
 const comments = ref([]);
 const boardList = ref([]);
-const searchKeyword = ref(''); // 검색어 상태 추가
+const searchKeyword = ref(""); // 검색어 상태 추가
 const isDropdownOpen = ref(false); // 드롭다운 상태 추가
-const sortBy = ref('updated_at');
+const sortBy = ref("updated_at");
 
-async function fetchBoardList(page, keyword = '', sortBy='updated_at') {
+async function fetchBoardList(page, keyword = "", sortBy = "updated_at") {
   try {
-    const response = await axios.get(`http://localhost:8080/api/articles/list`, {
-      params: {
-        page,
-        size: 8, // 페이지당 10개의 콘텐츠를 가져옴
-        keyword, // 검색어 포함
-        sortBy,
-      },
-    });
+    const response = await axios.get(
+      `http://localhost:8080/api/articles/list`,
+      {
+        params: {
+          page,
+          size: 8, // 페이지당 10개의 콘텐츠를 가져옴
+          keyword, // 검색어 포함
+          sortBy,
+        },
+      }
+    );
     boardList.value = response.data;
     totalElements.value = response.data[0].totalCount; // 전체 게시글 수 설정
   } catch (error) {
-    console.error('Failed to fetch board list:', error);
+    console.error("Failed to fetch board list:", error);
   }
 }
 
@@ -47,13 +52,17 @@ function updatePage(newPage) {
 
 async function showModal(board) {
   try {
-    const articleResponse = await axios.get(`http://localhost:8080/api/articles/${board.articleId}`);
-    const commentsResponse = await axios.get(`http://localhost:8080/api/comment/${board.articleId}`);
+    const articleResponse = await axios.get(
+      `http://localhost:8080/api/articles/${board.articleId}`
+    );
+    const commentsResponse = await axios.get(
+      `http://localhost:8080/api/comment/${board.articleId}`
+    );
     selectedItem.value = articleResponse.data;
     comments.value = commentsResponse.data;
     isModalVisible.value = true;
   } catch (error) {
-    console.error('Failed to fetch article details or comments:', error);
+    console.error("Failed to fetch article details or comments:", error);
   }
 }
 
@@ -85,7 +94,9 @@ onMounted(() => {
 <template>
   <div class="relative min-h-screen">
     <div class="bg-cover w-full flex justify-center items-center">
-      <div class="w-full bg-white bg-opacity-40 backdrop-filter backdrop-blur-lg">
+      <div
+        class="w-full bg-white bg-opacity-40 backdrop-filter backdrop-blur-lg"
+      >
         <div class="w-full flex justify-end px-2 mt-2 gap-x-3">
           <div class="relative inline-block text-left">
             <button
@@ -178,8 +189,12 @@ onMounted(() => {
             />
           </div>
         </div>
-        <div class="w-12/12 mx-auto rounded-2xl bg-white mt-1 p-5 bg-opacity-40 backdrop-filter backdrop-blur-lg">
-          <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 text-center px-3 mx-auto">
+        <div
+          class="w-12/12 mx-auto rounded-2xl bg-white mt-1 p-5 bg-opacity-40 backdrop-filter backdrop-blur-lg"
+        >
+          <div
+            class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 text-center px-3 mx-auto"
+          >
             <BoardCard
               v-for="board in boardList"
               :key="board.articleId"
