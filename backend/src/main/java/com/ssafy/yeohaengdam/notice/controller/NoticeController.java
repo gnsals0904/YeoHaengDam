@@ -24,7 +24,12 @@ public class NoticeController {
 
     @GetMapping("/list")
     public ResponseEntity<List<Detail>> findAll(SearchCriteria searchCriteria){
-        return ResponseEntity.ok(noticeService.findAll(searchCriteria));
+        List<Detail> findNoticesByAlgorithm = noticeService.findAllByAlgorithm(searchCriteria);
+//        List<Detail> findNoticesBySQL = noticeService.findAll(searchCriteria);
+//        System.out.println(noticesByOrigin);
+//        System.out.println(noticesByKMP);
+        return ResponseEntity.ok(findNoticesByAlgorithm);
+//        return ResponseEntity.ok(findNoticesBySQL);
     }
 
     @PostMapping
