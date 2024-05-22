@@ -1,11 +1,26 @@
 <script setup>
-import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
-import { onMounted, ref, computed } from "vue";
-import LocationBox from "@/components/map/LocationBox.vue";
-import draggable from "vuedraggable";
+import { KakaoMap, KakaoMapMarker, KakaoMapPolyline } from 'vue3-kakao-maps';
+import { useRoute } from 'vue-router';
+import { onMounted, ref, computed, watch } from 'vue';
 
+import InfoCardSlide from '@/components/common/InfoCardSlide.vue';
+import LocationBox from '@/components/map/LocationBox.vue';
+import draggable from 'vuedraggable';
+import axios from 'axios';
+
+const route = useRoute();
 const planData = ref([]);
-
+const loading = ref(true);
+const routeData = ref(null); // 추가: 경로 데이터를 저장할 변수
+const routeInfo = ref(null);
+const markerList = ref([]); // 마커 데이터를 저장할 변수
+const kakaoApiKey = import.meta.env.VITE_VUE_APP_KAKAO_API_REST_KEY;
+const props = defineProps({
+  courseId: String,
+  title: String,
+  description: String,
+  routeInfo: Object,
+});
 // 기본 좌표를 서울 시청으로 설정하되, planData에 값이 있으면 첫 번째 데이터의 좌표를 사용
 const defaultCoordinate = computed(() => {
   if (planData.value.length > 0) {
@@ -20,7 +35,136 @@ const defaultCoordinate = computed(() => {
   };
 });
 
-onMounted(async () => {});
+const savePlanData = async () => {
+  const token = sessionStorage.getItem('accessToken');
+  const updateData = {
+    courseId: props.courseId,
+    title: props.title,
+    description: props.description,
+    schedules: planData.value.map((spot, index) => ({
+      spot: { ...spot },
+      orderIndex: index,
+    })),
+  };
+  console.log(updateData);
+  try {
+    const response = await axios.patch(
+      'http://localhost:8080/api/course/update',
+      updateData,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log('Plan data saved successfully:', response.data);
+  } catch (error) {
+    console.error('Error saving plan data:', error);
+  }
+};
+
+const fetchCourseDetails = async () => {
+  const courseId = route.params.courseId;
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/course/${courseId}`
+    );
+    // planData.value = addCustomAttributes(
+    //   response.data.schedules.map((schedule) => schedule.spot)
+    // );
+    planData.value = response.data.schedules.map((schedule) => schedule.spot);
+    await fetchRoute(); // 초기 로드 시 경로 데이터를 가져옴
+    console.log(planData.value);
+    loading.value = false;
+  } catch (error) {
+    console.error('Error fetching course details:', error);
+    loading.value = false;
+  }
+};
+
+// Kakao Mobility API로 경로 데이터를 요청하는 함수
+const fetchRoute = async () => {
+  const origin = planData.value[0];
+  const destination = planData.value[planData.value.length - 1];
+  const waypoints = planData.value.slice(1, -1).map((spot, index) => ({
+    name: `name${index}`,
+    x: spot.longitude,
+    y: spot.latitude,
+  }));
+
+  const requestData = {
+    origin: {
+      x: origin.longitude,
+      y: origin.latitude,
+    },
+    destination: {
+      x: destination.longitude,
+      y: destination.latitude,
+    },
+    waypoints: waypoints,
+    priority: 'RECOMMEND',
+    car_fuel: 'GASOLINE',
+    car_hipass: false,
+    alternatives: false,
+    road_details: false,
+  };
+
+  try {
+    const response = await axios.post(
+      'https://apis-navi.kakaomobility.com/v1/waypoints/directions',
+      requestData,
+      {
+        headers: {
+          Authorization: `KakaoAK ${kakaoApiKey}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    routeData.value = response.data;
+    console.log('받은 데이터:', routeData.value);
+    processRouteData();
+  } catch (error) {
+    console.error('Error fetching route data:', error);
+  }
+};
+
+// 경로 데이터를 처리하여 마커 리스트를 생성하는 함수
+const processRouteData = () => {
+  if (!routeData.value) return;
+
+  markerList.value = [];
+  const vertexes = routeData.value.routes[0].sections.flatMap((section) =>
+    section.roads.flatMap((road) => road.vertexes)
+  );
+  for (let i = 0; i < vertexes.length; i += 2) {
+    markerList.value.push({ lat: vertexes[i + 1], lng: vertexes[i] });
+  }
+  console.log('markerList ', markerList.value);
+};
+
+const image = {
+  imageSrc: 'https://vue3-kakao-maps.netlify.app/images/redMarker.png',
+  imageWidth: 48,
+  imageHeight: 48,
+};
+
+onMounted(async () => {
+  await fetchCourseDetails();
+});
+
+watch(
+  planData,
+  async (newVal, oldVal) => {
+    console.log('planData updated:', newVal);
+    if (newVal !== oldVal) {
+      await fetchRoute();
+    }
+  },
+  { deep: true }
+);
+
+const ordermargin = '35px';
 </script>
 
 <template>
@@ -38,29 +182,62 @@ onMounted(async () => {});
         :lat="item.latitude"
         :lng="item.longitude"
         :clickable="true"
-        @onClickKakaoMapMarker="toggleInfoWindow(item)"
-        :infoWindow="{
-          content: `<div style='width: 200px;'><h4>${
-            item.title
-          }</h4><img src='${item.img1}' alt='${
-            item.title
-          }' style='width: 100%;'><button onClickKakaoMapMarker='toggleInfoWindow(${JSON.stringify(
-            item
-          )})'>Close</button></div>`,
-          visible: item.infoVisible,
-        }"
+        :order="index + 1"
+        :order-bottom-margin="ordermargin"
+        :image="image"
       />
+      <KakaoMapPolyline :latLngList="markerList" />
     </KakaoMap>
-    <div class="locations-list flex-1 h-screen overflow-auto min-w-[500px]">
-      <draggable v-model="planData" group="locations" item-key="contentId">
-        <template #item="{ element, index }">
-          <LocationBox
-            :item="element"
-            :loading="loading"
-            @click="showModal(element)"
-          />
-        </template>
-      </draggable>
+    <div class="flex flex-col">
+      <p>저장된 여행 경로</p>
+      <p>드래그해서 순서를 바꿔서 경로를 저장해보세요!</p>
+      <div
+        class="locations-list flex-1 overflow-auto overflow-y-auto min-w-[500px] max-h-[50vh]"
+      >
+        <draggable v-model="planData" group="locations" item-key="contentId">
+          <template #item="{ element }">
+            <LocationBox
+              :item="element"
+              :loading="loading"
+              @click="showModal(element)"
+            />
+          </template>
+        </draggable>
+      </div>
+      <div class="flex justify-end">
+        <button
+          class="mr-8 mt-5 inline-flex justify-center items-center py-2 px-7 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"
+          @click="savePlanData"
+        >
+          저장하기
+        </button>
+      </div>
+      <!-- summary 를 이용한 정보 -->
+      <div
+        v-if="
+          routeData &&
+          routeData.routes &&
+          routeData.routes.length > 0 &&
+          routeData.routes[0].summary
+        "
+      >
+        <div>총 이동 경로 : {{ routeData.routes[0].summary.distance }}m</div>
+        <div>
+          총 예상 소요 시간 : {{ routeData.routes[0].summary.duration }}초
+        </div>
+        <div>
+          예상 택시 요금 : {{ routeData.routes[0].summary.fare.taxi }}원
+        </div>
+        <div v-if="routeData.routes[0].summary.fare.toll">
+          예상 요금 :
+          {{ routeData.routes[0].summary.fare.toll }}원
+        </div>
+        <div v-else>톨게이트 비용 : 무료</div>
+      </div>
+      <div v-else>
+        <div>information is not available</div>
+      </div>
+      <InfoCardSlide :routeInfo="routeInfo"></InfoCardSlide>
     </div>
   </div>
 </template>

@@ -11,7 +11,7 @@ public class SearchCriteria {
 
     private String keyword;
 
-    private String SortBy;
+    private String sortBy;
 
     private int page = 1;
 

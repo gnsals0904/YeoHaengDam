@@ -26,7 +26,8 @@ public class CourseServiceImpl implements CourseService{
                 .description(save.getDescription())
                 .createdAt(now())
                 .build();
-        int courseId = courseMapper.save(newCourse);
+        courseMapper.save(newCourse);
+        int courseId = newCourse.getCourseId();
         List<Schedule> scheduleList = save.getSchedules();
         courseMapper.saveSchedules(courseId, scheduleList);
     }
@@ -43,10 +44,22 @@ public class CourseServiceImpl implements CourseService{
                 .title(update.getTitle())
                 .description(update.getDescription())
                 .build();
-
+        System.out.println("updateCourse() 실행");
+        System.out.println("update start : " + update);
         courseMapper.update(updatedCourse);
-        courseMapper.deleteSchedules(update.getCourseId());
+
+
         List<Schedule> scheduleList = update.getSchedules();
+        System.out.println("scheduleList: " + scheduleList);
+        System.out.println("deleteSchedules() 실행");
+        courseMapper.deleteSchedules(update.getCourseId());
+
+        System.out.println("update.getSchedules() 실행");
+
+        System.out.println(update);
+
+        System.out.println("saveSchedules() 실행");
+        System.out.println(update.getCourseId());
         courseMapper.saveSchedules(update.getCourseId(), scheduleList);
     }
 

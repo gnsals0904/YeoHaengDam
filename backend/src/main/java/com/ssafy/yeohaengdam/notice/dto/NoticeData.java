@@ -1,7 +1,7 @@
 package com.ssafy.yeohaengdam.notice.dto;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -19,6 +19,10 @@ public class NoticeData {
     }
 
     @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @ToString
     public static class Detail{
         public int noticeId;
 

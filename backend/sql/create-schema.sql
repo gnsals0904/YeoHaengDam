@@ -1,10 +1,10 @@
 DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS article CASCADE;
-DROP TABLE IF EXISTS notice CASCADE;
 DROP TABLE IF EXISTS article_image CASCADE;
 DROP TABLE IF EXISTS comment CASCADE;
-DROP TABLE IF EXISTS course CASCADE;
+DROP TABLE IF EXISTS article CASCADE;
+DROP TABLE IF EXISTS notice CASCADE;
 DROP TABLE IF EXISTS schedule CASCADE;
+DROP TABLE IF EXISTS course CASCADE;
 
 CREATE TABLE users (
                        user_id           INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -26,7 +26,7 @@ CREATE TABLE article (
                          content TEXT NOT NULL,
                          hit INT DEFAULT 0,
                          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE comment(

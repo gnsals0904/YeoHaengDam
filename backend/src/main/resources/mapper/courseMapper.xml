@@ -23,6 +23,9 @@
                 <result column="sido_code" property="sidoCode"/>
                 <result column="gugun_code" property="gugunCode"/>
                 <result column="attraction_title" property="title"/>
+                <result column="first_image" property="img1"/>
+                <result column="first_image2" property="img2"/>
+                <result column="overview" property="description"/>
                 <result column="addr" property="addr"/>
                 <result column="tel" property="tel"/>
                 <result column="image_url" property="imageUrl"/>
@@ -59,11 +62,13 @@
 
     <select id="findById" resultMap="detail">
         select c.course_id, c.user_id, c.title, c.description,
-               s.schedule_id, s.spot_id, s.order_index,
-            a.title as attraction_title, a.latitude, a.longitude
+        s.schedule_id, s.spot_id, s.order_index,
+        a.title as attraction_title, a.latitude, a.longitude, a.first_image, a.first_image2, a.content_id,
+        ad.overview
         from course c
         LEFT JOIN schedule s ON s.course_id = c.course_id
         LEFT JOIN attraction_info a ON s.spot_id = a.content_id
+        LEFT JOIN attraction_description ad ON ad.content_id = s.spot_id
         where c.course_id = #{courseId}
     </select>
 

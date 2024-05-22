@@ -12,7 +12,7 @@ const token = sessionStorage.getItem('accessToken'); // 토큰을 세션 스토�
 const comments = ref([]);
 const isModalVisible = ref(false);
 const currentPage = ref(1);
-const totalElements = ref(0); // 전체 게시글 수
+const totalElements = ref(1); // 전체 게시글 수
 const pageSize = ref(10); // 페이지당 게시글 수
 const totalPages = computed(() => Math.ceil(totalElements.value / pageSize.value)); // 총 페이지 수 계산
 

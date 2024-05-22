@@ -1,24 +1,24 @@
 <script setup>
-import { useRouter } from "vue-router";
-import { ref, onMounted } from "vue";
-import axios from "axios";
-import MyPageSide from "@/components/common/MyPageSide.vue";
-import CourseCard from "./Course/CourseCard.vue";
+import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import MyPageSide from '@/components/common/MyPageSide.vue';
+import CourseCard from './Course/CourseCard.vue';
 
 const router = useRouter();
 const courses = ref([]);
 
 onMounted(async () => {
   try {
-    const token = sessionStorage.getItem("accessToken");
-    const response = await axios.get("http://localhost:8080/api/course", {
+    const token = sessionStorage.getItem('accessToken');
+    const response = await axios.get('http://localhost:8080/api/course', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
     courses.value = response.data;
   } catch (error) {
-    console.error("Error fetching courses:", error);
+    console.error('Error fetching courses:', error);
   }
 });
 </script>

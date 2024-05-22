@@ -21,14 +21,16 @@ const comments = ref([]);
 const boardList = ref([]);
 const searchKeyword = ref(''); // 검색어 상태 추가
 const isDropdownOpen = ref(false); // 드롭다운 상태 추가
+const sortBy = ref('updated_at');
 
-async function fetchBoardList(page, keyword = '') {
+async function fetchBoardList(page, keyword = '', sortBy='updated_at') {
   try {
     const response = await axios.get(`http://localhost:8080/api/articles/list`, {
       params: {
         page,
         size: 8, // 페이지당 10개의 콘텐츠를 가져옴
         keyword, // 검색어 포함
+        sortBy,
       },
     });
     boardList.value = response.data;
@@ -40,7 +42,7 @@ async function fetchBoardList(page, keyword = '') {
 
 function updatePage(newPage) {
   currentPage.value = newPage;
-  fetchBoardList(newPage, searchKeyword.value); // 페이지 변경 시 검색어와 함께 데이터 다시 로드
+  fetchBoardList(newPage, searchKeyword.value, sortBy.value); // 페이지 변경 시 검색어와 함께 데이터 다시 로드
 }
 
 async function showModal(board) {
@@ -61,7 +63,7 @@ function closeModal() {
 
 function handleSearchInput(event) {
   searchKeyword.value = event.target.value;
-  fetchBoardList(currentPage.value, searchKeyword.value); // 검색어 입력 시 데이터 다시 로드
+  fetchBoardList(currentPage.value, searchKeyword.value, sortBy.value); // 검색어 입력 시 데이터 다시 로드
 }
 
 function toggleDropdown() {
@@ -71,6 +73,8 @@ function toggleDropdown() {
 function selectSort(order) {
   console.log(order);
   // 정렬 기준을 적용하는 로직을 여기에 추가하세요.
+  sortBy.value = order;
+  fetchBoardList(currentPage.value, searchKeyword.value, sortBy.value); // 정렬 기준 변경 시 데이터 다시 로드
   isDropdownOpen.value = false;
 }
 
@@ -78,7 +82,6 @@ onMounted(() => {
   fetchBoardList(currentPage.value); // 컴포넌트 마운트 시 데이터 로드
 });
 </script>
-
 <template>
   <div class="relative min-h-screen">
     <div class="bg-cover w-full flex justify-center items-center">
@@ -126,36 +129,27 @@ onMounted(() => {
                   class="text-gray-700 block px-4 py-2 text-sm"
                   role="menuitem"
                   tabindex="-1"
-                  @click="selectSort('latest')"
+                  @click="selectSort('created_at')"
                 >
-                  최신순
+                  업로드 일
                 </a>
                 <a
                   href="#"
                   class="text-gray-700 block px-4 py-2 text-sm"
                   role="menuitem"
                   tabindex="-1"
-                  @click="selectSort('popular')"
+                  @click="selectSort('updated_at')"
                 >
-                  인기순
+                  최신 순
                 </a>
                 <a
                   href="#"
                   class="text-gray-700 block px-4 py-2 text-sm"
                   role="menuitem"
                   tabindex="-1"
-                  @click="selectSort('lowPrice')"
+                  @click="selectSort('hit')"
                 >
-                  가격 낮은순
-                </a>
-                <a
-                  href="#"
-                  class="text-gray-700 block px-4 py-2 text-sm"
-                  role="menuitem"
-                  tabindex="-1"
-                  @click="selectSort('highPrice')"
-                >
-                  가격 높은순
+                  조회수 순
                 </a>
               </div>
             </div>
