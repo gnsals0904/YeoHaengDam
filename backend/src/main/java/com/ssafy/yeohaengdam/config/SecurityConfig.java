@@ -1,5 +1,6 @@
 package com.ssafy.yeohaengdam.config;
 
+import com.ssafy.yeohaengdam.auth.handler.OAuth2SuccessHandler;
 import com.ssafy.yeohaengdam.core.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -7,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -23,6 +25,8 @@ import static org.springframework.http.HttpMethod.POST;
 public class SecurityConfig {
     
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final DefaultOAuth2UserService defaultOAuth2UserService;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
@@ -37,15 +41,22 @@ public class SecurityConfig {
 //                        }
 //                )
                 .authorizeHttpRequests(authorize -> {
-                            authorize.requestMatchers("/api/auth/login").permitAll();
-                            authorize.requestMatchers(POST, "/api/users/join").permitAll();
+                    authorize.requestMatchers("/", "/api/auth/**","/oauth2/**").permitAll();
+                    authorize.requestMatchers("/api/auth/login").permitAll();
+                    authorize.requestMatchers(POST, "/api/users/join").permitAll();
                     /**
                      * 개발
                      */
                     authorize.requestMatchers("/**").permitAll();
                         }
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(oauth2 -> oauth2
+                        .authorizationEndpoint(endpoint -> endpoint.baseUri("/api/auth/oauth2"))
+                        .redirectionEndpoint(endpoint -> endpoint.baseUri("/oauth2/callback/*"))
+                        .userInfoEndpoint(endpoint -> endpoint.userService(defaultOAuth2UserService))
+                        .successHandler(oAuth2SuccessHandler)
+                )
+//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

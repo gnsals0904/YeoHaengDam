@@ -11,9 +11,15 @@
                 <result column="profile_image" property="profileImage"></result>
         </resultMap>
 
+        <select id="findByOauthId">
+            select *
+            from users
+            where oauth_id = #{aouthId};
+        </select>
+
         <insert id ='join'>
-                insert into users (email, password, nickname, profile_image)
-                values (#{email}, #{password}, #{nickname}, #{profileImage})
+                insert into users (email, password, nickname, profile_image, oauth_id)
+                values (#{email}, #{password}, #{nickname}, #{profileImage}, #{oauthId})
         </insert>
 
         <select id ="findByEmail">

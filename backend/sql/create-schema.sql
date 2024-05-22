@@ -11,6 +11,8 @@ CREATE TABLE users (
                        email             VARCHAR(255)                                                                   NOT NULL,
                        password          VARCHAR(255)                                                                   NOT NULL,
                        nickname          VARCHAR(255)                                                                   NOT NULL,
+                       type VARCHAR(255),
+                       oauth_id VARCHAR(255),
                        profile_image     VARCHAR(500),
                        role_type         enum ('USER', 'ADMIN')                               DEFAULT 'USER' NULL,
                        created_at        TIMESTAMP                                            DEFAULT CURRENT_TIMESTAMP NOT NULL,

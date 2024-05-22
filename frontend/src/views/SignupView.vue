@@ -20,6 +20,14 @@ const emailVerificationVisible = ref(false);
 const isLoading = ref(false);
 const router = useRouter();
 
+const handleKakaoSignUp = async () => {
+  window.location.href= `api/auth/oauth2/kakao`;
+};
+
+const handleNaverSignUp = async () => {
+  window.location.href= `api/auth/oauth2/naver`;
+};
+
 /** 회원 가입 */
 const handleSignUp = async () => {
   if (!hasCheckedNickname.value) {
@@ -362,20 +370,16 @@ const verifyEmailCode = async (code) => {
             <a
               href="#"
               class="flex items-center justify-center space-x-2 text-gray-600 my-2 py-2 bg-gray-100 hover:bg-gray-200 rounded"
+              @click="handleKakaoSignUp"
             >
-              <span>Sign up with Google</span>
+              <span>Sign up with kakao</span>
             </a>
             <a
               href="#"
               class="flex items-center justify-center space-x-2 text-gray-600 my-2 py-2 bg-gray-100 hover:bg-gray-200 rounded"
+              @click="handleNaverSignUp"
             >
-              <span>Sign up with Facebook</span>
-            </a>
-            <a
-              href="#"
-              class="flex items-center justify-center space-x-2 text-gray-600 my-2 py-2 bg-gray-100 hover:bg-gray-200 rounded"
-            >
-              <span>Sign up with LinkedIn</span>
+              <span>Sign up with naver</span>
             </a>
           </div>
         </div>

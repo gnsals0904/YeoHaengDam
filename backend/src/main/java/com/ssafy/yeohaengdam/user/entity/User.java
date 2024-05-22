@@ -1,6 +1,7 @@
 package com.ssafy.yeohaengdam.user.entity;
 
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -9,7 +10,12 @@ import lombok.*;
 @ToString
 public class User {
 
+
+
+
     private int userId;
+
+    private String oauthId;
 
     private String email;
 
@@ -20,6 +26,18 @@ public class User {
     private String profileImage;
 
     private RoleType roleType;
+
+    private String type;
+
+    public User(String oauthId, String email, String type, String nickname){
+        this.oauthId = oauthId;
+        this.password = "password";
+        this.nickname = nickname;
+        this.email = email;
+        this.type = type;
+        this.roleType = RoleType.USER;
+
+    }
 
 
     public void changePassword(String password) {

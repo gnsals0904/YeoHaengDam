@@ -22,4 +22,6 @@ public interface UserMapper {
     public void updatePassword(User user);
 
     public void updateProfile(String email, String profileImage);
+
+    public User findByOauthId(String oauthId);
 }
