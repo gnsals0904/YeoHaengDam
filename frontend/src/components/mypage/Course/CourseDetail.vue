@@ -2,6 +2,8 @@
 import { KakaoMap, KakaoMapMarker, KakaoMapPolyline } from 'vue3-kakao-maps';
 import { useRoute } from 'vue-router';
 import { onMounted, ref, computed, watch } from 'vue';
+
+import InfoCardSlide from '@/components/common/InfoCardSlide.vue';
 import LocationBox from '@/components/map/LocationBox.vue';
 import draggable from 'vuedraggable';
 import axios from 'axios';
@@ -10,12 +12,14 @@ const route = useRoute();
 const planData = ref([]);
 const loading = ref(true);
 const routeData = ref(null); // 추가: 경로 데이터를 저장할 변수
+const routeInfo = ref(null);
 const markerList = ref([]); // 마커 데이터를 저장할 변수
 const kakaoApiKey = import.meta.env.VITE_VUE_APP_KAKAO_API_REST_KEY;
 const props = defineProps({
   courseId: String,
   title: String,
   description: String,
+  routeInfo: Object,
 });
 // 기본 좌표를 서울 시청으로 설정하되, planData에 값이 있으면 첫 번째 데이터의 좌표를 사용
 const defaultCoordinate = computed(() => {
@@ -191,7 +195,7 @@ const ordermargin = '35px';
         class="locations-list flex-1 overflow-auto overflow-y-auto min-w-[500px] max-h-[50vh]"
       >
         <draggable v-model="planData" group="locations" item-key="contentId">
-          <template #item="{ element, index }">
+          <template #item="{ element }">
             <LocationBox
               :item="element"
               :loading="loading"
@@ -208,7 +212,7 @@ const ordermargin = '35px';
           저장하기
         </button>
       </div>
-      <!-- 총 이동 경로 -->
+      <!-- summary 를 이용한 정보 -->
       <div
         v-if="
           routeData &&
@@ -218,10 +222,22 @@ const ordermargin = '35px';
         "
       >
         <div>총 이동 경로 : {{ routeData.routes[0].summary.distance }}m</div>
+        <div>
+          총 예상 소요 시간 : {{ routeData.routes[0].summary.duration }}초
+        </div>
+        <div>
+          예상 택시 요금 : {{ routeData.routes[0].summary.fare.taxi }}원
+        </div>
+        <div v-if="routeData.routes[0].summary.fare.toll">
+          예상 요금 :
+          {{ routeData.routes[0].summary.fare.toll }}원
+        </div>
+        <div v-else>톨게이트 비용 : 무료</div>
       </div>
       <div v-else>
-        <div>Distance information is not available</div>
+        <div>information is not available</div>
       </div>
+      <InfoCardSlide :routeInfo="routeInfo"></InfoCardSlide>
     </div>
   </div>
 </template>
