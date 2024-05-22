@@ -12,7 +12,8 @@ public interface UserMapper {
 
     public User findByEmail(String email);
 
-    public void update(User user);
+
+    public void updateNickname(User user);
 
     public void delete(User user);
 

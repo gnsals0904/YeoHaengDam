@@ -28,9 +28,15 @@
                 where email = #{email}
         </update>
 
-        <update id = "update">
+        <update id = "updateNickname">
                 update users
                 set nickname = #{nickname}
+                where email = #{email}
+        </update>
+
+        <update id = "updatePassword">
+                update users
+                set password = #{password}
                 where email = #{email}
         </update>
 
@@ -46,11 +52,5 @@
                 FROM users
                 WHERE nickname = #{nickname}
         </select>
-
-        <update id="updatePassword">
-            update users
-            set password = #{password}
-            where user_id = #{userId}
-        </update>
 
 </mapper>

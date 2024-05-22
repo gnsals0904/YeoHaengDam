@@ -53,16 +53,22 @@ public class UserController {
 
 
 
-    /**
-     * 회원 정보 업데이트
-     * @param update
-     * @return
-     */
-    @PutMapping("/update")
+    @PutMapping("/update_password")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Void> update(@CurrentUser User user,
-                                       Update update){
-        userService.updateUser(update);
+    public ResponseEntity<Void> updatePassword(@CurrentUser User user,
+                                       @RequestBody Password password){
+
+        userService.updatePassword(user, password);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/update_nickname")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Void> updateNickname(@CurrentUser User user,
+                                       @RequestBody Update update){
+
+        System.out.println(update);
+        userService.updateNickname(user, update);
         return ResponseEntity.ok().build();
     }
 

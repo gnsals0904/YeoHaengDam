@@ -11,7 +11,9 @@ public interface UserService {
 
     public void join(Join join);
 
-    public void updateUser(Update update);
+    public void updatePassword(User user,Password password);
+
+    public void updateNickname(User user,Update update);
 
     public void updateImage(@CurrentUser User user, @RequestPart MultipartFile image);
 

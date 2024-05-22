@@ -38,7 +38,18 @@ const handleUpdate = async () => {
   };
 
   try {
-    const response = await axios.put("http://localhost:8080/api/users/update", user);
+    const token = sessionStorage.getItem("accessToken");
+
+    const response = await axios.put(
+      "http://localhost:8080/api/users/update_password",
+      user,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }
+    );
+    console.log(response.data);
     if (response.status === 200) {
       alert("정보가 성공적으로 업데이트되었습니다.");
       router.replace("/");
@@ -59,16 +70,39 @@ const handleUpdate = async () => {
         <div class="w-full px-12">
           <h1 class="text-center text-3xl font-bold tracking-wide text-gray-800">패스워드 변경</h1>
 
-          <form class="my-8 text-sm" @submit.prevent>
+          <form class="my-8 text-sm" @submit.prevent="handleUpdate">
+            <div class="flex flex-col my-4">
+              <label for="nickname" class="text-gray-700">닉네임</label>
+              <input
+                type="text"
+                name="nickname"
+                id="nickname"
+                class="flex-1 p-2 pr-10 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
+                v-model="nickname"
+              />
+            </div>
+
+            <div class="flex flex-col my-4">
+              <label for="email" class="text-gray-700">이메일</label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                class="flex-1 p-2 pr-10 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
+                v-model="email"
+                disabled
+              />
+            </div>
+
             <div class="flex flex-col my-4">
               <label for="currentPassword" class="text-gray-700">기존 비밀번호</label>
-              <div x-data="{ show: false }" class="relative flex items-center mt-2">
+              <div class="relative flex items-center mt-2">
                 <input
                   :type="showPrevPassword ? 'text' : 'password'"
                   name="currentPassword"
                   id="currentPassword"
                   class="flex-1 p-2 pr-10 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
-                  placeholder="Enter your password"
+                  placeholder="Enter your current password"
                   v-model="currentPassword"
                 />
                 <button
@@ -119,13 +153,13 @@ const handleUpdate = async () => {
 
             <div class="flex flex-col my-4">
               <label for="password" class="text-gray-700">변경할 비밀번호</label>
-              <div x-data="{ show: false }" class="relative flex items-center mt-2">
+              <div class="relative flex items-center mt-2">
                 <input
                   :type="showPassword ? 'text' : 'password'"
                   name="password"
                   id="password"
                   class="flex-1 p-2 pr-10 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
-                  placeholder="Enter your password"
+                  placeholder="Enter your new password"
                   v-model="password"
                 />
                 <button
@@ -175,16 +209,14 @@ const handleUpdate = async () => {
             </div>
 
             <div class="flex flex-col my-4">
-              <label for="password_confirmation" class="text-gray-700"
-                >변경할 비밀번호를 한번 더 입력해주세요</label
-              >
-              <div x-data="{ show: false }" class="relative flex items-center mt-2">
+              <label for="password_confirmation" class="text-gray-700">변경할 비밀번호를 한번 더 입력해주세요</label>
+              <div class="relative flex items-center mt-2">
                 <input
                   :type="showConfirmPassword ? 'text' : 'password'"
                   name="password_confirmation"
                   id="password_confirmation"
                   class="flex-1 p-2 pr-10 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
-                  placeholder="Enter your password again"
+                  placeholder="Enter your new password again"
                   v-model="passwordConfirmation"
                 />
                 <button
@@ -236,7 +268,7 @@ const handleUpdate = async () => {
             <div class="my-4 flex items-center justify-end space-x-4">
               <button
                 class="bg-blue-600 hover:bg-blue-700 rounded-lg px-8 py-2 text-gray-100 hover:shadow-xl transition duration-150 uppercase w-full"
-                @click="handleUpdate"
+                type="submit"
               >
                 수정
               </button>
@@ -273,8 +305,7 @@ const handleUpdate = async () => {
             href="#"
             class="mt-6 bg-gray-100 hover:bg-gray-200 px-6 py-2 rounded text-sm uppercase text-gray-900 transition duration-150"
             title="Learn More"
-            >Learn More</a
-          >
+            >Learn More</a>
         </div>
       </div>
     </div>

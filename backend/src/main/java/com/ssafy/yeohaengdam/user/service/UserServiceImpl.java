@@ -53,19 +53,36 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void updateUser(Update update) {
-        User user = userMapper.findByEmail(update.getEmail());
-        if(user == null){
+    public void updatePassword(User user, Password password) {
+        User findUser = userMapper.findByEmail(user.getEmail());
+        if(findUser == null){
             throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
         }
         User updatedUser = User.builder()
-                .userId(user.getUserId())
-                .email(user.getEmail())
-                .nickname(update.getNickname())
-                .roleType(user.getRoleType())
+                .userId(findUser.getUserId())
+                .email(findUser.getEmail())
+                .password(passwordEncoder.encode(password.getPassword()))
+                .nickname(findUser.getNickname())
+                .roleType(findUser.getRoleType())
                 .build();
 
-        userMapper.update(updatedUser);
+        userMapper.updatePassword(updatedUser);
+    }
+
+    @Override
+    public void updateNickname(User user, Update update) {
+        User findUser = userMapper.findByEmail(user.getEmail());
+        if(findUser == null){
+            throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
+        }
+        User updatedUser = User.builder()
+                .userId(findUser.getUserId())
+                .email(findUser.getEmail())
+                .nickname(update.getNickname())
+                .roleType(findUser.getRoleType())
+                .build();
+
+        userMapper.updateNickname(updatedUser);
     }
 
     @Override
