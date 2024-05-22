@@ -38,12 +38,17 @@
             </if>
         </where>
         ORDER BY
-        <if test="sortBy != null and sortBy != ''">
-            ${sortBy}
-        </if>
-        <if test="sortBy == null or sortBy == ''">
-            notice.created_at ASC
-        </if>
+        <choose>
+            <when test="sortBy == 'hit'">
+                ${sortBy} ASC
+            </when>
+            <when test="sortBy != null and sortBy != ''">
+                ${sortBy}
+            </when>
+            <otherwise>
+                notice.created_at DESC
+            </otherwise>
+        </choose>
         limit #{start}, #{size}
     </select>
 
@@ -76,4 +81,8 @@
         where notice_id = #{noticeId}
     </delete>
 
+<select id="findAllNotices" resultMap="NoticeDetail">
+    SELECT notice.notice_id, notice.user_id, users.nickname AS user_nickname, notice.title, notice.content, notice.created_at, notice.updated_at
+    FROM notice LEFT JOIN users ON notice.user_id = users.user_id
+</select>
 </mapper>

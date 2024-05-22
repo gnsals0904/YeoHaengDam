@@ -1,6 +1,9 @@
 package com.ssafy.yeohaengdam.algorithm;
 
-public class StringChekyByRabinKarp implements StringCheckService {
+import org.springframework.stereotype.Service;
+
+//@Service
+public class StringCheckByRabinKarp implements StringCheckService {
 
     public final static int d = 10;
 

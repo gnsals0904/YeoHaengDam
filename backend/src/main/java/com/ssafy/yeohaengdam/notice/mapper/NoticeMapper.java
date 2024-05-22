@@ -10,6 +10,7 @@ import static com.ssafy.yeohaengdam.notice.dto.NoticeData.*;
 @Mapper
 public interface NoticeMapper {
 
+    public List<Detail> findAllNotices();
 
     public List<Detail> findAll(String keyword, int start, String sortBy, int size);
 
