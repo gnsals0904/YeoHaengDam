@@ -1,5 +1,5 @@
 <script setup>
-import { KakaoMap, KakaoMapMarker } from 'vue3-kakao-maps';
+import { KakaoMap, KakaoMapMarker, KakaoMapPolyline } from 'vue3-kakao-maps';
 import { useRoute } from 'vue-router';
 import { onMounted, ref, computed } from 'vue';
 import LocationBox from '@/components/map/LocationBox.vue';
@@ -10,6 +10,7 @@ const route = useRoute();
 const planData = ref([]);
 const loading = ref(true);
 const routeData = ref(null); // 추가: 경로 데이터를 저장할 변수
+const markerList = ref([]); // 마커 데이터를 저장할 변수
 const kakaoApiKey = import.meta.env.VITE_VUE_APP_KAKAO_API_REST_KEY;
 
 // 기본 좌표를 서울 시청으로 설정하되, planData에 값이 있으면 첫 번째 데이터의 좌표를 사용
@@ -81,9 +82,27 @@ const fetchRoute = async () => {
     );
     routeData.value = response.data;
     console.log('Route Data:', routeData.value);
+    processRouteData();
   } catch (error) {
     console.error('Error fetching route data:', error);
   }
+};
+
+// 경로 데이터를 처리하여 마커 리스트를 생성하는 함수
+const processRouteData = () => {
+  const vertexes = routeData.value.routes[0].sections.flatMap((section) =>
+    section.roads.flatMap((road) => road.vertexes)
+  );
+  for (let i = 0; i < vertexes.length; i += 2) {
+    markerList.value.push({ lat: vertexes[i + 1], lng: vertexes[i] });
+  }
+  console.log(markerList.value);
+};
+
+const image = {
+  imageSrc: 'https://vue3-kakao-maps.netlify.app/images/redMarker.png',
+  imageWidth: 48,
+  imageHeight: 48,
 };
 
 onMounted(async () => {
@@ -107,19 +126,17 @@ onMounted(async () => {
         :lat="item.latitude"
         :lng="item.longitude"
         :clickable="true"
-        @onClickKakaoMapMarker="toggleInfoWindow(item)"
-        :infoWindow="{
-          content: `<div style='width: 200px;'><h4>${
-            item.title
-          }</h4><img src='${item.img1}' alt='${
-            item.title
-          }' style='width: 100%;'><button onClickKakaoMapMarker='toggleInfoWindow(${JSON.stringify(
-            item
-          )})'>Close</button></div>`,
-          visible: item.infoVisible,
-        }"
       />
+      <KakaoMapPolyline :latLngList="markerList" />
+      <!-- <KakaoMapMarkerPolyline
+        :markerList="markerList"
+        :showMarkerOrder="false"
+        strokeColor="#C74C5E"
+        :strokeOpacity="1"
+        strokeStyle="shortdot"
+      /> -->
     </KakaoMap>
+
     <div class="locations-list flex-1 h-screen overflow-auto min-w-[500px]">
       <draggable v-model="planData" group="locations" item-key="contentId">
         <template #item="{ element, index }">
