@@ -79,6 +79,7 @@ const handleUpdate = async () => {
                 id="nickname"
                 class="flex-1 p-2 pr-10 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
                 v-model="nickname"
+                required
               />
             </div>
 
@@ -104,6 +105,7 @@ const handleUpdate = async () => {
                   class="flex-1 p-2 pr-10 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
                   placeholder="Enter your current password"
                   v-model="currentPassword"
+                  required
                 />
                 <button
                   @click="togglePrevPasswordVisibility"
@@ -161,6 +163,7 @@ const handleUpdate = async () => {
                   class="flex-1 p-2 pr-10 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
                   placeholder="Enter your new password"
                   v-model="password"
+                  required
                 />
                 <button
                   @click="togglePasswordVisibility"
@@ -218,6 +221,7 @@ const handleUpdate = async () => {
                   class="flex-1 p-2 pr-10 border border-gray-300 focus:outline-none focus:ring-0 focus:border-gray-300 rounded text-sm text-gray-900"
                   placeholder="Enter your new password again"
                   v-model="passwordConfirmation"
+                  required
                 />
                 <button
                   @click="toggleConfirmPasswordVisibility"

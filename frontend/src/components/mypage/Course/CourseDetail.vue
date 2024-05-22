@@ -212,7 +212,7 @@ const ordermargin = "35px";
         <h1
           class="block text-5xl font-semibold leading-tight tracking-normal text-blue-800 antialiased"
         >
-          저장된 여행 경로
+          나의 여행 계획
         </h1>
         <h3
           class="block text-2xl font-semibold leading-tight tracking-normal text-blue-800 antialiased"

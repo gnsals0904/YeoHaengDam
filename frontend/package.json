@@ -17,6 +17,7 @@
     "canvas-confetti": "^1.9.3",
     "countup.js": "^2.8.0",
     "jwt-decode": "^4.0.0",
+    "openai": "^4.47.1",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",
     "sweetalert2": "^11.11.0",
