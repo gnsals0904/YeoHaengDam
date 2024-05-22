@@ -26,7 +26,8 @@ public class CourseServiceImpl implements CourseService{
                 .description(save.getDescription())
                 .createdAt(now())
                 .build();
-        int courseId = courseMapper.save(newCourse);
+        courseMapper.save(newCourse);
+        int courseId = newCourse.getCourseId();
         List<Schedule> scheduleList = save.getSchedules();
         courseMapper.saveSchedules(courseId, scheduleList);
     }
