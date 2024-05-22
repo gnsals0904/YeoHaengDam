@@ -1,10 +1,14 @@
 <script setup>
-import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
-import { onMounted, ref, computed } from "vue";
-import LocationBox from "@/components/map/LocationBox.vue";
-import draggable from "vuedraggable";
+import { KakaoMap, KakaoMapMarker } from 'vue3-kakao-maps';
+import { useRoute } from 'vue-router';
+import { onMounted, ref, computed } from 'vue';
+import LocationBox from '@/components/map/LocationBox.vue';
+import draggable from 'vuedraggable';
+import axios from 'axios';
 
+const route = useRoute();
 const planData = ref([]);
+const loading = ref(true);
 
 // 기본 좌표를 서울 시청으로 설정하되, planData에 값이 있으면 첫 번째 데이터의 좌표를 사용
 const defaultCoordinate = computed(() => {
@@ -20,7 +24,24 @@ const defaultCoordinate = computed(() => {
   };
 });
 
-onMounted(async () => {});
+const fetchCourseDetails = async () => {
+  const courseId = route.params.courseId;
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/course/${courseId}`
+    );
+    planData.value = response.data.schedules.map((schedule) => schedule.spot);
+    console.log(planData.value);
+    loading.value = false;
+  } catch (error) {
+    console.error('Error fetching course details:', error);
+    loading.value = false;
+  }
+};
+
+onMounted(async () => {
+  fetchCourseDetails();
+});
 </script>
 
 <template>
