@@ -31,4 +31,4 @@ coverage
 
 # History folder
 .history
-
+package-lock.json

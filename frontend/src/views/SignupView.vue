@@ -1,17 +1,17 @@
 <script setup>
-import { ref } from 'vue';
-import { joinUser } from '@/api/user';
-import { useRouter } from 'vue-router';
-import axios from 'axios';
-import { showConfetti } from '@/util/confetti';
-import EmailVerification from '@/components/common/EmailVerification.vue';
-import CustomLoading from '@/components/common/CustomLoading.vue';
+import { ref } from "vue";
+import { joinUser } from "@/api/user";
+import { useRouter } from "vue-router";
+import axios from "axios";
+import { showConfetti } from "@/util/confetti";
+import EmailVerification from "@/components/common/EmailVerification.vue";
+import CustomLoading from "@/components/common/CustomLoading.vue";
 
 /** 회원 가입 */
-const nickname = ref('');
-const email = ref('');
-const password = ref('');
-const passwordConfirmation = ref('');
+const nickname = ref("");
+const email = ref("");
+const password = ref("");
+const passwordConfirmation = ref("");
 const isNicknameAvailable = ref(false);
 const hasCheckedNickname = ref(false);
 const isNicknameConfirmed = ref(false);
@@ -21,21 +21,21 @@ const isLoading = ref(false);
 const router = useRouter();
 
 const handleKakaoSignUp = async () => {
-  window.location.href= `api/auth/oauth2/kakao`;
+  window.location.href = `http://localhost:8080/api/auth/oauth2/kakao`;
 };
 
 const handleNaverSignUp = async () => {
-  window.location.href= `api/auth/oauth2/naver`;
+  window.location.href = `http://localhost:8080/api/auth/oauth2/naver`;
 };
 
 /** 회원 가입 */
 const handleSignUp = async () => {
   if (!hasCheckedNickname.value) {
-    alert('닉네임 중복체크를 해주세요.');
+    alert("닉네임 중복체크를 해주세요.");
     return;
   }
   if (!isEmailConfirmed.value) {
-    alert('이메일 인증을 완료해주세요.');
+    alert("이메일 인증을 완료해주세요.");
     return;
   }
   const user = {
@@ -45,14 +45,14 @@ const handleSignUp = async () => {
   };
   console.log(user);
   const result = await joinUser(user);
-  console.log('회원가입 결과:', result);
+  console.log("회원가입 결과:", result);
 
   if (result.success) {
-    alert('회원가입이 완료되었습니다.');
+    alert("회원가입이 완료되었습니다.");
     showConfetti();
-    router.replace('/login');
+    router.replace("/login");
   } else {
-    alert('회원가입에 실패했습니다.');
+    alert("회원가입에 실패했습니다.");
   }
 };
 
@@ -69,7 +69,7 @@ const toggleConfirmPasswordVisibility = () => {
 /** 닉네임 중복 체크 */
 const nicknameCheck = async () => {
   if (!nickname.value) {
-    alert('이메일을 입력해주세요.');
+    alert("이메일을 입력해주세요.");
     return;
   }
   try {
@@ -77,44 +77,42 @@ const nicknameCheck = async () => {
       `http://localhost:8080/api/users/check_nickname/${nickname.value}`
     );
     if (response.data.available) {
-      const confirmUse = confirm(
-        '사용 가능한 닉네임입니다. 이 닉네임을 사용하시겠습니까?'
-      );
+      const confirmUse = confirm("사용 가능한 닉네임입니다. 이 닉네임을 사용하시겠습니까?");
       if (confirmUse) {
         isNicknameAvailable.value = true;
         isNicknameConfirmed.value = true;
         hasCheckedNickname.value = true;
       }
     } else {
-      alert('이미 사용 중인 닉네임입니다.');
+      alert("이미 사용 중인 닉네임입니다.");
       isNicknameAvailable.value = false;
     }
   } catch (error) {
-    console.error('닉네임 중복체크 오류:', error);
-    alert('중복 체크 중 오류가 발생했습니다.');
+    console.error("닉네임 중복체크 오류:", error);
+    alert("중복 체크 중 오류가 발생했습니다.");
   }
 };
 
 /** 이메일 체크 */
 const emailCheck = async (emailInput) => {
   if (!email.value) {
-    alert('이메일을 입력해주세요.');
+    alert("이메일을 입력해주세요.");
     return;
   }
   isLoading.value = true;
   try {
-    const response = await axios.post(
-      `http://localhost:8080/api/auth/checkEmail`,
-      { email: email.value, emailInput }
-    );
+    const response = await axios.post(`http://localhost:8080/api/auth/checkEmail`, {
+      email: email.value,
+      emailInput,
+    });
     if (response.status === 200) {
       emailVerificationVisible.value = true;
     } else {
-      alert('이메일 인증이 완료되지 않았습니다.');
+      alert("이메일 인증이 완료되지 않았습니다.");
     }
   } catch (error) {
-    console.error('이메일 인증 오류:', error);
-    alert('이메일 인증 중 오류가 발생했습니다.');
+    console.error("이메일 인증 오류:", error);
+    alert("이메일 인증 중 오류가 발생했습니다.");
   } finally {
     isLoading.value = false; // 로딩 상태 종료
   }
@@ -122,20 +120,20 @@ const emailCheck = async (emailInput) => {
 
 const verifyEmailCode = async (code) => {
   try {
-    const response = await axios.post(
-      `http://localhost:8080/api/auth/checkCode`,
-      { email: email.value, code: code }
-    );
+    const response = await axios.post(`http://localhost:8080/api/auth/checkCode`, {
+      email: email.value,
+      code: code,
+    });
     if (response.status == 200) {
       emailVerificationVisible.value = false;
       isEmailConfirmed.value = true;
-      alert('이메일 인증이 완료되었습니다.');
+      alert("이메일 인증이 완료되었습니다.");
     } else {
-      alert('잘못된 인증 코드입니다.');
+      alert("잘못된 인증 코드입니다.");
     }
   } catch (error) {
-    console.error('이메일 인증 코드 확인 오류:', error);
-    alert('이메일 인증 코드 확인 중 오류가 발생했습니다.');
+    console.error("이메일 인증 코드 확인 오류:", error);
+    alert("이메일 인증 코드 확인 중 오류가 발생했습니다.");
   }
 };
 </script>
@@ -147,11 +145,7 @@ const verifyEmailCode = async (code) => {
         class="w-full sm:w-5/6 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-2/6 h-full bg-white flex items-center justify-center"
       >
         <div class="w-full px-12">
-          <h2
-            class="text-center text-2xl font-bold tracking-wide text-gray-800"
-          >
-            Sign Up
-          </h2>
+          <h2 class="text-center text-2xl font-bold tracking-wide text-gray-800">Sign Up</h2>
           <p class="text-center text-sm text-gray-600 mt-2">
             이미 계정이 있으신가요?
             <router-link
@@ -207,10 +201,7 @@ const verifyEmailCode = async (code) => {
 
             <div class="flex flex-col my-4">
               <label for="password" class="text-gray-700">Password</label>
-              <div
-                x-data="{ show: false }"
-                class="relative flex items-center mt-2"
-              >
+              <div x-data="{ show: false }" class="relative flex items-center mt-2">
                 <input
                   :type="showPassword ? 'text' : 'password'"
                   name="password"
@@ -266,13 +257,8 @@ const verifyEmailCode = async (code) => {
             </div>
 
             <div class="flex flex-col my-4">
-              <label for="password_confirmation" class="text-gray-700"
-                >Password Confirmation</label
-              >
-              <div
-                x-data="{ show: false }"
-                class="relative flex items-center mt-2"
-              >
+              <label for="password_confirmation" class="text-gray-700">Password Confirmation</label>
+              <div x-data="{ show: false }" class="relative flex items-center mt-2">
                 <input
                   :type="showConfirmPassword ? 'text' : 'password'"
                   name="password_confirmation"
@@ -336,15 +322,9 @@ const verifyEmailCode = async (code) => {
               />
               <label for="remember_me" class="text-gray-700"
                 >I accept the
-                <a
-                  href="#"
-                  class="text-blue-600 hover:text-blue-700 hover:underline"
-                  >terms</a
-                >
+                <a href="#" class="text-blue-600 hover:text-blue-700 hover:underline">terms</a>
                 and
-                <a
-                  href="#"
-                  class="text-blue-600 hover:text-blue-700 hover:underline"
+                <a href="#" class="text-blue-600 hover:text-blue-700 hover:underline"
                   >privacy policy</a
                 ></label
               >
@@ -388,9 +368,7 @@ const verifyEmailCode = async (code) => {
         class="hidden lg:flex lg:w-1/2 xl:w-2/3 2xl:w-3/4 h-full bg-cover"
         style="background-image: url('/signimg.jpg')"
       >
-        <div
-          class="w-full h-full flex flex-col items-center justify-center bg-black bg-opacity-30"
-        >
+        <div class="w-full h-full flex flex-col items-center justify-center bg-black bg-opacity-30">
           <div class="flex items-center justify-center space-x-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -406,15 +384,11 @@ const verifyEmailCode = async (code) => {
                 d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"
               ></path>
             </svg>
-            <h1
-              class="text-3xl xl:text-4xl 2xl:text-5xl font-bold text-gray-100 tracking-wider"
-            >
+            <h1 class="text-3xl xl:text-4xl 2xl:text-5xl font-bold text-gray-100 tracking-wider">
               여행담
             </h1>
           </div>
-          <p class="text-gray-300 mt-4 px-16 text-center">
-            지금 가입하고 여행 계획을 세워보세요
-          </p>
+          <p class="text-gray-300 mt-4 px-16 text-center">지금 가입하고 여행 계획을 세워보세요</p>
           <a
             href="#"
             class="mt-6 bg-gray-100 hover:bg-gray-200 px-6 py-2 rounded text-sm uppercase text-gray-900 transition duration-150"
