@@ -1,11 +1,11 @@
 <script setup>
-import WordAnimation from '@/components/Landing/WordAnimation.vue';
-import VideoSection from '@/components/Landing/VideoSection.vue';
-import { ref } from 'vue';
+import WordAnimation from "@/components/Landing/WordAnimation.vue";
+import VideoSection from "@/components/Landing/VideoSection.vue";
+import { ref } from "vue";
 const targetSection = ref(null);
 
 const scrollToSection = () => {
-  targetSection.value.scrollIntoView({ behavior: 'smooth' });
+  targetSection.value.scrollIntoView({ behavior: "smooth" });
 };
 </script>
 
@@ -86,7 +86,7 @@ const scrollToSection = () => {
     <!-- Content -->
     <section class="p-20 space-y-8">
       <h1 ref="targetSection" class="text-4xl text-center my-20">
-        여행담 사용 방법이 들어갈 예정입니다
+        여행담 사용 방법
       </h1>
       <div class="py-12 relative overflow-hidden bg-white">
         <div class="grid grid-cols-2 max-w-screen-lg mx-auto">
@@ -94,11 +94,11 @@ const scrollToSection = () => {
             <h2
               class="text-[#64618C] font-bold text-2xl max-w-xs text-right mb-12 mt-10"
             >
-              이쪽에는 사진이
+              1. 여행 계획을 세워요
             </h2>
             <div class="h-full mt-auto overflow-hidden relative">
               <img
-                src="https://picsum.photos/800/600"
+                src="../../public/landing/n1.PNG"
                 class="h-full w-full object-contain"
                 alt=""
               />
@@ -110,18 +110,15 @@ const scrollToSection = () => {
           >
             <div class="relative z-20 pl-12">
               <h2 class="text-[#f7d0b6] font-black text-5xl leading-snug mb-10">
-                여기에는 설명이 <br />to help you
+                여행 계획을 <br />세워보세요
               </h2>
               <p class="text-white text-sm">
-                Purus in massa tempor nec. Magna etiam tempor orci eu lobortis
-                elementum nibh tellus molestie. Faucibus ornare suspendisse sed
-                nisi lacus sed viverra. Diam in arcu cursus euismod quis viverra
-                nibh cras pulvinar.
+                여행담이 당신의 여행 계획을 도와드려요
               </p>
               <button
                 class="mt-8 text-white uppercase py-3 text-sm px-10 border border-white hover:bg-white hover:bg-opacity-10"
               >
-                Talk with expert
+                Talk with Service
               </button>
             </div>
           </div>
@@ -135,18 +132,15 @@ const scrollToSection = () => {
           >
             <div class="relative z-20 pl-12">
               <h2 class="text-sky-950 font-black text-5xl leading-snug mb-10">
-                Finpoint is here <br />to help you
+                여행계획을 <br />공유해보아요
               </h2>
               <p class="text-sky-950 text-sm">
-                Purus in massa tempor nec. Magna etiam tempor orci eu lobortis
-                elementum nibh tellus molestie. Faucibus ornare suspendisse sed
-                nisi lacus sed viverra. Diam in arcu cursus euismod quis viverra
-                nibh cras pulvinar.
+                여행담이 당신의 여행 계획 공유를 도와드려요
               </p>
               <button
                 class="mt-8 text-sky-950 uppercase py-3 text-sm px-10 border border-sky-950 hover:bg-white hover:bg-opacity-10"
               >
-                Talk with expert
+                Talk with Service
               </button>
             </div>
           </div>
@@ -154,11 +148,11 @@ const scrollToSection = () => {
             <h2
               class="text-[#64618C] font-bold text-2xl max-w-xs text-left mb-12 mt-10"
             >
-              Whether you need Assistance
+              2. 여행 계획을 공유해요
             </h2>
             <div class="h-full mt-auto overflow-hidden relative">
               <img
-                src="https://picsum.photos/800/600"
+                src="../../public/landing/n2.PNG"
                 class="h-full w-full object-contain"
                 alt=""
               />
@@ -173,11 +167,11 @@ const scrollToSection = () => {
             <h2
               class="text-[#64618C] font-bold text-2xl max-w-xs text-right mb-12 mt-10"
             >
-              Whether you need Assistance
+              3. AI를 활용해요
             </h2>
             <div class="h-full mt-auto overflow-hidden relative">
               <img
-                src="https://picsum.photos/800/600"
+                src="../../public/landing/n3.PNG"
                 class="h-full w-full object-contain"
                 alt=""
               />
@@ -189,18 +183,15 @@ const scrollToSection = () => {
           >
             <div class="relative z-20 pl-12">
               <h2 class="text-[#f7d0b6] font-black text-5xl leading-snug mb-10">
-                Finpoint is here <br />to help you
+                AI를 활용해서 <br />길을 찾고, 추천도 받아보세요
               </h2>
               <p class="text-white text-sm">
-                Purus in massa tempor nec. Magna etiam tempor orci eu lobortis
-                elementum nibh tellus molestie. Faucibus ornare suspendisse sed
-                nisi lacus sed viverra. Diam in arcu cursus euismod quis viverra
-                nibh cras pulvinar.
+                여행담과 AI가 당신의 여행계획을 도와드려요
               </p>
               <button
                 class="mt-8 text-white uppercase py-3 text-sm px-10 border border-white hover:bg-white hover:bg-opacity-10"
               >
-                Talk with expert
+                Talk with Service
               </button>
             </div>
           </div>
