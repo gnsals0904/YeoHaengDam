@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router';
 import { onMounted, ref, computed, watch } from 'vue';
 import draggable from 'vuedraggable';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 import InfoCardSlide from '@/components/common/InfoCardSlide.vue';
 import LocationBox from '@/components/map/LocationBox.vue';
@@ -65,8 +66,16 @@ const savePlanData = async () => {
         },
       }
     );
+    Swal.fire({
+      title: '데이터를 성공적으로 저장했습니다.',
+      imageUrl: '/rottie/basicSuccess.gif',
+      imageWidth: 150,
+      imageHeight: 150,
+      imageAlt: 'Custom image',
+    });
     console.log('Plan data saved successfully:', response.data);
   } catch (error) {
+    Swal.fire('저장을 실패했습니다', '다시 로그인 해주세요.', 'error');
     console.error('Error saving plan data:', error);
   }
 };
@@ -85,6 +94,11 @@ const fetchCourseDetails = async () => {
     console.log(planData.value);
     loading.value = false;
   } catch (error) {
+    Swal.fire(
+      '계획 정보를 불러오는데 실패했습니다',
+      '다시 로그인 해주세요.',
+      'error'
+    );
     console.error('Error fetching course details:', error);
     loading.value = false;
   }
@@ -132,6 +146,11 @@ const fetchRoute = async () => {
     console.log('받은 데이터:', routeData.value);
     processRouteData();
   } catch (error) {
+    Swal.fire(
+      '계획 정보를 불러오는데 실패했습니다',
+      '다시 로그인 해주세요.',
+      'error'
+    );
     console.error('Error fetching route data:', error);
   }
 };

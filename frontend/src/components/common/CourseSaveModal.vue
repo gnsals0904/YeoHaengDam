@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, defineEmits, defineProps, watch } from 'vue';
+import Swal from 'sweetalert2';
 
 const props = defineProps({
   visible: Boolean,

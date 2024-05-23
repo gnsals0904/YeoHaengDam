@@ -4,6 +4,7 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import MyPageSide from '@/components/common/MyPageSide.vue';
 import CourseCard from './Course/CourseCard.vue';
+import Swal from 'sweetalert2';
 
 const router = useRouter();
 const courses = ref([]);
@@ -18,6 +19,7 @@ onMounted(async () => {
     });
     courses.value = response.data;
   } catch (error) {
+    Swal.fire('계획 정보 불러오기 실패', '다시 로그인 해주세요.', 'error');
     console.error('Error fetching courses:', error);
   }
 });

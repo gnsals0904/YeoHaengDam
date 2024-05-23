@@ -119,22 +119,22 @@
             <nav class="mb-10 list-none">
               <li class="mt-3">
                 <a class="text-gray-500 cursor-pointer hover:text-gray-900"
-                  >알고리즘 황제 황성민</a
+                  >SAMSUNG</a
                 >
               </li>
               <li class="mt-3">
                 <a class="text-gray-500 cursor-pointer hover:text-gray-900"
-                  >알파메일 이인준</a
+                  >SSAFY</a
                 >
               </li>
               <li class="mt-3">
                 <a class="text-gray-500 cursor-pointer hover:text-gray-900"
-                  >확실한 백엔드 김민주</a
+                  >MULTICAMPUS</a
                 >
               </li>
               <li class="mt-3">
                 <a class="text-gray-500 cursor-pointer hover:text-gray-900"
-                  >확실한 프론트 김보보</a
+                  >KOREA</a
                 >
               </li>
             </nav>

@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, defineEmits, defineProps } from 'vue';
+import Swal from 'sweetalert2';
 
 const props = defineProps({
   visible: Boolean,
@@ -24,7 +25,13 @@ const verifyCode = () => {
 };
 
 const resendCode = () => {
-  alert('Verification code resent.');
+  Swal.fire({
+    title: '인증 번호를 다시 전송했습니다.',
+    imageUrl: '/rottie/basicSuccess.gif',
+    imageWidth: 150,
+    imageHeight: 150,
+    imageAlt: 'Custom image',
+  });
 };
 </script>
 

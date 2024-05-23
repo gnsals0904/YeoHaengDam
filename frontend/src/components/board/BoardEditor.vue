@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter, useRoute } from 'vue-router';
+import Swal from 'sweetalert2';
 
 const router = useRouter();
 const route = useRoute();
@@ -37,7 +38,7 @@ const removeImage = (index) => {
 const postArticle = async () => {
   const token = sessionStorage.getItem('accessToken');
   if (!token) {
-    alert('로그인이 필요합니다.');
+    Swal.fire('로그인이 필요합니다!', '다시 로그인 해주세요.', 'error');
     return;
   }
 
@@ -57,11 +58,17 @@ const postArticle = async () => {
         'Content-Type': 'multipart/form-data',
       },
     });
-    alert('게시글이 등록되었습니다.');
+    Swal.fire({
+      title: '게시글이 등록되었습니다.',
+      imageUrl: '/rottie/basicUpdate.gif',
+      imageWidth: 150,
+      imageHeight: 150,
+      imageAlt: 'Custom image',
+    });
     router.replace({ name: 'List' }); // 게시글 등록 후 이동할 경로
   } catch (error) {
     console.error('게시글 등록 실패:', error);
-    alert('게시글 등록에 실패했습니다. 다시 시도해주세요.');
+    Swal.fire('게시글 등록에 실패했습니다!', '다시 시도해주세요', 'error');
   }
 };
 
@@ -84,7 +91,7 @@ async function fetchArticleData() {
     description.value = response.data.content;
     // 이미지 데이터 처리 방식에 따라 추가 구현 필요
   } catch (error) {
-    console.error('게시글 불러오기 실패:', error);
+    Swal.fire('게시글 불러오기에 실패했습니다!', '다시 시도해주세요', 'error');
   }
 }
 
@@ -105,11 +112,17 @@ const updateArticle = async () => {
         },
       }
     );
-    alert('게시글이 업데이트되었습니다.');
+    Swal.fire({
+      title: '게시글이 업데이트되었습니다.',
+      imageUrl: '/rottie/basicUpdate.gif',
+      imageWidth: 150,
+      imageHeight: 150,
+      imageAlt: 'Custom image',
+    });
     router.push('/'); // 업데이트 후 이동할 경로
   } catch (error) {
     console.error('게시글 업데이트 실패:', error);
-    alert('게시글 업데이트에 실패했습니다. 다시 시도해주세요.');
+    Swal.fire('게시글 업데이트에 실패했습니다!', '다시 시도해주세요', 'error');
   }
 };
 onMounted(() => {

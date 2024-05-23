@@ -4,6 +4,7 @@ import axios from 'axios';
 import MyPageSide from '@/components/common/MyPageSide.vue';
 import BoardDetail from '@/components/board/BoardDetail.vue'; // 모달 컴포넌트 가져오기
 import Pagination from '@/components/common/Pagination.vue';
+import Swal from 'sweetalert2';
 
 // 데이터 변수 설정
 const articles = ref([]);
@@ -34,6 +35,7 @@ async function fetchArticles(page) {
     articles.value = response.data;
     totalElements.value = response.data[0].totalCount;
   } catch (error) {
+    Swal.fire('게시글 불러오기 실패', '다시 로그인 해주세요.', 'error');
     console.error('Error fetching articles:', error);
   }
 }
@@ -65,6 +67,7 @@ async function showModal(board) {
     isModalVisible.value = true;
   } catch (error) {
     console.error('Failed to fetch article details or comments:', error);
+    Swal.fire('게시글 불러오기 실패', '다시 로그인 해주세요.', 'error');
   }
 }
 

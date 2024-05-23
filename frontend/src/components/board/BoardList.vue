@@ -7,6 +7,7 @@ import { useMemberStore } from '@/stores/member';
 import BoardCard from '@/components/board/BoardCard.vue';
 import Pagination from '@/components/common/Pagination.vue';
 import BoardDetail from '@/components/board/BoardDetail.vue'; // 모달 컴포넌트 가져오기
+import Swal from 'sweetalert2';
 
 const boardStore = useBoardStore();
 const currentPage = ref(1);
@@ -41,7 +42,7 @@ async function fetchBoardList(page, keyword = '', sortBy = 'updated_at') {
     boardList.value = response.data;
     totalElements.value = response.data[0].totalCount; // 전체 게시글 수 설정
   } catch (error) {
-    console.error('Failed to fetch board list:', error);
+    Swal.fire('게시글 불러오기에 실패했습니다', '다시 시도 해주세요.', 'error');
   }
 }
 
@@ -62,7 +63,7 @@ async function showModal(board) {
     comments.value = commentsResponse.data;
     isModalVisible.value = true;
   } catch (error) {
-    console.error('Failed to fetch article details or comments:', error);
+    Swal.fire('게시글 불러오기에 실패했습니다', '다시 시도 해주세요.', 'error');
   }
 }
 
