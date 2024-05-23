@@ -1,9 +1,9 @@
 <script setup>
-import { defineProps, defineEmits, computed } from "vue";
-import { useMemberStore } from "@/stores/member";
-import { useRouter } from "vue-router";
-import Swal from "sweetalert2";
-import axios from "axios";
+import { defineProps, defineEmits, computed } from 'vue';
+import { useMemberStore } from '@/stores/member';
+import { useRouter } from 'vue-router';
+import Swal from 'sweetalert2';
+import axios from 'axios';
 
 const memberStore = useMemberStore();
 const router = useRouter();
@@ -27,53 +27,42 @@ const closeModal = () => {
 };
 
 const editNotice = (noticeId) => {
-  router.push({ name: "NoticeEdit", params: { noticeId } });
+  router.push({ name: 'NoticeEdit', params: { noticeId } });
 };
-
-
 
 const deleteNotice = async () => {
   if (userInfo.value.roleType === `ADMIN`) {
     Swal.fire({
-      title: "Are you sure?",
+      title: 'Are you sure?',
       text: "You won't be able to revert this!",
-      icon: "warning",
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(
-            `http://localhost:8080/api/notice/${props.item.noticeId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${sessionStorage.getItem(
-                  "accessToken"
-                )}`,
-              },
-            }
-          )
+          .delete(`http://localhost:8080/api/notice/${props.item.noticeId}`, {
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+            },
+          })
           .then(() => {
-            Swal.fire("Deleted!", "Your file has been deleted.", "success");
+            Swal.fire('공지사항 삭제!', '공지사항을 삭제했습니다.', 'success');
             closeModal();
             router
-              .replace({ name: "List" })
+              .replace({ name: 'List' })
               .then(() => window.location.reload());
           })
           .catch((error) => {
-            console.error("Deletion failed:", error);
-            Swal.fire("Failed!", "Could not delete the article.", "error");
+            console.error('Deletion failed:', error);
+            Swal.fire('공지사항 삭제 실패', '다시 로그인 해주세요', 'error');
           });
       }
     });
   } else {
-    Swal.fire(
-      "Unauthorized!",
-      "You are not the owner of this article.",
-      "error"
-    );
+    Swal.fire('인증되지 않은 사용자입니다', '삭제할 수 없습니다', 'error');
   }
 };
 </script>

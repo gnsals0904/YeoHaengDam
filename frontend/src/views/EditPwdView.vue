@@ -1,19 +1,20 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import axios from "axios";
-import { useRouter } from "vue-router";
-import { useMemberStore } from "@/stores/member";
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
+import { useMemberStore } from '@/stores/member';
+import Swal from 'sweetalert2';
 
 const memberStore = useMemberStore();
 const { getUserInfo } = memberStore;
 const router = useRouter();
-const token = sessionStorage.getItem("accessToken");
-const nickname = ref("닉네임");
-const email = ref("sgo722@naver.com");
+const token = sessionStorage.getItem('accessToken');
+const nickname = ref('닉네임');
+const email = ref('sgo722@naver.com');
 
-const currentPassword = ref("");
-const password = ref("");
-const passwordConfirmation = ref("");
+const currentPassword = ref('');
+const password = ref('');
+const passwordConfirmation = ref('');
 
 /** 비밀번호 보이게 / 보이지 않게 */
 const showPrevPassword = ref(false);
@@ -38,25 +39,35 @@ const handleUpdate = async () => {
   };
 
   try {
-    const token = sessionStorage.getItem("accessToken");
+    const token = sessionStorage.getItem('accessToken');
 
     const response = await axios.put(
-      "http://localhost:8080/api/users/update_password",
+      'http://localhost:8080/api/users/update_password',
       user,
       {
         headers: {
-          'Authorization': `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
     console.log(response.data);
     if (response.status === 200) {
-      alert("정보가 성공적으로 업데이트되었습니다.");
-      router.replace("/");
+      Swal.fire({
+        title: '정보가 성공적으로 업데이트되었습니다.',
+        imageUrl: '/rottie/basicUpdate.gif',
+        imageWidth: 150,
+        imageHeight: 150,
+        imageAlt: 'Custom image',
+      });
+      router.replace('/');
     }
   } catch (error) {
-    console.error("업데이트 에러:", error);
-    alert("정보 업데이트 중 문제가 발생했습니다.");
+    console.error('업데이트 에러:', error);
+    Swal.fire(
+      '정보 업데이트 중 문제가 발생했습니다!',
+      '다시 시도 해주세요.',
+      'error'
+    );
   }
 };
 </script>
@@ -68,7 +79,11 @@ const handleUpdate = async () => {
         class="w-full sm:w-5/6 md:w-2/3 lg:w-1/2 xl:w-1/3 2xl:w-1/4 h-full bg-white flex items-center justify-center"
       >
         <div class="w-full px-12">
-          <h1 class="text-center text-3xl font-bold tracking-wide text-gray-800">패스워드 변경</h1>
+          <h1
+            class="text-center text-3xl font-bold tracking-wide text-gray-800"
+          >
+            패스워드 변경
+          </h1>
 
           <form class="my-8 text-sm" @submit.prevent="handleUpdate">
             <div class="flex flex-col my-4">
@@ -96,7 +111,9 @@ const handleUpdate = async () => {
             </div>
 
             <div class="flex flex-col my-4">
-              <label for="currentPassword" class="text-gray-700">기존 비밀번호</label>
+              <label for="currentPassword" class="text-gray-700"
+                >기존 비밀번호</label
+              >
               <div class="relative flex items-center mt-2">
                 <input
                   :type="showPrevPassword ? 'text' : 'password'"
@@ -154,7 +171,9 @@ const handleUpdate = async () => {
             </div>
 
             <div class="flex flex-col my-4">
-              <label for="password" class="text-gray-700">변경할 비밀번호</label>
+              <label for="password" class="text-gray-700"
+                >변경할 비밀번호</label
+              >
               <div class="relative flex items-center mt-2">
                 <input
                   :type="showPassword ? 'text' : 'password'"
@@ -212,7 +231,9 @@ const handleUpdate = async () => {
             </div>
 
             <div class="flex flex-col my-4">
-              <label for="password_confirmation" class="text-gray-700">변경할 비밀번호를 한번 더 입력해주세요</label>
+              <label for="password_confirmation" class="text-gray-700"
+                >변경할 비밀번호를 한번 더 입력해주세요</label
+              >
               <div class="relative flex items-center mt-2">
                 <input
                   :type="showConfirmPassword ? 'text' : 'password'"
@@ -282,9 +303,13 @@ const handleUpdate = async () => {
       </div>
       <div
         class="hidden lg:flex lg:w-1/2 xl:w-2/3 2xl:w-3/4 h-full bg-cover"
-        style="background-image: url('https://source.unsplash.com/1600x900/?ocean')"
+        style="
+          background-image: url('https://source.unsplash.com/1600x900/?ocean');
+        "
       >
-        <div class="w-full h-full flex flex-col items-center justify-center bg-black bg-opacity-30">
+        <div
+          class="w-full h-full flex flex-col items-center justify-center bg-black bg-opacity-30"
+        >
           <div class="flex items-center justify-center space-x-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -300,16 +325,21 @@ const handleUpdate = async () => {
                 d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"
               ></path>
             </svg>
-            <h1 class="text-3xl xl:text-4xl 2xl:text-5xl font-bold text-gray-100 tracking-wider">
+            <h1
+              class="text-3xl xl:text-4xl 2xl:text-5xl font-bold text-gray-100 tracking-wider"
+            >
               여행담
             </h1>
           </div>
-          <p class="text-gray-300 mt-4 px-16 text-center">지금 가입하고 여행 계획을 세워보세요</p>
+          <p class="text-gray-300 mt-4 px-16 text-center">
+            지금 가입하고 여행 계획을 세워보세요
+          </p>
           <a
             href="#"
             class="mt-6 bg-gray-100 hover:bg-gray-200 px-6 py-2 rounded text-sm uppercase text-gray-900 transition duration-150"
             title="Learn More"
-            >Learn More</a>
+            >Learn More</a
+          >
         </div>
       </div>
     </div>

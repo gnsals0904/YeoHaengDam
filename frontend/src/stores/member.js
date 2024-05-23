@@ -93,31 +93,6 @@ export const useMemberStore = defineStore(
         },
         async (error) => {
           console.log(error);
-          // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
-          // if (error.response.status === httpStatusCode.UNAUTHORIZED) {
-          // 다시 로그인 전 DB에 저장된 RefreshToken 제거.
-          // ToDo : Logout api 추가
-          // await logout(
-          //   userInfo.value.userid,
-          //   (response) => {
-          //     if (response.status === httpStatusCode.OK) {
-          //       console.log('리프레시 토큰 제거 성공');
-          //     } else {
-          //       console.log('리프레시 토큰 제거 실패');
-          //     }
-          //     alert('RefreshToken 기간 만료!!! 다시 로그인해 주세요.');
-          //     isLogin.value = false;
-          //     userInfo.value = null;
-          //     isValidToken.value = false;
-          //     router.push({ name: 'user-login' });
-          //   },
-          //   (error) => {
-          //     console.error(error);
-          //     isLogin.value = false;
-          //     userInfo.value = null;
-          //   }
-          // );
-          // }
           isLogin.value = false;
           userInfo.value = null;
           isValidToken.value = false;
@@ -134,24 +109,6 @@ export const useMemberStore = defineStore(
 
     // TODO : 로그아웃 함수 api 요청 추가 필요
     const userLogout = async () => {
-      // await logout(
-      //   userInfo.value.userId,
-      //   (response) => {
-      //     if (response.status === httpStatusCode.OK) {
-      //       isLogin.value = false;
-      //       userInfo.value = null;
-      //       isValidToken.value = false;
-
-      //       sessionStorage.removeItem('accessToken');
-      //       sessionStorage.removeItem('refreshToken');
-      //     } else {
-      //       console.error('유저 정보 없음!!!!');
-      //     }
-      //   },
-      //   (error) => {
-      //     console.log(error);
-      //   }
-      // );
       isLogin.value = false;
       userInfo.value = null;
       isValidToken.value = false;

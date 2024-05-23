@@ -34,7 +34,12 @@ const toggleEdit = () => {
 /** 닉네임 중복 체크 */
 const nicknameCheck = async () => {
   if (!nickname.value) {
-    alert('닉네임을 입력해주세요.');
+    Swal.fire(
+      '닉네임을 입력해주세요!',
+      '닉네임은 필수로 입력하셔야 합니다.',
+      'error'
+    );
+
     return;
   }
 
@@ -54,14 +59,20 @@ const nicknameCheck = async () => {
         isNicknameEditable.value = true;
       }
     } else {
-      Swal.fire('계획 정보 불러오기 실패', '다시 로그인 해주세요.', 'error');
-
-      alert('이미 사용 중인 닉네임입니다.');
+      Swal.fire(
+        '이미 사용중인 닉네임입니다.',
+        '다른 닉네임을 사용해주세요.',
+        'error'
+      );
       isNicknameAvailable.value = false;
     }
   } catch (error) {
     console.error('닉네임 중복체크 오류:', error);
-    alert('중복 체크 중 오류가 발생했습니다.');
+    Swal.fire(
+      '중복체크 중 오류가 발생했습니다',
+      '서버와의 연결을 확인해 주세요',
+      'error'
+    );
   }
 };
 
@@ -83,10 +94,20 @@ const handleFileChange = async (event) => {
         }
       );
       profileImage.value = URL.createObjectURL(file);
-      alert('프로필 이미지가 성공적으로 업로드되었습니다.');
+      Swal.fire({
+        title: '프로필 이미지가 성공적으로 업로드 되었습니다.',
+        imageUrl: '/rottie/basicUpdate.gif',
+        imageWidth: 150,
+        imageHeight: 150,
+        imageAlt: 'Custom image',
+      });
     } catch (error) {
+      Swal.fire(
+        '업로드를 실패했습니다!',
+        '프로필 이미지 업로드 중 문제가 발생했습니다.',
+        'error'
+      );
       console.error('프로필 이미지 업로드 오류:', error);
-      alert('프로필 이미지 업로드 중 문제가 발생했습니다.');
     }
   }
 };
@@ -110,12 +131,22 @@ const handleUpdate = async () => {
       }
     );
     if (response.status === 200) {
-      alert('정보가 성공적으로 업데이트되었습니다.');
+      Swal.fire({
+        title: '정보가 성공적으로 업데이트되었습니다.',
+        imageUrl: '/rottie/basicUpdate.gif',
+        imageWidth: 150,
+        imageHeight: 150,
+        imageAlt: 'Custom image',
+      });
       router.replace('/');
     }
   } catch (error) {
     console.error('업데이트 에러:', error);
-    alert('정보 업데이트 중 문제가 발생했습니다.');
+    Swal.fire(
+      '업데이트 실패',
+      '정보 업데이트 중 문제가 발생했습니다.',
+      'error'
+    );
   }
   toggleEdit();
 };

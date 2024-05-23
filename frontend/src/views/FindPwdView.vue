@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 import EmailVerification from '@/components/common/EmailVerification.vue';
 import CustomLoading from '@/components/common/CustomLoading.vue';
+import Swal from 'sweetalert2';
 
 /** 회원 가입 */
 const email = ref('');
@@ -17,7 +18,7 @@ const resetPassword = ref('');
 /** 이메일 체크 */
 const emailCheck = async (emailInput) => {
   if (!email.value) {
-    alert('이메일을 입력해주세요.');
+    Swal.fire('이메일은 필수 항목입니다', '이메일을 입력해주세요.', 'error');
     return;
   }
   isLoading.value = true;
@@ -32,11 +33,19 @@ const emailCheck = async (emailInput) => {
     if (response.status === 200) {
       emailVerificationVisible.value = true;
     } else {
-      alert('이메일 인증이 완료되지 않았습니다.');
+      Swal.fire(
+        '이메일은 필수 항목입니다',
+        '이메일 인증이 완료되지 않았습니다.',
+        'error'
+      );
     }
   } catch (error) {
     console.error('이메일 인증 오류:', error);
-    alert('이메일 인증 중 오류가 발생했습니다.');
+    Swal.fire(
+      '이메일은 필수 항목입니다',
+      '이메일 인증 중 오류가 발생했습니다',
+      'error'
+    );
   } finally {
     isLoading.value = false; // 로딩 상태 종료
   }
@@ -54,12 +63,14 @@ const resetPasswordFunction = async (email) => {
       resetPassword.value = response.data;
       showModal.value = true;
     } else {
-      alert('비밀번호 초기화에 실패하였습니다.');
+      Swal.fire('비밀번호 초기화 실패', '다시 시도해 주세요', 'error');
     }
   } catch (error) {
     console.error('비밀번호 초기화 오류:', error);
-    alert(
-      '입력하신 이메일 주소로 등록된 사용자가 없습니다.\n이메일 주소를 다시 확인해주세요.'
+    Swal.fire(
+      '입력하신 이메일 주소로 등록된 사용자가 없습니다',
+      '이메일 주소를 다시 확인해주세요',
+      'error'
     );
   }
 };
@@ -76,14 +87,24 @@ const verifyEmailCode = async (code) => {
     if (response.status === 200) {
       emailVerificationVisible.value = false;
       isEmailConfirmed.value = true;
-      alert('이메일 인증이 완료되었습니다.');
+      Swal.fire({
+        title: '이메일 인증이 완료되었습니다.',
+        imageUrl: '/rottie/basicSuccess.gif',
+        imageWidth: 150,
+        imageHeight: 150,
+        imageAlt: 'Custom image',
+      });
       await resetPasswordFunction(email); // 비밀번호 초기화 요청 보내기
     } else {
-      alert('잘못된 인증 코드입니다.');
+      Swal.fire('잘못된 인증 코드입니다!', '다시 시도 해주세요.', 'error');
     }
   } catch (error) {
     console.error('이메일 인증 코드 확인 오류:', error);
-    alert('이메일 인증 코드 확인 중 오류가 발생했습니다.');
+    Swal.fire(
+      '잘못된 인증 코드입니다!',
+      '이메일 인증 코드 확인 중 오류가 발생했습니다.',
+      'error'
+    );
   }
 };
 
@@ -91,9 +112,16 @@ const copyToClipboard = () => {
   navigator.clipboard
     .writeText(resetPassword.value)
     .then(() => {
-      alert('비밀번호가 복사되었습니다');
+      Swal.fire({
+        title: '비밀번호가 복사되었습니다',
+        imageUrl: '/rottie/basicSuccess.gif',
+        imageWidth: 150,
+        imageHeight: 150,
+        imageAlt: 'Custom image',
+      });
     })
     .catch((error) => {
+      Swal.fire('비밀번호 복사 실패', '다시 시도해주세요', 'error');
       console.error('Error copying text: ', error);
     });
 };

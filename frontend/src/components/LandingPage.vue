@@ -1,4 +1,6 @@
-<script setup></script>
+<script setup>
+// ToDo : 삭제필요
+</script>
 
 <template>
   <section

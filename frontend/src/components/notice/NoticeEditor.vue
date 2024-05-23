@@ -1,12 +1,13 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import axios from "axios";
-import { useRouter, useRoute } from "vue-router";
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import { useRouter, useRoute } from 'vue-router';
+import Swal from 'sweetalert2';
 
 const router = useRouter();
 const route = useRoute();
-const title = ref("");
-const description = ref("");
+const title = ref('');
+const description = ref('');
 const isEditMode = ref(false);
 
 const props = defineProps({
@@ -14,9 +15,9 @@ const props = defineProps({
 });
 
 const postArticle = async () => {
-  const token = sessionStorage.getItem("accessToken");
+  const token = sessionStorage.getItem('accessToken');
   if (!token) {
-    alert("로그인이 필요합니다.");
+    Swal.fire('로그인이 필요합니다!', '다시 로그인 해주세요.', 'error');
     return;
   }
 
@@ -26,17 +27,27 @@ const postArticle = async () => {
   };
 
   try {
-    await axios.post("http://localhost:8080/api/notice", articleData, {
+    await axios.post('http://localhost:8080/api/notice', articleData, {
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
-    alert("공지사항이 등록되었습니다.");
-    router.replace({ name: "Notice" }); // 게시글 등록 후 이동할 경로
+    Swal.fire({
+      title: '공지사항이 등록되었습니다.',
+      imageUrl: '/rottie/basicSuccess.gif',
+      imageWidth: 150,
+      imageHeight: 150,
+      imageAlt: 'Custom image',
+    });
+    router.replace({ name: 'Notice' }); // 게시글 등록 후 이동할 경로
   } catch (error) {
-    console.error("공지사항 등록 실패:", error);
-    alert("공지사항 등록에 실패했습니다. 다시 시도해주세요.");
+    console.error('공지사항 등록 실패:', error);
+    Swal.fire(
+      '공지사항 등록에 실패했습니다!',
+      '다시 로그인 해주세요.',
+      'error'
+    );
   }
 };
 
@@ -55,36 +66,46 @@ async function fetchArticleData() {
     const response = await axios.get(
       `http://localhost:8080/api/notice/${props.noticeId}`
     );
-    console.log("data : ", response.data);
+    console.log('data : ', response.data);
     title.value = response.data.title;
     description.value = response.data.content;
   } catch (error) {
-    console.error("공지사항 불러오기 실패:", error);
+    Swal.fire('공지사항 불러오기 실패!', '다시 시도 해주세요.', 'error');
   }
 }
 
 // 게시글을 업데이트하는 함수
 const updateArticle = async () => {
-  const articleData ={
-    title : title.value,
-    content : description.value,
-  }
+  const articleData = {
+    title: title.value,
+    content: description.value,
+  };
   try {
     await axios.patch(
       `http://localhost:8080/api/notice/${props.noticeId}`,
       articleData,
       {
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
-          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+          'Content-Type': 'application/json',
         },
       }
     );
-    alert("공지사항이 업데이트되었습니다.");
-    router.push({ name: "Notice" }); // 업데이트 후 이동할 경로
+    Swal.fire({
+      title: '공지사항이 업데이트되었습니다.',
+      imageUrl: '/rottie/basicUpdate.gif',
+      imageWidth: 150,
+      imageHeight: 150,
+      imageAlt: 'Custom image',
+    });
+    router.push({ name: 'Notice' }); // 업데이트 후 이동할 경로
   } catch (error) {
-    console.error("공지사항 업데이트 실패:", error);
-    alert("공지사항 업데이트에 실패했습니다. 다시 시도해주세요.");
+    console.error('공지사항 업데이트 실패:', error);
+    Swal.fire(
+      '공지사항 업데이트에 실패했습니다!',
+      '다시 시도해주세요.',
+      'error'
+    );
   }
 };
 onMounted(() => {
@@ -127,7 +148,7 @@ onMounted(() => {
           @click="saveArticle"
           class="btn border border-indigo-500 p-1 px-4 font-semibold cursor-pointer text-gray-200 ml-2 bg-indigo-500"
         >
-          {{ isEditMode.valueOf ? "Update" : "Post" }}
+          {{ isEditMode.valueOf ? 'Update' : 'Post' }}
         </div>
       </div>
     </div>

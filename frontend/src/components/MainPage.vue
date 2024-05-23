@@ -6,6 +6,7 @@ import { useDestinationStore } from '@/stores/mapstore.js';
 import ListBoxCities from './listbox/ListBoxCities.vue';
 import ListBoxGuguns from './listbox/ListBoxGuguns.vue';
 import ListBoxContents from './listbox/ListBoxContents.vue';
+import Swal from 'sweetalert2';
 
 import axios from 'axios';
 
@@ -77,7 +78,7 @@ const handleSearch = () => {
       },
     });
   } else {
-    alert('모든 옵션을 선택해주세요.');
+    Swal.fire('모든 옵션을 선택해야합니다!', '도시를 선택해주세요', 'error');
   }
 };
 
