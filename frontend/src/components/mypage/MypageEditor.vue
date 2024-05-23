@@ -1,19 +1,19 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
-import { useRouter } from 'vue-router';
-import { useMemberStore } from '@/stores/member';
-import MyPageSide from '@/components/common/MyPageSide.vue';
-import Swal from 'sweetalert2';
+import { ref, onMounted } from "vue";
+import axios from "axios";
+import { useRouter } from "vue-router";
+import { useMemberStore } from "@/stores/member";
+import MyPageSide from "@/components/common/MyPageSide.vue";
+import Swal from "sweetalert2";
 
 const memberStore = useMemberStore();
 const { getUserInfo } = memberStore;
 const router = useRouter();
-const token = sessionStorage.getItem('accessToken');
-const nickname = ref('닉네임');
-const email = ref('email@example.com');
-const password = ref('');
-const passwordConfirmation = ref('');
+const token = sessionStorage.getItem("accessToken");
+const nickname = ref("닉네임");
+const email = ref("email@example.com");
+const password = ref("");
+const passwordConfirmation = ref("");
 const isNicknameAvailable = ref(false);
 const hasCheckedNickname = ref(false);
 const isNicknameEditable = ref(false);
@@ -21,7 +21,7 @@ const isNicknameConfirmed = ref(false);
 const isDisabled = ref(true);
 const isEditing = ref(false);
 const nicknameDisabled = ref(true);
-const profileImage = ref('/mnt/data/image.png'); // 기본 이미지 경로
+const profileImage = ref("/mnt/data/image.png"); // 기본 이미지 경로
 
 const fileInput = ref(null);
 
@@ -34,7 +34,7 @@ const toggleEdit = () => {
 /** 닉네임 중복 체크 */
 const nicknameCheck = async () => {
   if (!nickname.value) {
-    alert('닉네임을 입력해주세요.');
+    alert("닉네임을 입력해주세요.");
     return;
   }
 
@@ -43,9 +43,7 @@ const nicknameCheck = async () => {
       `http://localhost:8080/api/users/check_nickname/${nickname.value}`
     );
     if (response.data.available) {
-      const confirmUse = confirm(
-        '사용 가능한 닉네임입니다. 이 닉네임을 사용하시겠습니까?'
-      );
+      const confirmUse = confirm("사용 가능한 닉네임입니다. 이 닉네임을 사용하시겠습니까?");
       if (confirmUse) {
         isNicknameAvailable.value = true;
         isNicknameConfirmed.value = true;
@@ -54,14 +52,14 @@ const nicknameCheck = async () => {
         isNicknameEditable.value = true;
       }
     } else {
-      Swal.fire('계획 정보 불러오기 실패', '다시 로그인 해주세요.', 'error');
+      Swal.fire("계획 정보 불러오기 실패", "다시 로그인 해주세요.", "error");
 
-      alert('이미 사용 중인 닉네임입니다.');
+      alert("이미 사용 중인 닉네임입니다.");
       isNicknameAvailable.value = false;
     }
   } catch (error) {
-    console.error('닉네임 중복체크 오류:', error);
-    alert('중복 체크 중 오류가 발생했습니다.');
+    console.error("닉네임 중복체크 오류:", error);
+    alert("중복 체크 중 오류가 발생했습니다.");
   }
 };
 
@@ -70,23 +68,19 @@ const handleFileChange = async (event) => {
   const file = event.target.files[0];
   if (file) {
     const formData = new FormData();
-    formData.append('', file);
+    formData.append("", file);
     try {
-      const response = await axios.post(
-        'http://localhost:8080/api/users/updateProfile',
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
+      const response = await axios.post("http://localhost:8080/api/users/updateProfile", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
       profileImage.value = URL.createObjectURL(file);
-      alert('프로필 이미지가 성공적으로 업로드되었습니다.');
+      alert("프로필 이미지가 성공적으로 업로드되었습니다.");
     } catch (error) {
-      console.error('프로필 이미지 업로드 오류:', error);
-      alert('프로필 이미지 업로드 중 문제가 발생했습니다.');
+      console.error("프로필 이미지 업로드 오류:", error);
+      alert("프로필 이미지 업로드 중 문제가 발생했습니다.");
     }
   }
 };
@@ -99,29 +93,25 @@ const handleUpdate = async () => {
   };
 
   try {
-    const response = await axios.put(
-      'http://localhost:8080/api/users/update_nickname',
-      user,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const response = await axios.put("http://localhost:8080/api/users/update_nickname", user, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
     if (response.status === 200) {
-      alert('정보가 성공적으로 업데이트되었습니다.');
-      router.replace('/');
+      alert("정보가 성공적으로 업데이트되었습니다.");
+      router.replace("/");
     }
   } catch (error) {
-    console.error('업데이트 에러:', error);
-    alert('정보 업데이트 중 문제가 발생했습니다.');
+    console.error("업데이트 에러:", error);
+    alert("정보 업데이트 중 문제가 발생했습니다.");
   }
   toggleEdit();
 };
 
 const goEditPwd = () => {
-  router.push({ name: 'EditPwd' });
+  router.push({ name: "EditPwd" });
 };
 
 onMounted(async () => {
@@ -131,35 +121,28 @@ onMounted(async () => {
     email.value = memberStore.userInfo.email;
     password.value = memberStore.userInfo.password;
     passwordConfirmation.value = memberStore.userInfo.password;
-    profileImage.value =
-      memberStore.userInfo.profileImage || profileImage.value;
+    profileImage.value = memberStore.userInfo.profileImage || profileImage.value;
   }
 });
 </script>
 
 <template>
-  <div
-    class="grid min-h-screen w-full overflow-hidden lg:grid-cols-[280px_1fr]"
-  >
+  <div class="grid min-h-screen w-full overflow-hidden lg:grid-cols-[280px_1fr]">
     <MyPageSide />
     <div class="w-full px-40 h-full bg-white flex items-center justify-center">
       <div class="w-full px-12">
-        <h1 class="text-center text-3xl font-bold tracking-wide text-gray-800">
-          My Page
-        </h1>
+        <h1 class="text-center text-3xl font-bold tracking-wide text-gray-800">My Page</h1>
         <div class="flex flex-col items-center my-4">
           <img
-            :src="profileImage"
+            :src="
+              memberStore.userInfo.profileImage ||
+              'https://source.unsplash.com/800x450/?Beautifulgirl'
+            "
             alt="Profile Image"
             class="h-24 w-24 rounded-full object-cover cursor-pointer"
             @click="fileInput.click()"
           />
-          <input
-            type="file"
-            ref="fileInput"
-            class="hidden"
-            @change="handleFileChange"
-          />
+          <input type="file" ref="fileInput" class="hidden" @change="handleFileChange" />
         </div>
         <form class="my-8 text-sm" @submit.prevent>
           <div class="flex flex-col my-4">
@@ -204,15 +187,9 @@ onMounted(async () => {
             />
             <label for="remember_me" class="text-gray-700"
               >I accept the
-              <a
-                href="#"
-                class="text-blue-600 hover:text-blue-700 hover:underline"
-                >terms</a
-              >
+              <a href="#" class="text-blue-600 hover:text-blue-700 hover:underline">terms</a>
               and
-              <a
-                href="#"
-                class="text-blue-600 hover:text-blue-700 hover:underline"
+              <a href="#" class="text-blue-600 hover:text-blue-700 hover:underline"
                 >privacy policy</a
               ></label
             >
