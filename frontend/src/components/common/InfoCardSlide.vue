@@ -32,7 +32,6 @@
           </p>
         </div>
         <a
-          href="/"
           class="inline-flex items-center shrink-0 justify-center w-8 h-8 rounded-full text-white bg-gray-900 focus:outline-none"
         >
           <svg
@@ -54,7 +53,7 @@
         </a>
       </div>
       <div aria-label="content" class="mt-2 grid gap-2.5">
-        <a href="#">
+        <a>
           <div
             class="flex items-center space-x-4 p-3.5 rounded-full bg-gray-100"
           >
@@ -93,7 +92,7 @@
             </svg>
           </div>
         </a>
-        <a href="#">
+        <a>
           <div
             class="flex items-center space-x-4 p-3.5 rounded-full bg-gray-100"
           >
@@ -134,7 +133,7 @@
             </svg>
           </div>
         </a>
-        <a href="#">
+        <a>
           <div
             class="flex items-center space-x-4 p-3.5 rounded-full bg-gray-100"
           >
@@ -169,7 +168,7 @@
             </svg>
           </div>
         </a>
-        <a href="#">
+        <a>
           <div
             class="flex items-center space-x-4 p-3.5 rounded-full bg-gray-100"
           >
@@ -210,13 +209,13 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue";
+import { defineProps } from 'vue';
 
 const props = defineProps({
   routeInfo: Object,
 });
 
-console.log("info : ", props);
+console.log('info : ', props);
 </script>
 
 <style></style>

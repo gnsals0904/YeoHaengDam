@@ -1,13 +1,13 @@
 <script setup>
-import { KakaoMap, KakaoMapMarker, KakaoMapPolyline } from "vue3-kakao-maps";
-import { useRoute } from "vue-router";
-import { onMounted, ref, computed, watch } from "vue";
-import draggable from "vuedraggable";
-import axios from "axios";
+import { KakaoMap, KakaoMapMarker, KakaoMapPolyline } from 'vue3-kakao-maps';
+import { useRoute } from 'vue-router';
+import { onMounted, ref, computed, watch } from 'vue';
+import draggable from 'vuedraggable';
+import axios from 'axios';
 
-import InfoCardSlide from "@/components/common/InfoCardSlide.vue";
-import LocationBox from "@/components/map/LocationBox.vue";
-import AIModal from "@/components/mypage/Course/AIModal.vue";
+import InfoCardSlide from '@/components/common/InfoCardSlide.vue';
+import LocationBox from '@/components/map/LocationBox.vue';
+import AIModal from '@/components/mypage/Course/AIModal.vue';
 
 const route = useRoute();
 const planData = ref([]);
@@ -43,7 +43,7 @@ const defaultCoordinate = computed(() => {
 });
 
 const savePlanData = async () => {
-  const token = sessionStorage.getItem("accessToken");
+  const token = sessionStorage.getItem('accessToken');
   const updateData = {
     courseId: props.courseId,
     title: props.title,
@@ -56,18 +56,18 @@ const savePlanData = async () => {
   console.log(updateData);
   try {
     const response = await axios.patch(
-      "http://localhost:8080/api/course/update",
+      'http://localhost:8080/api/course/update',
       updateData,
       {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
       }
     );
-    console.log("Plan data saved successfully:", response.data);
+    console.log('Plan data saved successfully:', response.data);
   } catch (error) {
-    console.error("Error saving plan data:", error);
+    console.error('Error saving plan data:', error);
   }
 };
 
@@ -85,7 +85,7 @@ const fetchCourseDetails = async () => {
     console.log(planData.value);
     loading.value = false;
   } catch (error) {
-    console.error("Error fetching course details:", error);
+    console.error('Error fetching course details:', error);
     loading.value = false;
   }
 };
@@ -110,8 +110,8 @@ const fetchRoute = async () => {
       y: destination.latitude,
     },
     waypoints: waypoints,
-    priority: "RECOMMEND",
-    car_fuel: "GASOLINE",
+    priority: 'RECOMMEND',
+    car_fuel: 'GASOLINE',
     car_hipass: false,
     alternatives: false,
     road_details: false,
@@ -119,20 +119,20 @@ const fetchRoute = async () => {
 
   try {
     const response = await axios.post(
-      "https://apis-navi.kakaomobility.com/v1/waypoints/directions",
+      'https://apis-navi.kakaomobility.com/v1/waypoints/directions',
       requestData,
       {
         headers: {
           Authorization: `KakaoAK ${kakaoApiKey}`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       }
     );
     routeData.value = response.data;
-    console.log("받은 데이터:", routeData.value);
+    console.log('받은 데이터:', routeData.value);
     processRouteData();
   } catch (error) {
-    console.error("Error fetching route data:", error);
+    console.error('Error fetching route data:', error);
   }
 };
 
@@ -147,11 +147,11 @@ const processRouteData = () => {
   for (let i = 0; i < vertexes.length; i += 2) {
     markerList.value.push({ lat: vertexes[i + 1], lng: vertexes[i] });
   }
-  console.log("markerList ", markerList.value);
+  console.log('markerList ', markerList.value);
 };
 
 const image = {
-  imageSrc: "https://vue3-kakao-maps.netlify.app/images/redMarker.png",
+  imageSrc: 'https://vue3-kakao-maps.netlify.app/images/redMarker.png',
   imageWidth: 48,
   imageHeight: 48,
 };
@@ -163,7 +163,7 @@ onMounted(async () => {
 watch(
   planData,
   async (newVal, oldVal) => {
-    console.log("planData updated:", newVal);
+    console.log('planData updated:', newVal);
     if (newVal !== oldVal) {
       await fetchRoute();
 
@@ -191,7 +191,7 @@ watch(
   { deep: true }
 );
 
-const ordermargin = "35px";
+const ordermargin = '35px';
 </script>
 
 <template>
@@ -218,18 +218,18 @@ const ordermargin = "35px";
     <div class="flex flex-col">
       <div class="text-center">
         <h1
-          class="block text-5xl font-semibold leading-tight tracking-normal text-blue-800 antialiased"
+          class="block text-3xl font-semibold leading-tight tracking-normal antialiased"
         >
           나의 여행 계획
         </h1>
         <h3
-          class="block text-2xl font-semibold leading-tight tracking-normal text-blue-800 antialiased"
+          class="block text-xl font-semibold leading-tight tracking-normal antialiased"
         >
           드래그해서 순서를 바꿔서 경로를 저장해보세요!
         </h3>
       </div>
       <div
-        class="locations-list flex-1 overflow-auto overflow-y-auto min-w-[500px] max-h-[70vh]"
+        class="locations-list flex-1 overflow-auto overflow-y-auto min-w-[500px] max-h-[60vh]"
       >
         <draggable v-model="planData" group="locations" item-key="contentId">
           <template #item="{ element }">
@@ -246,7 +246,7 @@ const ordermargin = "35px";
           class="mr-8 mt-2 mb-5 inline-flex justify-center items-center py-2 px-7 text-base font-medium text-center text-white rounded-lg bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:focus:ring-green-900"
           @click="showAIModal"
         >
-          AI 이용하기
+          AI로 길찾기
         </button>
         <button
           class="mr-8 mt-2 mb-5 inline-flex justify-center items-center py-2 px-7 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"

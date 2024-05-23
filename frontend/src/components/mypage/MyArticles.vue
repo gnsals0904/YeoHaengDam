@@ -2,8 +2,8 @@
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import MyPageSide from '@/components/common/MyPageSide.vue';
-import BoardDetail from "@/components/board/BoardDetail.vue"; // 모달 컴포넌트 가져오기
-import Pagination from "@/components/common/Pagination.vue";
+import BoardDetail from '@/components/board/BoardDetail.vue'; // 모달 컴포넌트 가져오기
+import Pagination from '@/components/common/Pagination.vue';
 
 // 데이터 변수 설정
 const articles = ref([]);
@@ -14,15 +14,16 @@ const isModalVisible = ref(false);
 const currentPage = ref(1);
 const totalElements = ref(1); // 전체 게시글 수
 const pageSize = ref(10); // 페이지당 게시글 수
-const totalPages = computed(() => Math.ceil(totalElements.value / pageSize.value)); // 총 페이지 수 계산
+const totalPages = computed(() =>
+  Math.ceil(totalElements.value / pageSize.value)
+); // 총 페이지 수 계산
 
 // 데이터 가져오기 함수
 async function fetchArticles(page) {
-  
   try {
     const response = await axios.get('http://localhost:8080/api/articles', {
       headers: {
-        'Authorization': `Bearer ${token}` // Authorization 헤더에 토큰을 추가합니다.
+        Authorization: `Bearer ${token}`, // Authorization 헤더에 토큰을 추가합니다.
       },
       params: {
         page,
@@ -35,7 +36,7 @@ async function fetchArticles(page) {
   } catch (error) {
     console.error('Error fetching articles:', error);
   }
-};
+}
 
 // 컴포넌트가 마운트될 때 데이터 가져오기
 function updatePage(newPage) {
@@ -45,7 +46,6 @@ function updatePage(newPage) {
 onMounted(() => {
   fetchArticles();
 });
-
 
 async function showModal(board) {
   try {
@@ -59,12 +59,12 @@ async function showModal(board) {
     );
     selectedItem.value = articleResponse.data;
     comments.value = commentsResponse.data;
-    console.log("게시글 상세 받은데이터 : ", articleResponse.data);
-    console.log("게시글 상세 : ", selectedItem.value);
-    console.log("댓글 : ", comments.value);
+    console.log('게시글 상세 받은데이터 : ', articleResponse.data);
+    console.log('게시글 상세 : ', selectedItem.value);
+    console.log('댓글 : ', comments.value);
     isModalVisible.value = true;
   } catch (error) {
-    console.error("Failed to fetch article details or comments:", error);
+    console.error('Failed to fetch article details or comments:', error);
   }
 }
 
@@ -74,7 +74,9 @@ function closeModal() {
 </script>
 
 <template>
-  <div class="grid min-h-screen w-full overflow-hidden lg:grid-cols-[280px_1fr]">
+  <div
+    class="grid min-h-screen w-full overflow-hidden lg:grid-cols-[280px_1fr]"
+  >
     <MyPageSide />
 
     <div class="bg-white rounded-lg p-6 shadow-lg">
@@ -104,23 +106,24 @@ function closeModal() {
           <div class="text-right">
             <p class="text-gray-500">조회수: {{ article.hit }}</p>
           </div>
-          </div>
+        </div>
+        <div class="flex justify-center">
           <Pagination
             :value="currentPage"
             :total-page-count="totalPages"
             :page-display-count="5"
             @change="updatePage"
           />
-        
+        </div>
       </div>
     </div>
   </div>
   <BoardDetail
-      :item="selectedItem"
-      :comments="comments"
-      :visible="isModalVisible"
-      @close="closeModal"
-    />
+    :item="selectedItem"
+    :comments="comments"
+    :visible="isModalVisible"
+    @close="closeModal"
+  />
 </template>
 
 <style scoped>
