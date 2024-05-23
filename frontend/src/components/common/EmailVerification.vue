@@ -1,5 +1,6 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, defineEmits, defineProps } from 'vue';
+import Swal from 'sweetalert2';
 
 const props = defineProps({
   visible: Boolean,
@@ -24,16 +25,24 @@ const verifyCode = () => {
 };
 
 const resendCode = () => {
-  alert('Verification code resent.');
+  Swal.fire({
+    title: '인증 번호를 다시 전송했습니다.',
+    imageUrl: '/rottie/basicSuccess.gif',
+    imageWidth: 150,
+    imageHeight: 150,
+    imageAlt: 'Custom image',
+  });
 };
 </script>
 
 <template>
-  <div class="modal-overlay" v-if="visible">
+  <div class="modal-overlay" v-if="visible" @click="close">
     <div class="modal-container">
-      <h2 class="text-center font-semibold text-3xl">Email Verification</h2>
+      <h2 class="text-center font-semibold text-3xl">
+        이메일을 확인해주세요!!
+      </h2>
       <p class="text-center mt-5 mb-5">
-        We have sent a code to your email {{ obfuscatedEmail }}
+        여행담이 해당 메일 주소로 {{ obfuscatedEmail }} 코드를 보냈어요
       </p>
       <div
         class="code-inputs flex flex-row items-center justify-between mx-auto w-full max-w-xs"
@@ -72,12 +81,12 @@ const resendCode = () => {
           class="rounded-xl outline-none py-3 bg-blue-700 border-none text-white text-sm shadow-sm"
           @click="verifyCode"
         >
-          Verify Account
+          인증하기
         </button>
         <p class="text-center flex flex-col justify-center">
-          Didn't receive code?
+          코드를 받지 못하셨나요?
           <a class="text-lg items-center text-blue-600" @click="resendCode"
-            >Resend</a
+            >다시 보내기</a
           >
         </p>
       </div>

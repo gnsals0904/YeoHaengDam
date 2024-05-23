@@ -1,22 +1,23 @@
 <script setup>
-import { ref, computed, defineEmits, defineProps, watch } from "vue";
+import { ref, computed, defineEmits, defineProps, watch } from 'vue';
+import Swal from 'sweetalert2';
 
 const props = defineProps({
   visible: Boolean,
   planData: Array, // 부모로부터 planData를 받음
 });
-console.log("visible : ", props.visible);
-console.log("props : ", props);
-const emit = defineEmits(["close", "save"]);
-const title = ref("");
-const description = ref("");
+console.log('visible : ', props.visible);
+console.log('props : ', props);
+const emit = defineEmits(['close', 'save']);
+const title = ref('');
+const description = ref('');
 
 const closeModal = () => {
-  emit("close");
+  emit('close');
 };
 const saveTripPlan = () => {
-  console.log("여행 계획 저장하기");
-  console.log("props plandata : ", props.planData);
+  console.log('여행 계획 저장하기');
+  console.log('props plandata : ', props.planData);
   const schedules = props.planData.map((item, index) => ({
     spot: {
       contentId: item.contentId,
@@ -39,7 +40,7 @@ const saveTripPlan = () => {
     // courseId: 0,   // 새로운 코스의 경우 기본값
     // orderIndex: index // 순서를 유지하기 위해 index 사용
   }));
-  emit("save", {
+  emit('save', {
     title: title.value,
     description: description.value,
     schedules: schedules,
@@ -51,8 +52,8 @@ watch(
   () => props.visible,
   (newVal) => {
     if (!newVal) {
-      title.value = "";
-      description.value = "";
+      title.value = '';
+      description.value = '';
     }
   }
 );

@@ -1,6 +1,8 @@
 <script setup>
-import { defineProps, onMounted, ref, watch } from "vue";
-import OpenAI from "openai";
+import { defineProps, onMounted, ref, watch } from 'vue';
+import OpenAI from 'openai';
+import Swal from 'sweetalert2';
+
 /** 모달 창 관련 */
 const props = defineProps({
   visible: {
@@ -15,11 +17,11 @@ const props = defineProps({
     type: Object,
   },
 });
-console.log("ai modal :", props.planData);
-console.log("ai modal :", props.routeData);
-const emit = defineEmits(["close"]);
+console.log('ai modal :', props.planData);
+console.log('ai modal :', props.routeData);
+const emit = defineEmits(['close']);
 const closeModal = () => {
-  emit("close");
+  emit('close');
 };
 
 // watch를 사용하여 props.routeData가 변경될 때 findRoadInfo 호출
@@ -44,7 +46,7 @@ const findRoadInfo = () => {
     !props.routeData.routes[0].sections ||
     !props.routeData.routes[0].sections[0].guides
   ) {
-    console.error("routeData 또는 guides가 정의되지 않았습니다.");
+    console.error('routeData 또는 guides가 정의되지 않았습니다.');
     loading.value = false; // 로딩 종료
     return;
   }
@@ -71,10 +73,15 @@ const getGPTResponse = async () => {
     const guidesData = findRoadInfo();
     // guidesData가 비어있는 경우 종료
     if (guidesData.length === 0) {
-      console.error("guides 데이터가 비어 있습니다.");
+      Swal.fire(
+        '카카오에서 도로 정보를 받을 수 없습니다!',
+        '도로로 갈 수 있는 곳만 AI가 계산할 수 있습니다.',
+        'error'
+      );
+      console.error('guides 데이터가 비어 있습니다.');
       return;
     }
-    let promptString = "";
+    let promptString = '';
     guidesData.forEach((guide) => {
       promptString += `${guide.name}, ${guide.guidance}; `;
     });
@@ -93,18 +100,19 @@ const getGPTResponse = async () => {
     const response = await openai.chat.completions.create({
       messages: [
         {
-          role: "user",
+          role: 'user',
           content: prompt.value,
         },
       ],
-      model: "gpt-4-turbo",
+      model: 'gpt-4-turbo',
     });
     gptResponse.value = response.choices[0].message.content; // 응답 결과 저장
-    console.log("chatGPT 전체 응답", response);
-    console.log("chatGPT 결과: ", response.choices[0].message.content);
+    console.log('chatGPT 전체 응답', response);
+    console.log('chatGPT 결과: ', response.choices[0].message.content);
   } catch (error) {
-    console.log("error : ", error);
-    console.log("chatGPT: 🚨 에러가 발생했습니다.");
+    console.log('error : ', error);
+    console.log('chatGPT: 🚨 에러가 발생했습니다.');
+    Swal.fire('chatGPT Key ERROR!', '네트워크 또는 키를 확인해주세요', 'error');
   } finally {
     loading.value = false; // 로딩 종료
   }

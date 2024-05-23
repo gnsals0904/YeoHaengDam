@@ -24,7 +24,7 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
 
   routes: [
-    { path: '/', name: 'Landing', component: LandingPage },
+    { path: '/', name: 'Landing', component: LandingView },
     { path: '/main', name: 'Main', component: MainPage },
     { path: '/map', name: 'Map', component: MapView },
     { path: '/login', name: 'Login', component: LoginView },
@@ -35,7 +35,7 @@ const router = createRouter({
     { path: '/editPwd', name: 'EditPwd', component: EditPwdView },
     { path: '/board/list', name: 'List', component: BoardList },
     { path: '/notice', name: 'Notice', component: NoticeView },
-    { path: '/landing3', name: 'Landing3', component: LandingView },
+    { path: '/landing3', name: 'Landing3', component: LandingPage },
     { path: '/board/write', name: 'BoardEditor', component: BoardEditor },
     { path: '/mypage/edit', name: 'MypageEditor', component: MypageEditor },
     { path: '/mypage/articles', name: 'MyArticles', component: MyArticles },

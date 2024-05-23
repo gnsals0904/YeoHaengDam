@@ -1,13 +1,13 @@
 <script setup>
-import { KakaoMap, KakaoMapMarker } from "vue3-kakao-maps";
-import { onMounted, ref, computed } from "vue";
-import { useRoute } from "vue-router";
-import LocationBox from "@/components/map/LocationBox.vue";
-import LocationDetail from "@/components/map/LocationDetail.vue";
-import MapNavigation from "@/components/map/MapNavigation.vue";
-import axios from "axios";
-import draggable from "vuedraggable";
-import CourseSaveModal from "@/components/common/CourseSaveModal.vue";
+import { KakaoMap, KakaoMapMarker } from 'vue3-kakao-maps';
+import { onMounted, ref, computed } from 'vue';
+import { useRoute } from 'vue-router';
+import LocationBox from '@/components/map/LocationBox.vue';
+import LocationDetail from '@/components/map/LocationDetail.vue';
+import MapNavigation from '@/components/map/MapNavigation.vue';
+import axios from 'axios';
+import draggable from 'vuedraggable';
+import CourseSaveModal from '@/components/common/CourseSaveModal.vue';
 
 const route = useRoute();
 const tripData = ref([]);
@@ -24,7 +24,7 @@ onMounted(async () => {
   if (sidoCode && gugunCode && contentCode) {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/spot/listSpot",
+        'http://localhost:8080/api/spot/listSpot',
         {
           params: {
             sidoCode: parseInt(sidoCode),
@@ -37,15 +37,15 @@ onMounted(async () => {
         ...item,
         infoVisible: false,
       }));
-      console.log("Trip Data:", tripData.value);
+      console.log('Trip Data:', tripData.value);
     } catch (error) {
-      console.error("Error fetching trip data:", error);
-      alert("여행 정보를 가져오는 데 실패했습니다.");
+      console.error('Error fetching trip data:', error);
+      alert('여행 정보를 가져오는 데 실패했습니다.');
     } finally {
       loading.value = false; // 데이터 로딩이 완료되면 로딩 상태를 false로 변경
     }
   } else {
-    alert("필요한 매개변수가 URL에 포함되지 않았습니다.");
+    alert('필요한 매개변수가 URL에 포함되지 않았습니다.');
   }
 });
 
@@ -83,9 +83,9 @@ const closeSaveModal = () => {
 };
 
 const openSaveModal = () => {
-  console.log("emit 이벤트 수신");
+  console.log('emit 이벤트 수신');
   isSaveModalVisible.value = true;
-  console.log("isSaveModalVisible.value : ", isSaveModalVisible.value);
+  console.log('isSaveModalVisible.value : ', isSaveModalVisible.value);
 };
 
 const toggleDrawer = () => {
@@ -97,20 +97,20 @@ const updatePlanData = (newData) => {
 };
 
 const savePlan = async (saveData) => {
-  console.log("emit 이벤트 수신 : ", saveData);
+  console.log('emit 이벤트 수신 : ', saveData);
   try {
-    const token = sessionStorage.getItem("accessToken");
-    await axios.post("http://localhost:8080/api/course/save", saveData, {
+    const token = sessionStorage.getItem('accessToken');
+    await axios.post('http://localhost:8080/api/course/save', saveData, {
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
-    alert("여행 계획이 저장되었습니다!");
+    alert('여행 계획이 저장되었습니다!');
     isSaveModalVisible.value = false;
   } catch (error) {
-    console.error("Error saving trip plan:", error);
-    alert("여행 계획 저장에 실패했습니다.");
+    console.error('Error saving trip plan:', error);
+    alert('여행 계획 저장에 실패했습니다.');
   }
 };
 </script>
@@ -132,13 +132,7 @@ const savePlan = async (saveData) => {
         :clickable="true"
         @onClickKakaoMapMarker="toggleInfoWindow(item)"
         :infoWindow="{
-          content: `<div style='width: 200px;'><h4>${
-            item.title
-          }</h4><img src='${item.img1}' alt='${
-            item.title
-          }' style='width: 100%;'><button onClickKakaoMapMarker='toggleInfoWindow(${JSON.stringify(
-            item
-          )})'>Close</button></div>`,
+          content: `<div style='width: 200px;'><img src='${item.img1}' alt='${item.title}' style='width: 100%;'></div>`,
           visible: item.infoVisible,
         }"
       />

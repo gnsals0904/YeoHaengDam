@@ -1,9 +1,9 @@
 <script setup>
-import { defineEmits, defineProps, ref, watch } from "vue";
-import draggable from "vuedraggable";
-import LocationBox from "@/components/map/LocationBox.vue";
+import { defineEmits, defineProps, ref, watch } from 'vue';
+import draggable from 'vuedraggable';
+import LocationBox from '@/components/map/LocationBox.vue';
 
-const emit = defineEmits(["toggle", "update:planData", "save-plan"]);
+const emit = defineEmits(['toggle', 'update:planData', 'save-plan']);
 const props = defineProps({
   planData: Array,
   loading: Boolean,
@@ -15,12 +15,12 @@ const localPlanData = ref([...props.planData]);
 
 // planData 변화 감지 및 부모 컴포넌트에 업데이트 전달
 watch(localPlanData, (newVal) => {
-  emit("update:planData", newVal);
+  emit('update:planData', newVal);
 });
 
 const savePlan = () => {
-  console.log("savePlan 버튼 클릭 !");
-  emit("save-plan");
+  console.log('savePlan 버튼 클릭 !');
+  emit('save-plan');
 };
 </script>
 
@@ -45,7 +45,7 @@ const savePlan = () => {
     >
       <div class="px-6 py-4">
         <h2 class="text-lg font-semibold">나만의 여행 계획 세우기</h2>
-        <p class="text-gray-500">This is a drawer.</p>
+        <p class="text-gray-500">마음에 드는 여행지를 드래그로 넣어보세요</p>
         <div class="locations-list flex-1 min-w-[500px]">
           <draggable
             v-model="localPlanData"

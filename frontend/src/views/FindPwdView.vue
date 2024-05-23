@@ -1,87 +1,105 @@
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import axios from "axios";
-import EmailVerification from "@/components/common/EmailVerification.vue";
-import CustomLoading from "@/components/common/CustomLoading.vue";
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
+import EmailVerification from '@/components/common/EmailVerification.vue';
+import CustomLoading from '@/components/common/CustomLoading.vue';
 
 /** 회원 가입 */
-const email = ref("");
+const email = ref('');
 const isEmailConfirmed = ref(false);
 const emailVerificationVisible = ref(false);
 const isLoading = ref(false);
 const router = useRouter();
+const showModal = ref(false);
+const resetPassword = ref('');
 
 /** 이메일 체크 */
 const emailCheck = async (emailInput) => {
   if (!email.value) {
-    alert("이메일을 입력해주세요.");
+    alert('이메일을 입력해주세요.');
     return;
   }
   isLoading.value = true;
   try {
-    const response = await axios.post(`http://localhost:8080/api/auth/checkEmail`, {
-      email: email.value,
-      emailInput,
-    });
+    const response = await axios.post(
+      `http://localhost:8080/api/auth/checkEmail`,
+      {
+        email: email.value,
+        emailInput,
+      }
+    );
     if (response.status === 200) {
       emailVerificationVisible.value = true;
     } else {
-      alert("이메일 인증이 완료되지 않았습니다.");
+      alert('이메일 인증이 완료되지 않았습니다.');
     }
   } catch (error) {
-    console.error("이메일 인증 오류:", error);
-    alert("이메일 인증 중 오류가 발생했습니다.");
+    console.error('이메일 인증 오류:', error);
+    alert('이메일 인증 중 오류가 발생했습니다.');
   } finally {
     isLoading.value = false; // 로딩 상태 종료
   }
 };
 
-const resetPassword = async (email) => {
+const resetPasswordFunction = async (email) => {
   try {
-    const response = await axios.post(`http://localhost:8080/api/users/reset/password`, {
-      email: email.value,
-    });
+    const response = await axios.post(
+      `http://localhost:8080/api/users/reset/password`,
+      {
+        email: email.value,
+      }
+    );
     if (response.status === 200) {
-      const resetPassword = response.data;
-      alert(`비밀번호가 성공적으로 초기화되었습니다.\n새로운 비밀번호: ${resetPassword}`);
-      router.push({ name: "Login" }); // 로그인 페이지로 리디렉션
+      resetPassword.value = response.data;
+      showModal.value = true;
     } else {
-      alert("비밀번호 초기화에 실패하였습니다.");
+      alert('비밀번호 초기화에 실패하였습니다.');
     }
   } catch (error) {
-    console.error("비밀번호 초기화 오류:", error);
-    alert("입력하신 이메일 주소로 등록된 사용자가 없습니다.\n이메일 주소를 다시 확인해주세요.");
+    console.error('비밀번호 초기화 오류:', error);
+    alert(
+      '입력하신 이메일 주소로 등록된 사용자가 없습니다.\n이메일 주소를 다시 확인해주세요.'
+    );
   }
 };
 
 const verifyEmailCode = async (code) => {
   try {
-    const response = await axios.post(`http://localhost:8080/api/auth/checkCode`, {
-      email: email.value,
-      code: code,
-    });
+    const response = await axios.post(
+      `http://localhost:8080/api/auth/checkCode`,
+      {
+        email: email.value,
+        code: code,
+      }
+    );
     if (response.status === 200) {
       emailVerificationVisible.value = false;
       isEmailConfirmed.value = true;
-      alert("이메일 인증이 완료되었습니다.");
-      await resetPassword(email); // 비밀번호 초기화 요청 보내기
+      alert('이메일 인증이 완료되었습니다.');
+      await resetPasswordFunction(email); // 비밀번호 초기화 요청 보내기
     } else {
-      alert("잘못된 인증 코드입니다.");
+      alert('잘못된 인증 코드입니다.');
     }
   } catch (error) {
-    console.error("이메일 인증 코드 확인 오류:", error);
-    alert("이메일 인증 코드 확인 중 오류가 발생했습니다.");
+    console.error('이메일 인증 코드 확인 오류:', error);
+    alert('이메일 인증 코드 확인 중 오류가 발생했습니다.');
   }
+};
+
+const copyToClipboard = () => {
+  navigator.clipboard
+    .writeText(resetPassword.value)
+    .then(() => {
+      alert('비밀번호가 복사되었습니다');
+    })
+    .catch((error) => {
+      console.error('Error copying text: ', error);
+    });
 };
 </script>
 
 <template>
-  <!--
-  // v0 by Vercel.
-  // https://v0.dev/t/YOufAQnTnbp
-  -->
-
   <main
     class="flex min-h-screen items-center justify-center bg-gray-100 px-4 py-12 dark:bg-gray-950"
   >
@@ -89,9 +107,9 @@ const verifyEmailCode = async (code) => {
       class="mx-auto w-full max-w-md space-y-4 rounded-lg bg-white p-6 shadow-lg dark:bg-gray-900"
     >
       <div class="space-y-2">
-        <h1 class="text-2xl font-bold">Find your password</h1>
+        <h1 class="text-2xl font-bold">비밀번호를 찾아드릴께요</h1>
         <p class="text-gray-500 dark:text-gray-400">
-          Enter your email address and we'll send you a link to reset your password.
+          당신의 이메일을 입력하고 비밀번호를 재설정하세요
         </p>
       </div>
       <form class="my-8 text-sm" @submit.prevent>
@@ -114,19 +132,13 @@ const verifyEmailCode = async (code) => {
             </button>
           </div>
         </div>
-        <button
-          class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
-          type="submit"
-        >
-          Send reset link
-        </button>
       </form>
       <div class="text-center text-sm text-gray-500 dark:text-gray-400">
         <a
           class="font-medium underline hover:text-gray-900 dark:hover:text-gray-50"
           @click="router.push('/login')"
         >
-          Back to login
+          로그인 화면으로 돌아가기
         </a>
       </div>
     </div>
@@ -138,6 +150,32 @@ const verifyEmailCode = async (code) => {
     @close="emailVerificationVisible = false"
   />
   <CustomLoading v-if="isLoading" />
+
+  <!-- 모달 오버레이 -->
+  <div
+    v-if="showModal"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+  >
+    <!-- 모달 컨텐츠 -->
+    <div class="bg-white p-5 rounded shadow-lg w-1/3">
+      <h2 class="text-xl mb-4">초기화된 비밀번호 입니다!</h2>
+      <p>{{ resetPassword }}</p>
+      <div class="mt-4 flex justify-end">
+        <button
+          @click="copyToClipboard"
+          class="bg-green-500 text-white px-4 py-2 rounded mr-2"
+        >
+          비밀번호 복사하기
+        </button>
+        <button
+          @click="handleModalClose"
+          class="bg-red-500 text-white px-4 py-2 rounded"
+        >
+          닫기
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped></style>
