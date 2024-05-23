@@ -1,6 +1,12 @@
 <script setup>
-import WordAnimation from "@/components/Landing/WordAnimation.vue";
-import VideoSection from "@/components/Landing/VideoSection.vue";
+import WordAnimation from '@/components/Landing/WordAnimation.vue';
+import VideoSection from '@/components/Landing/VideoSection.vue';
+import { ref } from 'vue';
+const targetSection = ref(null);
+
+const scrollToSection = () => {
+  targetSection.value.scrollIntoView({ behavior: 'smooth' });
+};
 </script>
 
 <template>
@@ -19,15 +25,19 @@ import VideoSection from "@/components/Landing/VideoSection.vue";
       <div class="px-3 mb-12 w-full lg:mb-0 lg:w-2/5">
         <WordAnimation></WordAnimation>
         <div class="mt-12 text-center flex justify-center">
-          <a
+          <router-link
+            :to="{ name: 'Main' }"
             class="py-4 px-4 mr-10 text-xl font-semibold tracking-wide text-white bg-blue-500 rounded cursor-pointer"
-            >여행담 사용해보기</a
           >
+            여행담 사용해보기
+          </router-link>
 
-          <a
+          <button
             class="py-4 px-4 text-xl font-semibold bg-black text-white rounded border border-solid cursor-pointer"
-            >사용 방법</a
+            @click="scrollToSection"
           >
+            사용 방법 알아보기
+          </button>
         </div>
       </div>
     </section>
@@ -75,7 +85,7 @@ import VideoSection from "@/components/Landing/VideoSection.vue";
 
     <!-- Content -->
     <section class="p-20 space-y-8">
-      <h1 class="text-4xl text-center my-20">
+      <h1 ref="targetSection" class="text-4xl text-center my-20">
         여행담 사용 방법이 들어갈 예정입니다
       </h1>
       <div class="py-12 relative overflow-hidden bg-white">

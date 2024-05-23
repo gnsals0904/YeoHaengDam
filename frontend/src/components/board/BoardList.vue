@@ -1,12 +1,12 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import axios from "axios";
-import { useRouter } from "vue-router";
-import { useBoardStore } from "@/stores/board";
-import { useMemberStore } from "@/stores/member";
-import BoardCard from "@/components/board/BoardCard.vue";
-import Pagination from "@/components/common/Pagination.vue";
-import BoardDetail from "@/components/board/BoardDetail.vue"; // 모달 컴포넌트 가져오기
+import { ref, computed, onMounted } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
+import { useBoardStore } from '@/stores/board';
+import { useMemberStore } from '@/stores/member';
+import BoardCard from '@/components/board/BoardCard.vue';
+import Pagination from '@/components/common/Pagination.vue';
+import BoardDetail from '@/components/board/BoardDetail.vue'; // 모달 컴포넌트 가져오기
 
 const boardStore = useBoardStore();
 const currentPage = ref(1);
@@ -21,11 +21,11 @@ const memberStore = useMemberStore();
 const isLogin = computed(() => memberStore.isLogin);
 const comments = ref([]);
 const boardList = ref([]);
-const searchKeyword = ref(""); // 검색어 상태 추가
+const searchKeyword = ref(''); // 검색어 상태 추가
 const isDropdownOpen = ref(false); // 드롭다운 상태 추가
-const sortBy = ref("updated_at");
+const sortBy = ref('updated_at');
 
-async function fetchBoardList(page, keyword = "", sortBy = "updated_at") {
+async function fetchBoardList(page, keyword = '', sortBy = 'updated_at') {
   try {
     const response = await axios.get(
       `http://localhost:8080/api/articles/list`,
@@ -41,7 +41,7 @@ async function fetchBoardList(page, keyword = "", sortBy = "updated_at") {
     boardList.value = response.data;
     totalElements.value = response.data[0].totalCount; // 전체 게시글 수 설정
   } catch (error) {
-    console.error("Failed to fetch board list:", error);
+    console.error('Failed to fetch board list:', error);
   }
 }
 
@@ -62,7 +62,7 @@ async function showModal(board) {
     comments.value = commentsResponse.data;
     isModalVisible.value = true;
   } catch (error) {
-    console.error("Failed to fetch article details or comments:", error);
+    console.error('Failed to fetch article details or comments:', error);
   }
 }
 
@@ -217,12 +217,14 @@ onMounted(() => {
               글을 작성하려면 로그인 해주세요
             </div>
           </div>
-          <Pagination
-            :value="currentPage"
-            :total-page-count="totalPages"
-            :page-display-count="5"
-            @change="updatePage"
-          />
+          <div class="flex justify-center">
+            <Pagination
+              :value="currentPage"
+              :total-page-count="totalPages"
+              :page-display-count="5"
+              @change="updatePage"
+            />
+          </div>
         </div>
       </div>
     </div>
