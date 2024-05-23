@@ -180,7 +180,10 @@ onMounted(async () => {
         </h1>
         <div class="flex flex-col items-center my-4">
           <img
-            :src="profileImage"
+            :src="
+              memberStore.userInfo.profileImage ||
+              'https://source.unsplash.com/800x450/?Beautifulgirl'
+            "
             alt="Profile Image"
             class="h-24 w-24 rounded-full object-cover cursor-pointer"
             @click="fileInput.click()"

@@ -100,8 +100,8 @@
 
 
     <insert id="create" parameterType="Article" useGeneratedKeys="true" keyProperty="articleId">
-        insert into article(user_id, title, content, created_at, updated_at())
-        values (#{userId}, #{title}, #{content}, #{createdAt}, now())
+        insert into article(user_id, title, content, created_at)
+        values (#{userId}, #{title}, #{content}, #{createdAt})
     </insert>
 
     <insert id="createImage">
