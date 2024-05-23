@@ -18,6 +18,7 @@ import MyArticles from '@/components/mypage/MyArticles.vue';
 import MyCourse from '@/components/mypage/MyCourse.vue';
 import EmailVerification from '@/components/common/EmailVerification.vue';
 import CourseDetail from '@/components/mypage/Course/CourseDetail.vue';
+import OauthView from '@/views/OauthSuccessView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,6 +40,11 @@ const router = createRouter({
     { path: '/mypage/edit', name: 'MypageEditor', component: MypageEditor },
     { path: '/mypage/articles', name: 'MyArticles', component: MyArticles },
     { path: '/mypage/course', name: 'MyCourse', component: MyCourse },
+    {
+      path: '/auth/oauth-response/:accessToken/:expiresIn',
+      name: 'Oauth',
+      component: OauthView,
+    },
     {
       path: '/course/:courseId',
       name: 'CourseDetail',
