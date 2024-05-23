@@ -348,14 +348,12 @@ const verifyEmailCode = async (code) => {
 
           <div class="text-sm">
             <a
-              href="#"
               class="flex items-center justify-center space-x-2 text-gray-600 my-2 py-2 bg-gray-100 hover:bg-gray-200 rounded"
               @click="handleKakaoSignUp"
             >
               <span>Sign up with kakao</span>
             </a>
             <a
-              href="#"
               class="flex items-center justify-center space-x-2 text-gray-600 my-2 py-2 bg-gray-100 hover:bg-gray-200 rounded"
               @click="handleNaverSignUp"
             >
