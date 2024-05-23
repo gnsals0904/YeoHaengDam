@@ -1,14 +1,14 @@
 <script setup>
-import { KakaoMap, KakaoMapMarker, KakaoMapPolyline } from 'vue3-kakao-maps';
-import { useRoute } from 'vue-router';
-import { onMounted, ref, computed, watch } from 'vue';
-import draggable from 'vuedraggable';
-import axios from 'axios';
-import Swal from 'sweetalert2';
+import { KakaoMap, KakaoMapMarker, KakaoMapPolyline } from "vue3-kakao-maps";
+import { useRoute } from "vue-router";
+import { onMounted, ref, computed, watch } from "vue";
+import draggable from "vuedraggable";
+import axios from "axios";
+import Swal from "sweetalert2";
 
-import InfoCardSlide from '@/components/common/InfoCardSlide.vue';
-import LocationBox from '@/components/map/LocationBox.vue';
-import AIModal from '@/components/mypage/Course/AIModal.vue';
+import InfoCardSlide from "@/components/common/InfoCardSlide.vue";
+import LocationBox from "@/components/map/LocationBox.vue";
+import AIModal from "@/components/mypage/Course/AIModal.vue";
 
 const route = useRoute();
 const planData = ref([]);
@@ -44,7 +44,7 @@ const defaultCoordinate = computed(() => {
 });
 
 const savePlanData = async () => {
-  const token = sessionStorage.getItem('accessToken');
+  const token = sessionStorage.getItem("accessToken");
   const updateData = {
     courseId: props.courseId,
     title: props.title,
@@ -57,26 +57,26 @@ const savePlanData = async () => {
   console.log(updateData);
   try {
     const response = await axios.patch(
-      'http://localhost:8080/api/course/update',
+      "http://localhost:8080/api/course/update",
       updateData,
       {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       }
     );
     Swal.fire({
-      title: '데이터를 성공적으로 저장했습니다.',
-      imageUrl: '/rottie/basicSuccess.gif',
+      title: "데이터를 성공적으로 저장했습니다.",
+      imageUrl: "/rottie/basicSuccess.gif",
       imageWidth: 150,
       imageHeight: 150,
-      imageAlt: 'Custom image',
+      imageAlt: "Custom image",
     });
-    console.log('Plan data saved successfully:', response.data);
+    console.log("Plan data saved successfully:", response.data);
   } catch (error) {
-    Swal.fire('저장을 실패했습니다', '다시 로그인 해주세요.', 'error');
-    console.error('Error saving plan data:', error);
+    Swal.fire("저장을 실패했습니다", "다시 로그인 해주세요.", "error");
+    console.error("Error saving plan data:", error);
   }
 };
 
@@ -95,11 +95,11 @@ const fetchCourseDetails = async () => {
     loading.value = false;
   } catch (error) {
     Swal.fire(
-      '계획 정보를 불러오는데 실패했습니다',
-      '다시 로그인 해주세요.',
-      'error'
+      "계획 정보를 불러오는데 실패했습니다",
+      "다시 로그인 해주세요.",
+      "error"
     );
-    console.error('Error fetching course details:', error);
+    console.error("Error fetching course details:", error);
     loading.value = false;
   }
 };
@@ -124,8 +124,8 @@ const fetchRoute = async () => {
       y: destination.latitude,
     },
     waypoints: waypoints,
-    priority: 'RECOMMEND',
-    car_fuel: 'GASOLINE',
+    priority: "RECOMMEND",
+    car_fuel: "GASOLINE",
     car_hipass: false,
     alternatives: false,
     road_details: false,
@@ -133,25 +133,25 @@ const fetchRoute = async () => {
 
   try {
     const response = await axios.post(
-      'https://apis-navi.kakaomobility.com/v1/waypoints/directions',
+      "https://apis-navi.kakaomobility.com/v1/waypoints/directions",
       requestData,
       {
         headers: {
           Authorization: `KakaoAK ${kakaoApiKey}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       }
     );
     routeData.value = response.data;
-    console.log('받은 데이터:', routeData.value);
+    console.log("받은 데이터:", routeData.value);
     processRouteData();
   } catch (error) {
     Swal.fire(
-      '계획 정보를 불러오는데 실패했습니다',
-      '다시 로그인 해주세요.',
-      'error'
+      "계획 정보를 불러오는데 실패했습니다",
+      "다시 로그인 해주세요.",
+      "error"
     );
-    console.error('Error fetching route data:', error);
+    console.error("Error fetching route data:", error);
   }
 };
 
@@ -166,11 +166,11 @@ const processRouteData = () => {
   for (let i = 0; i < vertexes.length; i += 2) {
     markerList.value.push({ lat: vertexes[i + 1], lng: vertexes[i] });
   }
-  console.log('markerList ', markerList.value);
+  console.log("markerList ", markerList.value);
 };
 
 const image = {
-  imageSrc: 'https://vue3-kakao-maps.netlify.app/images/redMarker.png',
+  imageSrc: "https://vue3-kakao-maps.netlify.app/images/redMarker.png",
   imageWidth: 48,
   imageHeight: 48,
 };
@@ -182,7 +182,7 @@ onMounted(async () => {
 watch(
   planData,
   async (newVal, oldVal) => {
-    console.log('planData updated:', newVal);
+    console.log("planData updated:", newVal);
     if (newVal !== oldVal) {
       await fetchRoute();
 
@@ -210,7 +210,7 @@ watch(
   { deep: true }
 );
 
-const ordermargin = '35px';
+const ordermargin = "35px";
 </script>
 
 <template>
@@ -265,7 +265,7 @@ const ordermargin = '35px';
           class="mr-8 mt-2 mb-5 inline-flex justify-center items-center py-2 px-7 text-base font-medium text-center text-white rounded-lg bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:focus:ring-green-900"
           @click="showAIModal"
         >
-          AI로 길찾기
+          AI 활용하기
         </button>
         <button
           class="mr-8 mt-2 mb-5 inline-flex justify-center items-center py-2 px-7 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900"

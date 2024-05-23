@@ -1,35 +1,37 @@
 <script setup>
-import { ref } from 'vue';
-import { storeToRefs } from 'pinia';
-import router from '@/router';
-import client from '@/api/client';
-import { useAuthStore } from '@/stores/auth';
-import { useMemberStore } from '@/stores/member';
+import { ref } from "vue";
+import { storeToRefs } from "pinia";
+import router from "@/router";
+import client from "@/api/client";
+import { useAuthStore } from "@/stores/auth";
+import { useMemberStore } from "@/stores/member";
+import Swal from "sweetalert2";
 
 const memberStore = useMemberStore();
 const authStore = useAuthStore();
-const email = ref('');
-const password = ref('');
+const email = ref("");
+const password = ref("");
 
 const { isLogin, isLoginError } = storeToRefs(memberStore);
 const { userLogin, getUserInfo } = memberStore;
 
 const loginUser = ref({
-  email: '',
-  password: '',
+  email: "",
+  password: "",
 });
 
 /** 로그인 함수 */
 const login = async () => {
   await userLogin(loginUser.value);
-  let token = sessionStorage.getItem('accessToken');
+  let token = sessionStorage.getItem("accessToken");
   console.log(token);
-  console.log('isLogin: ' + isLogin.value);
+  console.log("isLogin: " + isLogin.value);
   if (isLogin.value) {
     getUserInfo(token);
-    router.replace('/');
+    router.replace("/");
   } else {
-    alert('아이디와 비밀번호를 확인해주세요');
+    Swal.fire("로그인 실패", "아이디와 비밀번호를 확인해주세요", "error");
+    alert("아이디와 비밀번호를 확인해주세요");
   }
 };
 
@@ -129,6 +131,6 @@ const handleNaverLogin = async () => {
 <style>
 .login_img_section {
   background: linear-gradient(rgba(2, 2, 2, 0.7), rgba(0, 0, 0, 0.7)),
-    url('/signimg.jpg') center center;
+    url("/signimg.jpg") center center;
 }
 </style>

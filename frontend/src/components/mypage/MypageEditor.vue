@@ -1,19 +1,19 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
-import { useRouter } from 'vue-router';
-import { useMemberStore } from '@/stores/member';
-import MyPageSide from '@/components/common/MyPageSide.vue';
-import Swal from 'sweetalert2';
+import { ref, onMounted } from "vue";
+import axios from "axios";
+import { useRouter } from "vue-router";
+import { useMemberStore } from "@/stores/member";
+import MyPageSide from "@/components/common/MyPageSide.vue";
+import Swal from "sweetalert2";
 
 const memberStore = useMemberStore();
 const { getUserInfo } = memberStore;
 const router = useRouter();
-const token = sessionStorage.getItem('accessToken');
-const nickname = ref('닉네임');
-const email = ref('email@example.com');
-const password = ref('');
-const passwordConfirmation = ref('');
+const token = sessionStorage.getItem("accessToken");
+const nickname = ref("닉네임");
+const email = ref("email@example.com");
+const password = ref("");
+const passwordConfirmation = ref("");
 const isNicknameAvailable = ref(false);
 const hasCheckedNickname = ref(false);
 const isNicknameEditable = ref(false);
@@ -21,7 +21,7 @@ const isNicknameConfirmed = ref(false);
 const isDisabled = ref(true);
 const isEditing = ref(false);
 const nicknameDisabled = ref(true);
-const profileImage = ref('/mnt/data/image.png'); // 기본 이미지 경로
+const profileImage = ref("/mnt/data/image.png"); // 기본 이미지 경로
 
 const fileInput = ref(null);
 
@@ -35,9 +35,9 @@ const toggleEdit = () => {
 const nicknameCheck = async () => {
   if (!nickname.value) {
     Swal.fire(
-      '닉네임을 입력해주세요!',
-      '닉네임은 필수로 입력하셔야 합니다.',
-      'error'
+      "닉네임을 입력해주세요!",
+      "닉네임은 필수로 입력하셔야 합니다.",
+      "error"
     );
 
     return;
@@ -49,7 +49,7 @@ const nicknameCheck = async () => {
     );
     if (response.data.available) {
       const confirmUse = confirm(
-        '사용 가능한 닉네임입니다. 이 닉네임을 사용하시겠습니까?'
+        "사용 가능한 닉네임입니다. 이 닉네임을 사용하시겠습니까?"
       );
       if (confirmUse) {
         isNicknameAvailable.value = true;
@@ -60,18 +60,18 @@ const nicknameCheck = async () => {
       }
     } else {
       Swal.fire(
-        '이미 사용중인 닉네임입니다.',
-        '다른 닉네임을 사용해주세요.',
-        'error'
+        "이미 사용중인 닉네임입니다.",
+        "다른 닉네임을 사용해주세요.",
+        "error"
       );
       isNicknameAvailable.value = false;
     }
   } catch (error) {
-    console.error('닉네임 중복체크 오류:', error);
+    console.error("닉네임 중복체크 오류:", error);
     Swal.fire(
-      '중복체크 중 오류가 발생했습니다',
-      '서버와의 연결을 확인해 주세요',
-      'error'
+      "중복체크 중 오류가 발생했습니다",
+      "서버와의 연결을 확인해 주세요",
+      "error"
     );
   }
 };
@@ -81,33 +81,33 @@ const handleFileChange = async (event) => {
   const file = event.target.files[0];
   if (file) {
     const formData = new FormData();
-    formData.append('', file);
+    formData.append("image", file);
     try {
       const response = await axios.post(
-        'http://localhost:8080/api/users/updateProfile',
+        "http://localhost:8080/api/users/updateProfile",
         formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
         }
       );
       profileImage.value = URL.createObjectURL(file);
       Swal.fire({
-        title: '프로필 이미지가 성공적으로 업로드 되었습니다.',
-        imageUrl: '/rottie/basicUpdate.gif',
+        title: "프로필 이미지가 성공적으로 업로드 되었습니다.",
+        imageUrl: "/rottie/basicUpdate.gif",
         imageWidth: 150,
         imageHeight: 150,
-        imageAlt: 'Custom image',
+        imageAlt: "Custom image",
       });
     } catch (error) {
       Swal.fire(
-        '업로드를 실패했습니다!',
-        '프로필 이미지 업로드 중 문제가 발생했습니다.',
-        'error'
+        "업로드를 실패했습니다!",
+        "프로필 이미지 업로드 중 문제가 발생했습니다.",
+        "error"
       );
-      console.error('프로필 이미지 업로드 오류:', error);
+      console.error("프로필 이미지 업로드 오류:", error);
     }
   }
 };
@@ -121,38 +121,38 @@ const handleUpdate = async () => {
 
   try {
     const response = await axios.put(
-      'http://localhost:8080/api/users/update_nickname',
+      "http://localhost:8080/api/users/update_nickname",
       user,
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       }
     );
     if (response.status === 200) {
       Swal.fire({
-        title: '정보가 성공적으로 업데이트되었습니다.',
-        imageUrl: '/rottie/basicUpdate.gif',
+        title: "정보가 성공적으로 업데이트되었습니다.",
+        imageUrl: "/rottie/basicUpdate.gif",
         imageWidth: 150,
         imageHeight: 150,
-        imageAlt: 'Custom image',
+        imageAlt: "Custom image",
       });
-      router.replace('/');
+      router.replace("/");
     }
   } catch (error) {
-    console.error('업데이트 에러:', error);
+    console.error("업데이트 에러:", error);
     Swal.fire(
-      '업데이트 실패',
-      '정보 업데이트 중 문제가 발생했습니다.',
-      'error'
+      "업데이트 실패",
+      "정보 업데이트 중 문제가 발생했습니다.",
+      "error"
     );
   }
   toggleEdit();
 };
 
 const goEditPwd = () => {
-  router.push({ name: 'EditPwd' });
+  router.push({ name: "EditPwd" });
 };
 
 onMounted(async () => {

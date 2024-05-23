@@ -1,17 +1,17 @@
 <script setup>
-import { ref } from 'vue';
-import { joinUser } from '@/api/user';
-import { useRouter } from 'vue-router';
-import axios from 'axios';
-import { showConfetti } from '@/util/confetti';
-import EmailVerification from '@/components/common/EmailVerification.vue';
-import CustomLoading from '@/components/common/CustomLoading.vue';
-
+import { ref } from "vue";
+import { joinUser } from "@/api/user";
+import { useRouter } from "vue-router";
+import axios from "axios";
+import { showConfetti } from "@/util/confetti";
+import EmailVerification from "@/components/common/EmailVerification.vue";
+import CustomLoading from "@/components/common/CustomLoading.vue";
+import Swal from "sweetalert2";
 /** 회원 가입 */
-const nickname = ref('');
-const email = ref('');
-const password = ref('');
-const passwordConfirmation = ref('');
+const nickname = ref("");
+const email = ref("");
+const password = ref("");
+const passwordConfirmation = ref("");
 const isNicknameAvailable = ref(false);
 const hasCheckedNickname = ref(false);
 const isNicknameConfirmed = ref(false);
@@ -31,19 +31,26 @@ const handleNaverSignUp = async () => {
 /** 회원 가입 */
 const handleSignUp = async () => {
   if (!hasCheckedNickname.value) {
-    alert('닉네임 중복체크를 해주세요.');
+    Swal.fire("회원 가입 오류!", "닉네임 중복체크를 해주세요!", "error");
+
     return;
   }
   if (!isEmailConfirmed.value) {
-    alert('이메일 인증을 완료해주세요.');
+    Swal.fire("회원 가입 오류!", "이메일 인증을 완료해주세요!", "error");
     return;
   }
   if (password.value.length < 6) {
-    alert('비밀번호는 최소 6자리 이상이어야 합니다.');
+    Swal.fire(
+      "비밀번호 오류!",
+      "비밀번호는 최소 6자리 이상이어야 합니다",
+      "error"
+    );
+
     return;
   }
   if (password.value !== passwordConfirmation.value) {
-    alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+    Swal.fire("비밀번호 오류!", "비밀번호가 일치하지 않습니다.", "error");
+
     return;
   }
   const user = {
@@ -53,14 +60,20 @@ const handleSignUp = async () => {
   };
   console.log(user);
   const result = await joinUser(user);
-  console.log('회원가입 결과:', result);
+  console.log("회원가입 결과:", result);
 
   if (result.success) {
-    alert('회원가입이 완료되었습니다.');
+    Swal.fire({
+      title: "회원가입이 완료되었습니다.",
+      imageUrl: "/rottie/basicSuccess.gif",
+      imageWidth: 150,
+      imageHeight: 150,
+      imageAlt: "Custom image",
+    });
     showConfetti();
-    router.replace('/login');
+    router.replace("/login");
   } else {
-    alert('회원가입에 실패했습니다.');
+    alert("회원가입에 실패했습니다.");
   }
 };
 
@@ -77,7 +90,8 @@ const toggleConfirmPasswordVisibility = () => {
 /** 닉네임 중복 체크 */
 const nicknameCheck = async () => {
   if (!nickname.value) {
-    alert('이메일을 입력해주세요.');
+    Swal.fire("닉네임 중복 체크 오류!", "이메일을 입력해주세요!", "error");
+    alert("이메일을 입력해주세요.");
     return;
   }
   try {
@@ -86,7 +100,7 @@ const nicknameCheck = async () => {
     );
     if (response.data.available) {
       const confirmUse = confirm(
-        '사용 가능한 닉네임입니다. 이 닉네임을 사용하시겠습니까?'
+        "사용 가능한 닉네임입니다. 이 닉네임을 사용하시겠습니까?"
       );
       if (confirmUse) {
         isNicknameAvailable.value = true;
@@ -94,19 +108,23 @@ const nicknameCheck = async () => {
         hasCheckedNickname.value = true;
       }
     } else {
-      alert('이미 사용 중인 닉네임입니다.');
+      Swal.fire("닉네임 중복!", "이미 사용 중인 닉네임입니다!", "error");
       isNicknameAvailable.value = false;
     }
   } catch (error) {
-    console.error('닉네임 중복체크 오류:', error);
-    alert('중복 체크 중 오류가 발생했습니다.');
+    console.error("닉네임 중복체크 오류:", error);
+    Swal.fire("중복 체크 오류!", "중복 체크 중 오류가 발생했습니다.", "error");
   }
 };
 
 /** 이메일 체크 */
 const emailCheck = async (emailInput) => {
   if (!email.value) {
-    alert('이메일을 입력해주세요.');
+    Swal.fire(
+      "이메일을 입력해주세요!",
+      "이메일은 필수로 입력되어야 하는 항목입니다",
+      "error"
+    );
     return;
   }
   isLoading.value = true;
@@ -121,11 +139,15 @@ const emailCheck = async (emailInput) => {
     if (response.status === 200) {
       emailVerificationVisible.value = true;
     } else {
-      alert('이메일 인증이 완료되지 않았습니다.');
+      alert("이메일 인증이 완료되지 않았습니다.");
     }
   } catch (error) {
-    console.error('이메일 인증 오류:', error);
-    alert('이메일 인증 중 오류가 발생했습니다.');
+    console.error("이메일 인증 오류:", error);
+    Swal.fire(
+      "잘못된 인증 코드입니다!",
+      "이메일 인증 코드 확인 중 오류가 발생했습니다.",
+      "error"
+    );
   } finally {
     isLoading.value = false; // 로딩 상태 종료
   }
@@ -143,13 +165,27 @@ const verifyEmailCode = async (code) => {
     if (response.status == 200) {
       emailVerificationVisible.value = false;
       isEmailConfirmed.value = true;
-      alert('이메일 인증이 완료되었습니다.');
+      Swal.fire({
+        title: "이메일 인증이 완료되었습니다",
+        imageUrl: "/rottie/basicSuccess.gif",
+        imageWidth: 150,
+        imageHeight: 150,
+        imageAlt: "Custom image",
+      });
     } else {
-      alert('잘못된 인증 코드입니다.');
+      Swal.fire(
+        "잘못된 인증 코드입니다!",
+        "이메일 인증 코드 확인 중 오류가 발생했습니다.",
+        "error"
+      );
     }
   } catch (error) {
-    console.error('이메일 인증 코드 확인 오류:', error);
-    alert('이메일 인증 코드 확인 중 오류가 발생했습니다.');
+    console.error("이메일 인증 코드 확인 오류:", error);
+    Swal.fire(
+      "잘못된 인증 코드입니다!",
+      "이메일 인증 코드 확인 중 오류가 발생했습니다.",
+      "error"
+    );
   }
 };
 </script>

@@ -1,7 +1,8 @@
 <script setup>
-import { onMounted } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
-import { useMemberStore } from '@/stores/member';
+import { onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { useMemberStore } from "@/stores/member";
+import Swal from "sweetalert2";
 
 const router = useRouter();
 const route = useRoute();
@@ -13,7 +14,7 @@ onMounted(async () => {
 
   if (accessToken) {
     // 토큰을 세션 스토리지에 저장
-    sessionStorage.setItem('accessToken', accessToken);
+    sessionStorage.setItem("accessToken", accessToken);
 
     // memberStore의 상태 업데이트
     memberStore.isLogin = true;
@@ -24,11 +25,12 @@ onMounted(async () => {
     await memberStore.getUserInfo(accessToken);
 
     // 랜딩 페이지로 리디렉션
-    router.replace('/');
+    router.replace("/");
   } else {
     // 토큰이 없을 경우 오류 처리
-    alert('OAuth 인증 실패: 액세스 토큰을 찾을 수 없습니다.');
-    router.push('/login'); // 로그인 페이지로 이동
+    Swal.fire("OAuth 인증 실패", "액세스 토큰을 찾을 수 없습니다", "error");
+
+    router.push("/login"); // 로그인 페이지로 이동
   }
 });
 </script>

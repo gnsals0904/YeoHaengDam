@@ -1,10 +1,11 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue';
-import axios from 'axios';
-import TableRow from '@/components/notice/TableRow.vue';
-import NoticeDetail from '@/components/notice/NoticeDetail.vue';
-import { useMemberStore } from '@/stores/member';
-import Pagination from '@/components/common/Pagination.vue';
+import { ref, onMounted, computed } from "vue";
+import axios from "axios";
+import TableRow from "@/components/notice/TableRow.vue";
+import NoticeDetail from "@/components/notice/NoticeDetail.vue";
+import { useMemberStore } from "@/stores/member";
+import Pagination from "@/components/common/Pagination.vue";
+import Swal from "sweetalert2";
 
 const memberStore = useMemberStore();
 const rows = ref([]);
@@ -13,7 +14,7 @@ const isModalVisible = ref(false);
 const currentPage = ref(1);
 const totalElements = ref(0);
 const pageSize = ref(10);
-const searchKeyword = ref(''); // 검색어 상태 추가
+const searchKeyword = ref(""); // 검색어 상태 추가
 const totalPages = computed(() =>
   Math.ceil(totalElements.value / pageSize.value)
 );
@@ -29,7 +30,7 @@ const closeModal = () => {
 
 async function fetchNotices(page) {
   try {
-    const response = await axios.get('http://localhost:8080/api/notice/list', {
+    const response = await axios.get("http://localhost:8080/api/notice/list", {
       params: {
         page,
         size: 10,
@@ -40,7 +41,7 @@ async function fetchNotices(page) {
     rows.value = response.data;
     totalElements.value = response.data[0].totalCount;
   } catch (error) {
-    console.error('Failed to fetch notices:', error);
+    Swal.fire("공지사항 불러오기 실패!", "다시 로그인 해주세요", "error");
   }
 }
 
