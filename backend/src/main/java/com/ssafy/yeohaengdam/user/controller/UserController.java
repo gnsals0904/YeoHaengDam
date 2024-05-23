@@ -109,7 +109,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<User> myPage(@CurrentUser User user){
         System.out.println("member info : " + user);
-//        User tuser = userService.findByEmail(user.getEmail());
+//        User user = userService.findByEmail(user.getEmail());
         return ResponseEntity.ok(user);
     }
 

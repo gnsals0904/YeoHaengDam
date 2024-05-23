@@ -9,7 +9,7 @@ public class PasswordService {
     private final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~!@#$%^&*()";
     private final SecureRandom RANDOM = new SecureRandom();
 
-    private static final int LENGTH = 8;
+    private static final int LENGTH = 4;
 
     public String generateRandomPassword() {
         StringBuilder password = new StringBuilder(LENGTH);

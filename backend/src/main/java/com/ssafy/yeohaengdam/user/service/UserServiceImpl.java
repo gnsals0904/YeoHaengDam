@@ -1,5 +1,6 @@
 package com.ssafy.yeohaengdam.user.service;
 
+import com.ssafy.yeohaengdam.auth.service.EmailService;
 import com.ssafy.yeohaengdam.core.annotation.CurrentUser;
 import com.ssafy.yeohaengdam.user.entity.User;
 import com.ssafy.yeohaengdam.user.mapper.UserMapper;
@@ -24,6 +25,7 @@ public class UserServiceImpl implements UserService{
     private final PasswordEncoder passwordEncoder;
     private final PasswordService passwordService;
     private final S3Service s3Service;
+    private final EmailService emailService;
 
     @Override
     public void join(Join join) {
@@ -116,6 +118,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public String resetPassword(Password password) {
         User user = userMapper.findByEmail(password.getEmail());
+        System.out.println(password);
         if (user == null) {
             throw new IllegalArgumentException("해당 이메일을 사용하는 사용자가 없습니다.");
         }
