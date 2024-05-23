@@ -38,6 +38,14 @@ const handleSignUp = async () => {
     alert('이메일 인증을 완료해주세요.');
     return;
   }
+  if (password.value.length < 6) {
+    alert('비밀번호는 최소 6자리 이상이어야 합니다.');
+    return;
+  }
+  if (password.value !== passwordConfirmation.value) {
+    alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+    return;
+  }
   const user = {
     nickname: nickname.value,
     email: email.value,
