@@ -22,6 +22,7 @@ public class OAuth2UserServiceImplement extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest request) throws OAuth2AuthenticationException {
 
         OAuth2User oauth2User = super.loadUser(request);
+        System.out.println(oauth2User);
         String oauthClientName = request.getClientRegistration().getClientName();
         try{
             System.out.println(new ObjectMapper().writeValueAsString(oauth2User.getAttributes()));
@@ -44,6 +45,9 @@ public class OAuth2UserServiceImplement extends DefaultOAuth2UserService {
             email = responseMap.get("email");
             nickname = oauthId;
             user = new User(oauthId, email, "naver", nickname);
+        }
+        if(userMapper.findByOauthId(oauthId) != null){
+            return new CustomOAuth2User(oauthId);
         }
         userMapper.join(user);
 
