@@ -36,8 +36,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         JwtToken newToken = jwtTokenService.generateToken(user);
         System.out.println(newToken);
 
-        response.setHeader("Authorization", "Bearer " + newToken.getAccessToken());
-        response.setHeader("RefreshToken", "Bearer " + newToken.getRefreshToken());
+//        response.setHeader("Authorization", "Bearer " + newToken.getAccessToken());
+//        response.setHeader("RefreshToken", "Bearer " + newToken.getRefreshToken());
         /**
          * 나는 리프레시토큰으로 헤더에 넘기는 방식을 사용하고있지만,
          * 일단 accessToken만 넘기는 식으로 구현하고 나중에 수정예정.
@@ -45,7 +45,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 //        request.
 //        RequestDispatcher requestDispatcher
 //        response.f("/login");
-        response.sendRedirect("/auth/oauth-response/"  + newToken.getAccessToken() + "/3600");
+        response.sendRedirect("http://localhost:5173/auth/oauth-response/"  + newToken.getAccessToken() + "/3600");
     }
 }
 
