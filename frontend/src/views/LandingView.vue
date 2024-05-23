@@ -183,7 +183,7 @@ const scrollToSection = () => {
           >
             <div class="relative z-20 pl-12">
               <h2 class="text-[#f7d0b6] font-black text-5xl leading-snug mb-10">
-                AI를 활용해서 <br />길을 찾고, 추천도 받아보세요
+                AI를 활용해서 <br />길을 찾고, <br />추천도 받아보세요
               </h2>
               <p class="text-white text-sm">
                 여행담과 AI가 당신의 여행계획을 도와드려요
